@@ -1,0 +1,28 @@
+Phase 1
+ - Hosts file(hosts for communication among all systems) with inventory file
+ - DNS installation
+ - Internal_repo installation
+ - Ansible inventory file for installation of ose 3
+ - Proxy installation
+ - OSE installation
+    - git (copy for private network, clone for public network)
+    - inventory copy
+
+Phase 2
+ - new ansible role for customization.
+ - Checking network 
+   - master to nodes/etcd/infra with mgmt network
+   - ansible executer to master/node/infra  || not etcd
+   - DNS -> dig test
+   - Proxy -> dig test
+   - Internal repository => yum test
+
+ - Checking nodes
+   - oc get nodes
+
+  
+Phase 3
+ - Create RHEV vm with template iso
+   - master(M:4G D:30G)/node(M:8G D:50G)/etcd(M:4G D:100G)/infra(M:8G D:30G)
+   - Disk allocation to infra and it will be shared with each node for docker-regitstry-storage
+   - Network configuration ( master/node/infra => mgmt: eth0, public: eth1    etcd => mgmt: eth0)
