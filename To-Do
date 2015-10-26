@@ -1,4 +1,23 @@
 Phase 1
+ - Assert default variable
+    - dns_install=true
+       - extra variables should in hosts
+    - proxy_install=true
+       - extra variables should in hosts
+    - internal_repo_install=true   
+       - extra variables should be in hosts
+    - nfs_iscsi_install=true
+       - extra variables should be in hosts
+    - if master servers are more then 1
+       - extra HA variables should be in hosts 
+    - development=true
+       - master_mgmt_network_dev_name=eth0
+       - master_public_network_dev_name=eth1
+       - node_mgmt_network_dev_name=eth0
+       - node_public_network_dev_name=eth1  
+       - etcd_mgmt_network_dev_name=eth0
+       - infra_mgmt_network_dev_name=eth0
+       - infra_public_network_dev_name=eth1
  - Hosts file(hosts for communication among all systems) with inventory file
  - DNS installation
  - Internal_repo installation

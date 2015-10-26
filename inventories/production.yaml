@@ -4,7 +4,7 @@ nodes
 etcds
 infra
 
-[OSE_INSTALL:vars]
+[OSE3_INSTALL:vars]
 # Check if it is possible to reach to internet. If it is not, internal repository using apache will be installed by default but you can overwrite it with 'internal_repo_install'.
 internet_connected=false
 
@@ -20,16 +20,16 @@ proxy_vip="192.168.259.201"
 proxy_host_ip="192.168.259.200" #default:infra
 
 # This internal_repository using apache is useful if the site is not available to use internet. If 'internet_connected' set false, internal repository will be installed by default.
-internal_repo_install=true      
+internal_repo_install=false
 internal_repo_host_ip="192.168.259.300"  #default:infra
 internal_repo_host_name="internal-repo.example.com"
 
 # This NFS/iscsi server is for testing PV and docker-registory-storage hence I strongly disagee that you use it in Production. Only use it for Test environment.
 nfs_iscsi_install=true
-nfs_iscsi_host-ip="192.168.159.400"     #default:infra
+nfs_iscsi_host_ip="192.168.159.400"     #default:infra
 
-# If you would like to register your server to system, you should provide Red Hat id/password.
-#subscription_register=true
+# If you would like to register your server to system, you should provide Red Hat id/password.(internet_connected=true, internal_repo_install=false ==> this must be set)
+subscription_register=true
 #subscription_register_name=redhat_id
 #subscription_register_password=redhat_password
 
@@ -44,25 +44,25 @@ nfs_iscsi_host-ip="192.168.159.400"     #default:infra
 # If you use this script for testing environment, please set this true. Then you can set more infra environment using ansible.
 #development=true
 
-# host group for manager
+# host group for master
 # ansible_ssh_host : this is for initial connection of ansible playbook. ex) RHEV gives floating ip to VM automatically, it is the only ip that ansible can connect to execute playbook
 # public_network_ip : if you want to fix public ip which can be reached from outside, you set this value. Then, it will change network script.
 # mgmt_network_ip : if you want to fix mgmt ip for communication among systems(masters/nodes/etcds) , you set this value. Then, it will change network script.
-[managers]
-manager1.example.com ansible_ssh_host=192.168.259.300 public_network_ip=192.168.259.400 mgmt_network_ip=10.64.168.400 
-manager2.example.com ansible_ssh_host=192.168.259.301 public_network_ip=192.168.259.401 mgmt_network_ip=10.64.168.401
-manager3.example.com ansible_ssh_host=192.168.259.302 public_network_ip=192.168.259.402 mgmt_network_ip=10.64.168.402
+[masters]
+master1.example.com ansible_ssh_host=192.168.259.300 public_network_ip=192.168.259.400 mgmt_network_ip=10.64.168.400 
+master2.example.com ansible_ssh_host=192.168.259.301 public_network_ip=192.168.259.401 mgmt_network_ip=10.64.168.401
+master3.example.com ansible_ssh_host=192.168.259.302 public_network_ip=192.168.259.402 mgmt_network_ip=10.64.168.402
 
-[managers:vars]
-# It will help change hostname of each manager system.
-manager_set_hostname=true
+[masters:vars]
+# It will help change hostname of each master system.
+master_set_hostname=true
 
-# It will help set up network configuration of each manager system.
+# It will help set up network configuration of each master system.
 manger_set_network=true
-# Note!! It is important variable. If you misconfigure it, the master systems' network could be broken. Hence, please double-check the device is for manager_mgmt_network
-manager_mgmt_network_dev_name=eth0
-# Note!! It is important variable. If you misconfigure it, the master systems' network could be broken. Hence, please double-check the device is for manager_public_network
-manager_public_network_dev_name=eth1
+# Note!! It is important variable. If you misconfigure it, the master systems' network could be broken. Hence, please double-check the device is for master_mgmt_network
+master_mgmt_network_dev_name=eth0
+# Note!! It is important variable. If you misconfigure it, the master systems' network could be broken. Hence, please double-check the device is for master_public_network
+master_public_network_dev_name=eth1
 
 
 [nodes]

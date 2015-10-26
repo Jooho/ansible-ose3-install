@@ -1,0 +1,8 @@
+- include: ../../common/ose3-config/config.yaml
+  vars:
+    g_ose3_install_group: "{{ 'OSE3_INSTALL' }}"
+    g_masters_group: "{{ 'masters' }}"
+    g_nodes_group: "{{ 'nodes' }}"
+    g_etcds_group: "{{ 'etcds' }}"
+    g_infra: "{{ 'infra' }}"
+
