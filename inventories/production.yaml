@@ -42,7 +42,7 @@ subscription_register=true
 #openshift_master_cluster_public_hostname=openshift-ansible.test.example.com
 
 # If you use this script for testing environment, please set this true. Then you can set more infra environment using ansible.
-#development=true
+development=true
 
 # host group for master
 # ansible_ssh_host : this is for initial connection of ansible playbook. ex) RHEV gives floating ip to VM automatically, it is the only ip that ansible can connect to execute playbook
@@ -50,8 +50,8 @@ subscription_register=true
 # mgmt_network_ip : if you want to fix mgmt ip for communication among systems(masters/nodes/etcds) , you set this value. Then, it will change network script.
 [masters]
 master1.example.com ansible_ssh_host=192.168.259.300 public_network_ip=192.168.259.400 mgmt_network_ip=10.64.168.400 
-master2.example.com ansible_ssh_host=192.168.259.301 public_network_ip=192.168.259.401 mgmt_network_ip=10.64.168.401
-master3.example.com ansible_ssh_host=192.168.259.302 public_network_ip=192.168.259.402 mgmt_network_ip=10.64.168.402
+#master2.example.com ansible_ssh_host=192.168.259.301 public_network_ip=192.168.259.401 mgmt_network_ip=10.64.168.401
+#master3.example.com ansible_ssh_host=192.168.259.302 public_network_ip=192.168.259.402 mgmt_network_ip=10.64.168.402
 
 [masters:vars]
 # It will help change hostname of each master system.

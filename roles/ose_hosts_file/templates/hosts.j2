@@ -1,0 +1,24 @@
+{% for item in groups.oo_masters -%}
+{%- if hostvars[groups.oo_ose3_install.0].development == "true" -%}  {# For dev env, mgmt network will be used for communication between all nodes #}
+{{hostvars[item].mgmt_network_ip}} {{item}}
+{% else %}
+{{hostvars[item].ansible_ssh_host}} {{item}}   
+{% endif %} 
+{%- endfor %}
+{% for item in groups.oo_nodes %}
+{%- if hostvars[groups.oo_ose3_install.0].development == "true" -%}  {# For dev env, mgmt network will be used for communication between all nodes #}
+{{hostvars[item].mgmt_network_ip}} {{item}}
+{% else %}
+{{hostvars[item].ansible_ssh_host}} {{item}}
+{% endif %} 
+{%- endfor %}
+{% for item in groups.oo_etcds %}
+{%- if hostvars[groups.oo_ose3_install.0].development == "true" -%}  {# For dev env, mgmt network will be used for communication between all nodes #}
+{{hostvars[item].mgmt_network_ip}} {{item}}
+{% else %}
+{{hostvars[item].ansible_ssh_host}} {{item}}
+{% endif %} 
+{%- endfor %}
+{% for item in groups.oo_infra -%}
+{{hostvars[item].mgmt_network_ip}} {{item}}
+{%- endfor %}
