@@ -1,6 +1,6 @@
 
  - name: Set up infra machine
-   hosts: nodes
+   hosts: masters
    gather_facts: false
    
    pre_tasks:

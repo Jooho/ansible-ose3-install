@@ -18,7 +18,10 @@ Phase 1
        - etcd_mgmt_network_dev_name=eth0
        - infra_mgmt_network_dev_name=eth0
        - infra_public_network_dev_name=eth1
- - Hosts file(hosts for communication among all systems) with inventory file
+√- Hosts file(hosts for communication among all systems) with inventory file
+ - Network configuration
+   - public/management network
+   - service restart
  - DNS installation
  - Internal_repo installation
  - Ansible inventory file for installation of ose 3

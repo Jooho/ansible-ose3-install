@@ -4,5 +4,6 @@
     g_masters_group: "{{ 'masters' }}"
     g_nodes_group: "{{ 'nodes' }}"
     g_etcds_group: "{{ 'etcds' }}"
+    g_lb: "{{ 'lb' }}"
     g_infra: "{{ 'infra' }}"
 

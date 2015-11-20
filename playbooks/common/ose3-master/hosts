@@ -1,0 +1,9 @@
+172.20.20.91 master1.example.com
+172.20.20.92 master2.example.com
+172.20.20.93 master3.example.com
+10.64.168.403 node1.example.com
+10.64.168.404 node2.example.com
+10.64.168.405 etcd1.example.com
+10.64.168.406 etcd2.example.com
+10.64.168.407 etcd3.example.com
+10.64.168.408 infra.example.com

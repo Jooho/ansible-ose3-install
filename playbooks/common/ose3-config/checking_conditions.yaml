@@ -48,15 +48,24 @@
      when: "{{nfs_iscsi_install}} == true"
      tags: add_host
 
-   - name: Check Master HA parameters
-     shell: "echo Checking Master HA parameters"
+   - name: Check Master HA parameters with pacemaker
+     shell: "echo Checking Master HA parameters with pacemaker"
      notify:
        - Verify openshift_master_cluster_password
        - Verify openshift_master_cluster_vip
        - Verify openshift_master_cluster_public_vip
        - Verify openshift_master_cluster_hostname
        - Verify openshift_master_cluster_public_hostname
-     when: "{{master_count}} > 1"
+     when: "{{master_count}} > 1 and {{groups[g_lb] is not defined}}"
+     tags: add_host
+
+   - name: Check Master HA parameters with lb
+     shell: "echo Checking Master HA parameters with lb"
+     notify:
+       - Verify openshift_master_cluster_method
+       - Verify openshift_master_cluster_hostname
+       - Verify openshift_master_cluster_public_hostname
+     when: "{{master_count}} > 1 and {{groups[g_lb] is defined}}"
      tags: add_host
 
    - name: Check Subscription_manager parameters (it is depending on what you use Subscription_manager or internal_repo)
@@ -139,6 +148,12 @@
       fail:
          msg="openshift_master_cluster_hostname is not undefinded"
       when: "hostvars[groups.oo_ose3_install.0].openshift_master_cluster_hostname is not defined"
+      tags: add_host
+
+    - name : Verify openshift_master_cluster_method
+      fail:
+         msg="openshift_master_cluster_method is not undefinded"
+      when: "hostvars[groups.oo_ose3_install.0].openshift_master_cluster_method is not defined"
       tags: add_host
 
     - name : Verify openshift_master_cluster_public_hostname

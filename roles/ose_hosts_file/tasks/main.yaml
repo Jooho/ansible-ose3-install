@@ -1,4 +1,10 @@
 
+  - name: Check if there is already added to hosts
+    shell: "grep -ir '{{groups.oo_masters.0}}' /etc/hosts"
+    ignore_errors: true
+    register: check_hosts_file
+
   - name: generate hosts file
     local_action: template src=hosts.j2 dest={{pwd_path}}/hosts
-    
+    when: check_hosts_file.rc == 1
+ 

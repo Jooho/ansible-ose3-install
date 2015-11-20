@@ -45,7 +45,17 @@
       ansible_sudo: "{{ g_sudo | default(omit) }}"
      with_items: groups[g_etcds_group]
      tags: add_host
-   
+ 
+   - name: Evaluate oo_lb_to_config
+     add_host:
+      name: "{{ item }}"
+      groups: oo_lb
+      ansible_ssh_user: "{{ g_ssh_user | default(omit) }}"
+      ansible_sudo: "{{ g_sudo | default(omit) }}"
+     with_items: groups[g_lb]|default([])
+     when: "{{groups[g_lb] is defined}}"
+     tags: add_host
+
    - name: Evaluate oo_infra_to_config
      add_host:
       name: "{{ item }}"
@@ -54,8 +64,8 @@
       ansible_sudo: "{{ g_sudo | default(omit) }}"
      with_items: groups[g_infra]
      tags: add_host
-
 #Check conditions(To-Do vm network setting verification)
  - include: ./checking_conditions.yaml
 
- - include: "../ose3-infra/config.yaml"
+ #- include: "../ose3-infra/config.yaml"
+ - include: "../ose3-master/config.yaml"

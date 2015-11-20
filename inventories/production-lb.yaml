@@ -1,8 +1,8 @@
 [OSE3_INSTALL:children]
 masters
 nodes
-#etcds
-#lb
+etcds
+lb
 infra
 
 [OSE3_INSTALL:vars]
@@ -53,9 +53,9 @@ subscription_register=true
 # openshift_master_cluster_hostname must resolve to the load balancer
 # or to one or all of the masters defined in the inventory if no load
 # balancer is present.
-#openshift_master_cluster_method=native
-#openshift_master_cluster_hostname=openshift-cluster.example.com
-#openshift_master_cluster_public_hostname=openshift-cluster.example.com
+openshift_master_cluster_method=native
+openshift_master_cluster_hostname=openshift-cluster.example.com
+openshift_master_cluster_public_hostname=openshift-cluster.example.com
 
 # override the default controller lease ttl
 #osm_controller_lease_ttl=30
@@ -69,8 +69,8 @@ development=true
 # mgmt_network_ip : if you want to fix mgmt ip for communication among systems(masters/nodes/etcds) , you set this value. Then, it will change network script.
 [masters]
 master1.example.com ansible_ssh_host=10.64.168.231 public_network_ip=10.64.168.231 mgmt_network_ip=172.20.20.91
-#master2.example.com ansible_ssh_host=10.64.168.234 public_network_ip=10.64.168.234 mgmt_network_ip=172.20.20.92
-#master3.example.com ansible_ssh_host=10.64.168.233 public_network_ip=10.64.168.233 mgmt_network_ip=172.20.20.93
+master2.example.com ansible_ssh_host=10.64.168.234 public_network_ip=10.64.168.234 mgmt_network_ip=172.20.20.92
+master3.example.com ansible_ssh_host=10.64.168.233 public_network_ip=10.64.168.233 mgmt_network_ip=172.20.20.93
 
 [masters:vars]
 # It will help change hostname of each master system.
@@ -85,8 +85,8 @@ public_network_dev_name=eth1
 
 
 [nodes]
-node1.example.com ansible_ssh_host=192.168.259.303 public_network_ip=192.168.259.403 mgmt_network_ip=10.64.168.403 openshift_node_labels="{'region': 'primary', 'zone': 'east'}
-node2.example.com ansible_ssh_host=192.168.259.304 public_network_ip=192.168.259.404 mgmt_network_ip=10.64.168.404 openshift_node_labels="{'region': 'primary', 'zone': 'west'}
+node1.example.com ansible_ssh_host=192.168.259.303 public_network_ip=192.168.259.403 mgmt_network_ip=10.64.168.403 openshift_node_labels="{'region': 'primary', 'zone': 'east'}"
+node2.example.com ansible_ssh_host=192.168.259.304 public_network_ip=192.168.259.404 mgmt_network_ip=10.64.168.404 openshift_node_labels="{'region': 'primary', 'zone': 'west'}"
 
 
 [nodes:vars]
@@ -103,9 +103,9 @@ public_network_dev_name=eth1
 
 
 [etcds]
-#etcd1.example.com ansible_ssh_host=192.168.259.305  mgmt_network_ip=10.64.168.405 
-#etcd2.example.com ansible_ssh_host=192.168.259.306  mgmt_network_ip=10.64.168.406
-#etcd3.example.com ansible_ssh_host=192.168.259.307  mgmt_network_ip=10.64.168.407
+etcd1.example.com ansible_ssh_host=192.168.259.305  mgmt_network_ip=10.64.168.405 
+etcd2.example.com ansible_ssh_host=192.168.259.306  mgmt_network_ip=10.64.168.406
+etcd3.example.com ansible_ssh_host=192.168.259.307  mgmt_network_ip=10.64.168.407
 
 
 [etcds:vars]
@@ -119,7 +119,7 @@ etcd_mgmt_network_dev_name=eth0
 
 # Specify load balancer host
 [lb]
-#lb.example.com ansible_ssh_host=192.168.259.308  mgmt_network_ip=10.64.168.408
+lb.example.com ansible_ssh_host=192.168.259.308  mgmt_network_ip=10.64.168.408
 
 [infra]
 infra.example.com ansible_ssh_host=192.168.259.309  mgmt_network_ip=10.64.168.409 
