@@ -1,0 +1,3 @@
+internal_repo_iso_files:
+  - { long: '{{internal_repo_rhel_iso_long}}', short: '{{internal_repo_rhel_iso_short}}'}
+  - { long: '{{internal_repo_ose_iso_long}}', short: '{{internal_repo_ose_iso_short}}'}

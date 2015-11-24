@@ -1,0 +1,17 @@
+
+
+  - name: install httpd server
+    yum: name=httpd state=installed 
+
+  - name: Create rhel/ose repo folder
+    file: path=/var/www/html/repo/{{item.short}} state=directory force=false
+    with_items:
+       internal_repo_iso_files
+   
+  - name: mount rhel/ose iso file to {{apache_repo_path}}
+    mount: src={{iso_dest_path}}/{{item.long}}  name={{apache_repo_path}}/{{item.short}} fstype="iso9660" opts="loop" state=mounted
+    with_items:
+       internal_repo_iso_files
+  
+  - name: Start httpd server & enable to chkconfig
+    service: name=httpd state=started enabled=yes

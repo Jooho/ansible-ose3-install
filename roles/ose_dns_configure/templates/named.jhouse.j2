@@ -1,0 +1,12 @@
+$TTL 1D  
+$ORIGIN {{dns_wildcard_domain}}.  
+@       IN SOA  {{dns_wildcard_domain}}. root.{{dns_wildcard_domain}}. (  
+                                        0       ; serial  
+                                        1D      ; refresh  
+                                        1H      ; retry  
+                                        1W      ; expire  
+                                        3H )    ; minimum  
+   IN     NS      ns1.{{dns_wildcard_domain}}.  
+ns1   IN     A       127.0.0.1  
+*  IN   A       {{dns_routers_ip}}  
+   IN   A       {{dns_routers_ip}}  

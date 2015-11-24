@@ -1,0 +1,18 @@
+
+
+  - name: Copy github "openshift-ansible" when internet is not connected
+    copy: src="{{openshift_ansible_path}}/openshift_ansible.tar" dest="/root/openshift_ansible.tar"
+    when: "{{internet_connected}} == false"
+    tags: openshift-ansible
+
+  - name: Extract zip file "openshift-ansible.zip"
+    shell: "tar -xvf /root/openshift_ansible.tar"
+    when: "{{internet_connected}} == false"
+    tags: openshift-ansible
+
+  - name: Clone github "openshift-ansible" when internet is connected
+    git: repo=https://github.com/openshift/openshift-ansible.git dest=/root/openshift-ansible
+    when: "{{internet_connected}} == true"
+    tags: openshift-ansible
+
+

@@ -3,13 +3,13 @@
     shell: "ip addr show {{mgmt_network_dev_name}} |grep {{mgmt_network_ip}}" 
     register: check_mgmt_network
     ignore_errors: yes
-    when: "{{set_network}}" 
+    when: "{{set_network}} == true" 
   
   - name: Check if public ip is already set
     shell: "ip addr show {{public_network_dev_name}} |grep {{public_network_ip}}" 
     register: check_public_network
     ignore_errors: yes
-    when: "{{set_network}}" 
+    when: "{{set_network}} == true" 
 
   - name: Generate management network script
     template: src=ifcfg-mgmt.j2 dest=/etc/sysconfig/network-scripts/ifcfg-{{mgmt_network_dev_name}}
@@ -26,24 +26,24 @@
 
   - name: Set hostname for each machine
     hostname: name={{inventory_hostname}}
-    when: "{{set_hostname}} and check_hostname.rc == 1"
+    when: "set_hostname == true and check_hostname.rc == 1"
 
   - name: Check if NetworkManager is installed
     shell: "rpm -qa NetworkManager"
     register: networkmanager_installed
-    when: "{{set_network}}" 
+    when: "{{set_network}} == true" 
 
   - name: Disable/stop NetworkManager
     service: name=NetworkManager state=stopped enabled=no
     register: networkmanger_stopped
     ignore_errors: yes
-    when: "{{set_network}} and networkmanager_installed.stdout.find('NetworkManager')|int == 0"
+    when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager')|int == 0"
  
   - name: Remove NetworkManager package
     yum: name=NetworkManager state=absent
-    when: "{{set_network}} and networkmanager_installed.stdout.find('NetworkManager')|int == 0" 
+    when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager')|int == 0" 
 
 # Note!!!!  ==> This should be executed at last
   - name: restart network service
     shell: /etc/sysconfig/network-scripts/ifdown {{public_network_dev_name}} ; /etc/sysconfig/network-scripts/ifup {{public_network_dev_name}}
-    when: "{{set_network}}" 
+    when: "{{set_network}} == true and check_public_network.rc == 1" 

@@ -1,0 +1,26 @@
+
+
+  - name: Check if bind is installed
+    shell: "rpm -qa bind"
+    register: bind_installed
+    when: "{{dns_install}} == true "
+
+  - name: Install bind package 
+    yum: name=bind state=present
+    when: "{{dns_install}} == true and (bind_installed|length) >= 1"
+ 
+  - name: Copy /etc/named.conf
+    template: src=named.conf.j2 dest=/etc/named.conf
+    when: "{{dns_install}} == true"
+  
+  - name: Copy /etc/named.jhouse.zones
+    template: src=named.jhouse.zones.j2 dest=/etc/named.jhouse.zones
+    when: "{{dns_install}} == true"
+  
+  - name: Copy /var/named/named.jhouse
+    template: src=named.jhouse.j2 dest=/var/named/named.jhouse
+    when: "{{dns_install}} == true"
+ 
+  - name: Start DNS server(bind)
+    service: name=named state=restarted
+    when: "{{dns_install}} == true"

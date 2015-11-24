@@ -10,7 +10,7 @@ Phase 1
        - extra variables should be in hosts
    √ - if master servers are more then 1
        - extra HA variables should be in hosts 
-    - development=true
+   √ - development=true
        - master_mgmt_network_dev_name=eth0
        - master_public_network_dev_name=eth1
        - node_mgmt_network_dev_name=eth0
@@ -19,7 +19,7 @@ Phase 1
        - infra_mgmt_network_dev_name=eth0
        - infra_public_network_dev_name=eth1
 √- Hosts file(hosts for communication among all systems) with inventory file
- - Network configuration
+√ - Network configuration
    - public/management network
    - service restart
  - DNS installation
