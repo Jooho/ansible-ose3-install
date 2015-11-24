@@ -1,24 +1,23 @@
+{%- if (groups[g_masters_group] | length) >0 -%} 
 {% for item in groups.oo_masters -%}
-{%- if hostvars[groups.oo_ose3_install.0].development == "true" -%}  {# For dev env, mgmt network will be used for communication between all nodes #}
-{{hostvars[item].mgmt_network_ip}} {{item}}
-{% else %}
-{{hostvars[item].ansible_ssh_host}} {{item}}   
-{% endif %} 
+{{hostvars[item].mgmt_network_ip}} {{item}} 
+{{hostvars[item].public_network_ip}} {{item}}
 {%- endfor %}
+{% endif %} 
+{% if (groups[g_nodes_group] | length) >0 -%} 
 {% for item in groups.oo_nodes %}
-{%- if hostvars[groups.oo_ose3_install.0].development == "true" -%}  {# For dev env, mgmt network will be used for communication between all nodes #}
 {{hostvars[item].mgmt_network_ip}} {{item}}
-{% else %}
-{{hostvars[item].ansible_ssh_host}} {{item}}
-{% endif %} 
+{{hostvars[item].public_network_ip}} {{item}}
 {%- endfor %}
+{% endif %} 
+{% if (groups[g_etcds_group] | length) >0 -%} 
 {% for item in groups.oo_etcds %}
-{%- if hostvars[groups.oo_ose3_install.0].development == "true" -%}  {# For dev env, mgmt network will be used for communication between all nodes #}
-{{hostvars[item].mgmt_network_ip}} {{item}}
-{% else %}
-{{hostvars[item].ansible_ssh_host}} {{item}}
-{% endif %} 
+{{hostvars[item].mgmt_network_ip}} {{item}} 
 {%- endfor %}
+{% endif %} 
+{%- if (groups[g_infra] | length) >0 -%} 
 {% for item in groups.oo_infra -%}
 {{hostvars[item].mgmt_network_ip}} {{item}}
+{{hostvars[item].public_network_ip}} {{item}}
 {%- endfor %}
+{% endif %} 

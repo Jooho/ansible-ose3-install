@@ -2,24 +2,27 @@
   - name: Check if mgmt ip is already set
     shell: "ip addr show {{mgmt_network_dev_name}} |grep {{mgmt_network_ip}}" 
     register: check_mgmt_network
+    ignore_errors: yes
     when: "{{set_network}}" 
   
   - name: Check if public ip is already set
     shell: "ip addr show {{public_network_dev_name}} |grep {{public_network_ip}}" 
     register: check_public_network
+    ignore_errors: yes
     when: "{{set_network}}" 
 
   - name: Generate management network script
     template: src=ifcfg-mgmt.j2 dest=/etc/sysconfig/network-scripts/ifcfg-{{mgmt_network_dev_name}}
-    when: "{{set_network}} and check_mgmt_network.rc == 1"
+    when: "{{set_network}} == true and check_mgmt_network.rc == 1"
 
   - name: Generate public network script
     template: src=ifcfg-public.j2 dest=/etc/sysconfig/network-scripts/ifcfg-{{public_network_dev_name}}
-    when: "{{set_network}} and check_public_network.rc == 1"
+    when: "{{set_network}} == true and check_public_network.rc == 1"
   
   - name: Check if hostname is already set
     shell: "hostname |grep {{inventory_hostname}}"
     register: check_hostname
+    ignore_errors: yes
 
   - name: Set hostname for each machine
     hostname: name={{inventory_hostname}}
@@ -41,6 +44,6 @@
     when: "{{set_network}} and networkmanager_installed.stdout.find('NetworkManager')|int == 0" 
 
 # Note!!!!  ==> This should be executed at last
-  #- name: restart network service
-  #  service: name=network state=restarted
-  #  when: "{{set_network}}" 
+  - name: restart network service
+    shell: /etc/sysconfig/network-scripts/ifdown {{public_network_dev_name}} ; /etc/sysconfig/network-scripts/ifup {{public_network_dev_name}}
+    when: "{{set_network}}" 

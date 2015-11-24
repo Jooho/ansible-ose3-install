@@ -5,6 +5,9 @@
     register: check_hosts_file
 
   - name: generate hosts file
-    local_action: template src=hosts.j2 dest={{pwd_path}}/hosts
+    action: template src=hosts.j2 dest=/tmp/hosts.ose3
     when: check_hosts_file.rc == 1
  
+  - name: add ose3 hosts to previous hosts file
+    shell: "cat /tmp/hosts.ose3 >> /etc/hosts"
+    when: check_hosts_file.rc == 1

@@ -1,6 +1,6 @@
 
  - name: Set up infra machine
-   hosts: nodes
+   hosts: infra
    gather_facts: false
    
    pre_tasks:
@@ -14,5 +14,5 @@
         development_mode: "{{hostvars[groups.oo_ose3_install.0].development}}"
  
    roles:
-    - { role: ose_hosts_file }
-    - { role: ose_network_configure ,when: development_mode == "true" } 
+    - { role: ose_hosts_file, tag: infra }
+    - { role: ose_network_configure, when: development_mode == "true", tag: infra } 
