@@ -1,8 +1,8 @@
 
- - name: Set up masters machine
-   hosts: masters
+ - name: Set up etcd machine
+   hosts: etcd
    gather_facts: false
-   
+
    pre_tasks:
    - name: set concurrent path
      local_action: command pwd
@@ -14,10 +14,10 @@
         pwd_path: "{{pwd.stdout}}"
         development_mode: "{{hostvars[groups.oo_ose3_install.0].development}}"
         internet_connected: "{{hostvars[groups.oo_ose3_install.0].internet_connected}}"
+        temp_path: "/root/tmp"
      tags: pre_tasks
 
    roles:
-    - { role: ose_hosts_file, tags: master, hosts}
-    - { role: ose_network_configure, when: development_mode == "true", tags: master, network} 
-    - { role: update_yum_repo, when: "{{hostvars[groups.oo_ose3_install.0].internal_repo_install}} == true", tags: master, yum_repo } 
-    - { role: ose_ansible_installer,  tags: master, openshift_ansible}
+    - { role: ose_hosts_file, tags: hosts}
+    - { role: ose_network_configure, when: development_mode == "true", tags: network}
+    - { role: update_yum_repo, when: "{{hostvars[groups.oo_ose3_install.0].internal_repo_install}} == true", tags: yum_repo }

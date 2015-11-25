@@ -1,18 +1,53 @@
 
+  - name: prerequites process.
+    shell: "yum install -y wget git net-tools bind-utils iptables-services bridge-utils bash-completion atomic-openshift-utils docker "
+    tags: openshift_ansible
 
+# This part is no more needed because openshift conains openshift-ansible source
+  - name: Check if there is already "openshift-ansible" folder 
+    shell: "ls /root | grep openshift-ansible | wc -l"
+    when: "{{internet_connected}} == false"
+    register: openshift_ansible_exist
+    tags: openshift_ansible
+
+# This part is no more needed because openshift conains openshift-ansible source
   - name: Copy github "openshift-ansible" when internet is not connected
     copy: src="{{openshift_ansible_path}}/openshift_ansible.tar" dest="/root/openshift_ansible.tar"
-    when: "{{internet_connected}} == false"
-    tags: openshift-ansible
+    when: "{{internet_connected}} == false and openshift_ansible_exist.stdout|int == 0 "
+    tags: openshift_ansible
 
+# This part is no more needed because openshift conains openshift-ansible source
   - name: Extract zip file "openshift-ansible.zip"
     shell: "tar -xvf /root/openshift_ansible.tar"
-    when: "{{internet_connected}} == false"
-    tags: openshift-ansible
+    when: "{{internet_connected}} == false and openshift_ansible_exist.stdout|int == 0"
+    tags: openshift_ansible
 
+# This part is no more needed because openshift conains openshift-ansible source
   - name: Clone github "openshift-ansible" when internet is connected
     git: repo=https://github.com/openshift/openshift-ansible.git dest=/root/openshift-ansible
     when: "{{internet_connected}} == true"
-    tags: openshift-ansible
+    tags: openshift_ansible
 
+  - name: Copy ansible inventory hosts file
+    action: template src="hosts_minimal.j2" dest="/etc/ansible/hosts" backup="yes"
+    when: "(groups[g_masters_group] | length) == 1 and (groups[g_etcds_group] | length) == 0" 
+    tags: openshift_ansible
+  
+  - name: Copy ansible inventory hosts file(Master Single/ ETCD HA)
+    action: template src="hosts_master_single_etcd_ha.j2" dest="/etc/ansible/hosts" backup="yes"
+    when: "(groups[g_masters_group] | length) == 1 and (groups[g_etcds_group] | length) > 1" 
+    tags: openshift_ansible
 
+  - name: Copy ansible inventory hosts file(Master HA/ETCD HA/LB)
+    action: template src="hosts_master_ha_etcd_ha_lb.j2" dest="/etc/ansible/hosts" backup="yes"
+    when: "(groups[g_masters_group] | length) > 1 and (groups[g_etcds_group] | length) > 1 and (groups[g_lb] | length) == 1" 
+    tags: openshift_ansible
+  
+  - name: Copy ansible inventory hosts file(Master HA/ETCD HA/PACEMAKER)
+    action: template src="hosts_master_ha_etcd_ha_pacemaker.j2" dest="/etc/ansible/hosts" backup="yes" 
+    when: "(groups[g_masters_group] | length) > 1 and (groups[g_etcds_group] | length) > 1 and (groups[g_lb] | length) == 0" 
+    tags: openshift_ansible
+
+  - name: Execute ansible playbook for openshift v3
+    shell: "ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml"
+    tags: openshift_ansible

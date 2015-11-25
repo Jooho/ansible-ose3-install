@@ -7,7 +7,7 @@
    - name: set concurrent path
      local_action: command pwd
      register: pwd
-     tags: infra
+     tags: pre_tasks
 
    - name: set_facts - pwd_path
      set_fact:
@@ -16,8 +16,9 @@
         internet_connected: "{{hostvars[groups.oo_ose3_install.0].internet_connected}}"
         iso_dest_path: "/root/iso"
         temp_path: "/root/tmp"
-        apache_repo_path: "/var/www/html/repo"
-     tags: infra
+        internal_repo_apache_repo_path: "{{hostvars[groups.oo_ose3_install.0].internal_repo_apache_repo_path}}"
+     tags: pre_tasks
+
 
    - name: create temp folder for intallation
      file: path="{{iso_dest_path}}" state="directory"
@@ -33,7 +34,7 @@
      tags: infra
 
    - name: check if the internal repos are mounted
-     shell: "ls {{apache_repo_path}}/{{item}} |wc -l"
+     shell: "ls {{internal_repo_apache_repo_path}}/{{item}} |wc -l"
      with_items:
        - "{{internal_repo_rhel_iso_short}}"
        - "{{internal_repo_ose_iso_short}}"
@@ -41,8 +42,6 @@
      register: internal_repo_mounted
      tags: infra
 
-   - debug: var=iso_exist_int.results[0].stdout
-     tags: infra
    - name: copy iso files
      copy: src="{{internal_repo_iso_src_path}}/{{item}}" dest="{{iso_dest_path}}/{{item}}" force="no"
      with_items:
@@ -52,10 +51,9 @@
      tags: infra
    
    roles:
-    - { role: ose_hosts_file, tags: hosts}
-    - { role: ose_network_configure, when: development_mode == "true", tags: network} 
-    - { role: temp_repo_with_iso, when: internet_connected == "false" , tags: temp_repo}
-    - { role: ose_dns_configure, tags: dns } 
-    - { role: internal_repo_with_apache, when: 'internal_repo_mounted.results[0].stdout == "0" or internal_repo_mounted.results[1].stdout == "0"', tags: internal_repo } 
-    - { role: update_yum_repo, when: "{{hostvars[groups.oo_ose3_install.0].internal_repo_install}} == true", tags: yum_repo } 
-    - { role: ose_ansible_installer,  tags: ansible_installer}
+    - { role: ose_hosts_file, tags: infra, hosts}
+    - { role: ose_network_configure, when: development_mode == "true", tags: infra, network} 
+    - { role: temp_repo_with_iso, when: internet_connected == "false" , tags: infra, temp_repo}
+    - { role: ose_dns_configure, tags: infra, dns} 
+    - { role: internal_repo_with_apache, when: 'internal_repo_mounted.results[0].stdout == "0" or internal_repo_mounted.results[1].stdout == "0"', tags: infra, internal_repo } 
+    - { role: update_yum_repo, when: "{{hostvars[groups.oo_ose3_install.0].internal_repo_install}} == true", tags: infra, yum_repo } 

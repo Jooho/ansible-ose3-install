@@ -43,7 +43,7 @@
       groups: oo_etcds
       ansible_ssh_user: "{{ g_ssh_user | default(omit) }}"
       ansible_sudo: "{{ g_sudo | default(omit) }}"
-     with_items: groups[g_etcds_group]
+     with_items: groups[g_etcds_group]|default([])
      tags: add_host
  
    - name: Evaluate oo_lb_to_config
@@ -67,4 +67,8 @@
 #Check conditions(To-Do vm network setting verification)
  - include: ./checking_conditions.yaml
  - include: ../ose3-infra/config.yaml
- #- include: "../ose3-master/config.yaml"
+ - include: ../ose3-lb/config.yaml
+ - include: ../ose3-etcd/config.yaml
+ - include: ../ose3-node/config.yaml
+ - include: ../ose3-master/config.yaml
+ - include: /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml

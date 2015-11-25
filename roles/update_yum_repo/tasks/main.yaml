@@ -1,6 +1,4 @@
 
-   - debug: msg="{{hostvars[groups.oo_ose3_install.0].internal_repo_install}}"
-     tags: yum_repo 
    - name: Copy local.repos 
      template: src="local.repo.j2" dest="/etc/yum.repos.d/local.repo"
      when: "{{hostvars[groups.oo_ose3_install.0].internal_repo_install}} == true"
