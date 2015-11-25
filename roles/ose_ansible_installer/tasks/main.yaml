@@ -48,6 +48,7 @@
     when: "(groups[g_masters_group] | length) > 1 and (groups[g_etcds_group] | length) > 1 and (groups[g_lb] | length) == 0" 
     tags: openshift_ansible
 
-  - name: Execute ansible playbook for openshift v3
-    shell: "ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml"
-    tags: openshift_ansible
+ # - name: Execute ansible playbook for openshift v3
+ #   shell: "ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml"
+ #   delegate_to: "{{[groups.oo_masters.0].public_network_ip}}"
+ #   tags: openshift_ansible
