@@ -1,8 +1,8 @@
 [OSE3_INSTALL:children]
 masters
 nodes
-#etcds
-#lb
+etcds
+lb
 infra
 
 [OSE3_INSTALL:vars]
@@ -36,7 +36,7 @@ internal_repo_ose_iso_long="ose-3.1-x86_64-151120.iso"
 internal_repo_ose_iso_short="ose31"
 internal_repo_apache_repo_path="/var/www/html/repo"
 # This NFS/iscsi server is for testing PV and docker-registory-storage hence I strongly disagee that you use it in Production. Only use it for Test environment.
-nfs_iscsi_install=true
+nfs_iscsi_install=false
 nfs_iscsi_host_ip="192.168.20.60"     #default:infra
 
 # If you would like to register your server to system, you should provide Red Hat id/password.(internet_connected=true, internal_repo_install=false ==> this must be set)
@@ -61,9 +61,9 @@ subscription_register_password=test
 # openshift_master_cluster_hostname must resolve to the load balancer
 # or to one or all of the masters defined in the inventory if no load
 # balancer is present.
-#openshift_master_cluster_method=native
-#openshift_master_cluster_hostname=openshift-cluster.example.com
-#openshift_master_cluster_public_hostname=openshift-cluster.example.com
+openshift_master_cluster_method=native
+openshift_master_cluster_hostname=openshift-cluster.example.com
+openshift_master_cluster_public_hostname=openshift-cluster.example.com
 
 # override the default controller lease ttl
 #osm_controller_lease_ttl=30
@@ -78,10 +78,9 @@ deployment_type=openshift-enterprise
 # public_network_ip : if you want to fix public ip which can be reached from outside, you set this value. Then, it will change network script.
 # mgmt_network_ip : if you want to fix mgmt ip for communication among systems(masters/nodes/etcds) , you set this value. Then, it will change network script.
 [masters]
-master.example.com ansible_ssh_host=192.168.20.60 public_network_ip=192.168.122.2 public_network_gw=192.168.122.1 mgmt_network_ip=192.168.20.60 is_node=true openshift_node_labels="{'region': 'infra', 'zone': 'default'}" 
-#master.example.com ansible_ssh_host=192.168.20.60 public_network_ip=192.168.122.2 mgmt_network_ip=192.168.20.60 is_node=true 
-#master2.example.com ansible_ssh_host=192.168.20.61 public_network_ip=192.168.122.3 mgmt_network_ip=192.168.20.61
-#master3.example.com ansible_ssh_host=10.64.168.233 public_network_ip=192.168.122.4 mgmt_network_ip=192.168.20.62
+master1.example.com ansible_ssh_host=172.20.20.147 public_network_ip=10.64.168.123 mgmt_network_ip=172.20.20.147
+master2.example.com ansible_ssh_host=172.20.20.148 public_network_ip=10.64.168.124 mgmt_network_ip=172.20.20.148
+master3.example.com ansible_ssh_host=172.20.20.149 public_network_ip=10.64.168.125 mgmt_network_ip=172.20.20.149
 
 [masters:vars]
 # It will help change hostname of each master system.
@@ -90,14 +89,14 @@ set_hostname=true
 # It will help set up network configuration of each master system.
 set_network=true
 # Note!! It is important variable. If you misconfigure it, the master systems' network could be broken. Hence, please double-check the device is for master_mgmt_network
-mgmt_network_dev_name=ens3
+mgmt_network_dev_name=eth0
 # Note!! It is important variable. If you misconfigure it, the master systems' network could be broken. Hence, please double-check the device is for master_public_network
-public_network_dev_name=ens4
+public_network_dev_name=eth1
 
 
 [nodes]
-node1.example.com ansible_ssh_host=192.168.20.61 public_network_ip=192.168.122.3 public_network_gw=192.168.122.1 mgmt_network_ip=192.168.20.61 openshift_node_labels="{'region': 'primary', 'zone': 'east'}"
-#node2.example.com ansible_ssh_host=192.168.20.62 public_network_ip=192.168.122.4 mgmt_network_ip=192.168.20.62 openshift_node_labels="{'region': 'primary', 'zone': 'west'}
+node1.example.com ansible_ssh_host=172.20.20.152 public_network_ip=10.64.168.127 public_network_gw=10.64.168.254 mgmt_network_ip=172.20.20.152 openshift_node_labels="{'region': 'primary', 'zone': 'east'}"
+node2.example.com ansible_ssh_host=172.20.20.153 public_network_ip=10.64.168.128 public_network_gw=10.64.168.254 mgmt_network_ip=172.20.20.153 openshift_node_labels="{'region': 'primary', 'zone': 'west'}"
 
 
 [nodes:vars]
@@ -107,16 +106,16 @@ set_hostname=true
 # It will help set up network configuration of each node system.
 set_network=true
 # Note!! It is important variable. If you misconfigure it, the node systems' network could be broken. Hence, please double-check the device is for node_mgmt_network
-mgmt_network_dev_name=ens3
+mgmt_network_dev_name=eth0
 # Note!! It is important variable. If you misconfigure it, the node systems' network could be broken. Hence, please double-check the device is for node_public_network
-public_network_dev_name=ens4
+public_network_dev_name=eth1
 
 
 
 [etcd]
-#etcd1.example.com ansible_ssh_host=192.168.259.305  mgmt_network_ip=10.64.168.405 
-#etcd2.example.com ansible_ssh_host=192.168.259.306  mgmt_network_ip=10.64.168.406
-#etcd3.example.com ansible_ssh_host=192.168.259.307  mgmt_network_ip=10.64.168.407
+etcd1.example.com ansible_ssh_host=172.20.20.150  mgmt_network_ip=172.20.20.150
+etcd2.example.com ansible_ssh_host=172.20.20.146  mgmt_network_ip=172.20.20.146
+etcd3.example.com ansible_ssh_host=172.20.20.151  mgmt_network_ip=172.20.20.151
 
 
 [etcd:vars]
@@ -124,16 +123,27 @@ public_network_dev_name=ens4
 set_hostname=true
 
 # It will help set up network configuration of each etcd system.
-set_network=true
+set_network=false
 # Note!! It is important variable. If you misconfigure it, the etcd systems' network could be broken. Hence, please double-check the device is for etcd_mgmt_network
-mgmt_network_dev_name=ens3
+mgmt_network_dev_name=eth0
 
 # Specify load balancer host
 [lb]
-#lb.example.com ansible_ssh_host=192.168.259.308  mgmt_network_ip=10.64.168.408 public_network_ip=192.168.122.4 public_network_gw=192.168.122.1
+lb.example.com ansible_ssh_host=172.20.20.155  mgmt_network_ip=172.20.20.155 public_network_ip=10.64.168.131 public_network_gw=10.64.168.254
+
+[lb:vars]
+# It will help change hostname of each etcd system.
+set_hostname=true
+
+# It will help set up network configuration of each etcd system.
+set_network=true
+# Note!! It is important variable. If you misconfigure it, the etcd systems' network could be broken. Hence, please double-check the device is for etcd_mgmt_network
+mgmt_network_dev_name=eth0
+# Note!! It is important variable. If you misconfigure it, the node systems' network could be broken. Hence, please double-check the device is for node_public_network
+public_network_dev_name=eth1
 
 [infra]
-infra.example.com ansible_ssh_host=192.168.20.62  mgmt_network_ip=192.168.20.62 public_network_ip=192.168.122.4 public_network_gw=192.168.122.1
+infra.example.com ansible_ssh_host=172.20.20.154  mgmt_network_ip=172.20.20.154 public_network_ip=10.64.168.130 public_network_gw=10.64.168.254
 
 [infra:vars]
 # It will help change hostname of each infra system.
@@ -142,6 +152,6 @@ set_hostname=true
 # It will help set up network configuration of each infra system.
 set_network=true
 # Note!! It is important variable. If you misconfigure it, the infra systems' network could be broken. Hence, please double-check the device is for infra_mgmt_network
-mgmt_network_dev_name=ens3
+mgmt_network_dev_name=eth0
 # Note!! It is important variable. If you misconfigure it, the infra systems' network could be broken. Hence, please double-check the device is for infra_public_network
-public_network_dev_name=ens4
+public_network_dev_name=eth1

@@ -17,10 +17,18 @@
     template: src=named.jhouse.zones.j2 dest=/etc/named.jhouse.zones
     when: "{{dns_install}} == true"
   
+  - name: Copy /etc/named.ose.zones (example.com domain)
+    template: src=named.ose.zones.j2 dest=/etc/named.ose.zones
+    when: "{{dns_install}} == true"
+
   - name: Copy /var/named/named.jhouse
     template: src=named.jhouse.j2 dest=/var/named/named.jhouse
     when: "{{dns_install}} == true"
  
+  - name: Copy /var/named/named.ose (master/node/etcd/infra/lb)
+    template: src=named.ose.j2 dest=/var/named/named.ose
+    when: "{{dns_install}} == true"
+
   - name: Start DNS server(bind)
     service: name=named state=restarted
     when: "{{dns_install}} == true"
