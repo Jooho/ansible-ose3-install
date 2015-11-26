@@ -1,0 +1,6 @@
+
+
+
+  - name: prerequites process.
+    shell: "yum install -y wget git net-tools bind-utils iptables-services bridge-utils bash-completion atomic-openshift-utils docker "
+    tags: openshift_ansible

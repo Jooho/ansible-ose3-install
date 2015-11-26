@@ -66,9 +66,10 @@
      tags: add_host
 #Check conditions(To-Do vm network setting verification)
  - include: ./checking_conditions.yaml
+ - include: ../ose3-master/config.yaml
  - include: ../ose3-infra/config.yaml
  - include: ../ose3-lb/config.yaml
  - include: ../ose3-etcd/config.yaml
  - include: ../ose3-node/config.yaml
- - include: ../ose3-master/config.yaml
+ - include: ./ose3_install_prerequites.yaml
  - include: /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml
