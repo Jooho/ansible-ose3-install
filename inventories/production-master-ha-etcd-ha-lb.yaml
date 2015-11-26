@@ -28,7 +28,7 @@ proxy_host_ip="192.168.259.200" #default:infra
 internal_repo_install=true
 internal_repo_host_ip="192.168.20.60"  
 internal_repo_host_name="internal-repo.example.com"
-internal_repo_iso_src_path=/home/jooho
+internal_repo_iso_src_path=/root/ose
 #internal_repo_iso_dest_path=/root/iso
 internal_repo_rhel_iso_long="rhel-server-7.1-x86_64-151120.iso"
 internal_repo_rhel_iso_short="rhel71"
@@ -43,6 +43,7 @@ nfs_iscsi_host_ip="192.168.20.60"     #default:infra
 subscription_register=false
 subscription_register_name=test
 subscription_register_password=test
+subscription_register_pool_id=8a85f9813cf493fe013d028b6cf75b5a
 
 # If you choose master HA architecture, you should provide master configuration (This will be changed by OSE 3.1 because it does not use pacemaker any more)
 # master cluster ha variables using pacemaker or RHEL HA

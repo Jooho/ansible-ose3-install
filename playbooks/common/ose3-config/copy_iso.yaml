@@ -1,6 +1,0 @@
-  - name: Check if rhel iso file exist on local
-    local_action: file path={{internal_repo_iso_src_path}}/{{internal_repo_rhel_iso_long}}
-
-  - name: Check if ose iso file exist on local
-    local_action: path={{internal_repo_iso_src_path}}/{{internal_repo_ose_iso_long}}
-

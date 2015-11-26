@@ -1,7 +1,7 @@
 
 
   - name: "mount rhel iso file to {{ineternal_repo_apache_repo_path}}/{{internal_repo_rhel_iso_short}}"
-    mount: src={{iso_dest_path}}/{{internal_repo_rhel_iso_long}}  name={{internal_repo_apache_repo_path}}/{{internal_repo_rhel_iso_short}} fstype="iso9660" opts="loop" state=mounted
+    mount: src={{internal_repo_iso_src_path}}/{{internal_repo_rhel_iso_long}}  name={{internal_repo_apache_repo_path}}/{{internal_repo_rhel_iso_short}} fstype="iso9660" opts="loop" state=mounted
 
   - name: Copy repo file under yum.repos.d
     template: src=local.repo.j2 dest=/etc/yum.repos.d/local.repo
