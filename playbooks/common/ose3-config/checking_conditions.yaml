@@ -81,7 +81,7 @@
      tags: add_host
 
    - name: Check if ose iso file exist on local
-     local_action: path={{internal_repo_iso_src_path}}/{{internal_repo_ose_iso_long}} 
+     local_action: file path={{internal_repo_iso_src_path}}/{{internal_repo_ose_iso_long}} 
      tags: add_host
 
    handlers:
