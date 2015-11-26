@@ -75,7 +75,15 @@
        - Verify subscription_register_password
      when: "{{internal_repo_install}} == false and {{internet_connected}} == false and {{subscription_register}} == false"
      tags: add_host
-  
+ 
+   - name: Check if rhel iso file exist on local
+     local_action: file path={{internal_repo_iso_src_path}}/{{internal_repo_rhel_iso_long}}
+     tags: add_host
+
+   - name: Check if ose iso file exist on local
+     local_action: path={{internal_repo_iso_src_path}}/{{internal_repo_ose_iso_long}} 
+     tags: add_host
+
    handlers:
     - name : Verify dns_wildcard_domain
       fail:

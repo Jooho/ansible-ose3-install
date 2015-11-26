@@ -21,7 +21,7 @@
 
 
    - name: create temp folder for intallation
-     file: path="{{iso_dest_path}}" state="directory"
+     file: path="{{iso_dest_path}}" state="directory" force="false"
      tags: infra
    
    - name: check if the iso files exist
