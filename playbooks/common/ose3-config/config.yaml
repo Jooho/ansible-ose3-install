@@ -64,6 +64,7 @@
       ansible_sudo: "{{ g_sudo | default(omit) }}"
      with_items: groups[g_infra]
      tags: add_host
+
 #Check conditions(To-Do vm network setting verification)
  - include: ./checking_conditions.yaml
  - include: ../ose3-master/config.yaml
