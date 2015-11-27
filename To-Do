@@ -18,17 +18,33 @@ Phase 1
        - etcd_mgmt_network_dev_name=eth0
        - infra_mgmt_network_dev_name=eth0
        - infra_public_network_dev_name=eth1
-√- Hosts file(hosts for communication among all systems) with inventory file
+√ - Hosts file(hosts for communication among all systems) with inventory file
 √ - Network configuration
    - public/management network
    - service restart
- - DNS installation
- - Internal_repo installation
- - Ansible inventory file for installation of ose 3
- - Proxy installation
- - OSE installation
+√ - DNS installation
+√ - Internal_repo installation
+√ - Ansible inventory file for installation of ose 3
+√ - Proxy installation
+√ - OSE installation
     - git (copy for private network, clone for public network)
     - inventory copy
+
+Phase 1-1 (Enhancement)
+
+√  1-lb- notice lb hostname 은 openshift_cluster_hostname과 같아야한다.
+  1-all- tag 정리
+  1-pre-requite - 기본적으로 설치해야하는 것들 확인하기
+  1-최초 설치시 필요한것 -atomic-openshift-util 설치/ ansible-ose-installer 복사/ SSH-KEYGEN, SSH_COPY_ID/
+
+  2-infra - hosts/dns 설정파일 무조건 변경하기
+  2-master- 전체 언인스톨 하기
+
+  3-infra - NFS
+  3-infra - subscrption_register
+  3-doc - 전체 설치 문서
+  3-test - master/node/etcd/dns/repo/nfs/subscription
+  3-etcd 를 master에 같이 설치
 
 Phase 2
  - new ansible role for customization.
@@ -48,3 +64,5 @@ Phase 3
    - master(M:4G D:30G)/node(M:8G D:50G)/etcd(M:4G D:100G)/infra(M:8G D:30G)
    - Disk allocation to infra and it will be shared with each node for docker-regitstry-storage
    - Network configuration ( master/node/infra => mgmt: eth0, public: eth1    etcd => mgmt: eth0)
+
+

@@ -10,14 +10,15 @@ ansible_ssh_user=root
 # Check if it is possible to reach to internet. If it is not, internal repository using apache will be installed by default but you can overwrite it with 'internal_repo_install'.
 internet_connected=false  
 
+overriwrite_hosts_file=true
 # If internet_connected=false, you need archieved openshift-ansible because it is not possible to clone the github.
 openshift_ansible_path=/home/jooho
+
 # This DNS server using bind will be installed and the wildcard card entry configuration will be applied
 dns_install=true
 dns_wildcard_domain="cloudapps.example.com"
 dns_routers_ip="192.168.122.2"   
 dns_host_ip="192.168.20.60"    
-#default:infra
 
 # This proxy server using haproxy play an role in vip for multiple routers  (To-Do : image) In production, it would be changed L4 machine.
 proxy_install=false
@@ -97,8 +98,8 @@ public_network_dev_name=eth1
 
 
 [nodes]
-node1.example.com ansible_ssh_host=172.20.20.152 public_network_ip=10.64.168.133 public_network_gw=10.64.168.254 mgmt_network_ip=172.20.20.152 openshift_node_labels="{'region': 'primary', 'zone': 'east'}"
-node2.example.com ansible_ssh_host=172.20.20.153 public_network_ip=10.64.168.134 public_network_gw=10.64.168.254 mgmt_network_ip=172.20.20.153 openshift_node_labels="{'region': 'primary', 'zone': 'west'}"
+node1.example.com ansible_ssh_host=172.20.20.159 public_network_ip=10.64.168.133 public_network_gw=10.64.168.254 mgmt_network_ip=172.20.20.152 openshift_node_labels="{'region': 'primary', 'zone': 'east'}"
+node2.example.com ansible_ssh_host=172.20.20.160 public_network_ip=10.64.168.134 public_network_gw=10.64.168.254 mgmt_network_ip=172.20.20.153 openshift_node_labels="{'region': 'primary', 'zone': 'west'}"
 
 
 [nodes:vars]

@@ -15,7 +15,8 @@
        master_count: "{{ (groups[g_masters_group] | length) }}"
        subscription_register: "{{ (hostvars[groups.oo_ose3_install.0].subscription_register) }}"
      tags: add_host
-
+   - debug: msg="{{groups.oo_lb}}"
+     tags: add_host
    - name: Check DNS parameters
      shell: "echo Checking DNS parameters"
      notify:
@@ -64,7 +65,9 @@
      notify:
        - Verify openshift_master_cluster_method
        - Verify openshift_master_cluster_hostname
+       - Verify openshift_master_cluster_hostname is same as lb hostname
        - Verify openshift_master_cluster_public_hostname
+       - Verify openshift_master_cluster_public_hostname is same as lb hostname
      when: "{{master_count}} > 1 and {{groups[g_lb] is defined}}"
      tags: add_host
 
@@ -168,6 +171,18 @@
       fail:
          msg="openshift_master_cluster_public_hostname is not undefinded"
       when: "hostvars[groups.oo_ose3_install.0].openshift_master_cluster_public_hostname is not defined"
+      tags: add_host
+
+    - name : Verify openshift_master_cluster_hostname is same as lb hostname
+      fail:
+         msg="openshift_master_cluster_hostname is not same as lb hostname"
+      when: "'{{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_hostname}}' != '{{groups.oo_lb.0}}'"
+      tags: add_host
+
+    - name : Verify openshift_master_cluster_public_hostname is same as lb hostname
+      fail:
+         msg="openshift_master_cluster_public_hostname is not same as lb hostname"
+      when: "'{{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_public_hostname}}' != '{{groups.oo_lb.0}}'"
       tags: add_host
 
     - name : Verify subscription_register_name
