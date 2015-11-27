@@ -1,0 +1,11 @@
+
+#This file set up prerequites process for installation of ose3
+
+  - name: Prerequites process for masters.
+    hosts: masters
+    gather_facts: no
+
+    tasks:
+    - name: Install nessasary packages
+      shell: "yum install -y wget git net-tools bind-utils iptables-services bridge-utils bash-completion docker "
+      tags: openshift_ansible

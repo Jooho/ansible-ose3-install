@@ -11,36 +11,41 @@ $TTL 1D
       AAAA        ::1
 
 {% if (groups[g_masters_group] | length) >0 %}
-{% for item in groups.oo_masters -%}
+{% for item in groups.oo_masters %}
 {% set host=item.split(".")|first %}
+
 {{host}} A {{hostvars[item].public_network_ip}}
 {%- endfor %}
 {% endif %}
 
 {% if (groups[g_nodes_group] | length) >0 %}
-{% for item in groups.oo_nodes -%}
+{% for item in groups.oo_nodes %}
 {% set host=item.split(".")|first %}
+
 {{host}} A {{hostvars[item].public_network_ip}}
 {%- endfor %}
 {% endif %}
 
 {% if (groups[g_etcds_group] | length) >0 %}
-{% for item in groups.oo_etcd -%}
+{% for item in groups.oo_etcds %}
 {% set host=item.split(".")|first %}
+
 {{host}} A {{hostvars[item].mgmt_network_ip}}
 {%- endfor %}
 {% endif %}
 
 {% if (groups[g_infra] | length) >0 %}
-{% for item in groups.oo_infra -%}
+{% for item in groups.oo_infra %}
 {% set host=item.split(".")|first %}
+
 {{host}} A {{hostvars[item].public_network_ip}}
 {%- endfor %}
 {% endif %}
   
 {% if (groups[g_lb] | length) >0 %}
-{% for item in groups.oo_lb -%}
+{% for item in groups.oo_lb %}
 {% set host=item.split(".")|first %}
+
 {{host}} A {{hostvars[item].public_network_ip}}
 {%- endfor %}
 {% endif %}

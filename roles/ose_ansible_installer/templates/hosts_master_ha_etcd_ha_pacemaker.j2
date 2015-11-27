@@ -21,12 +21,12 @@ deployment_type=openshift-enterprise
 # Pacemaker HA environment must be able to self provision the
 # configured VIP. For installation openshift_master_cluster_hostname
 # must resolve to the configured VIP.
-openshift_master_cluster_method={{hostvar[oo_ose3_install].openshift_master_cluster_method}}
-openshift_master_cluster_password={{hostvar[oo_ose3_install].openshift_master_cluster_password}}
-openshift_master_cluster_vip={{hostvar[oo_ose3_install].openshift_master_cluster_vip}}
-openshift_master_cluster_public_vip={{hostvar[oo_ose3_install].openshift_master_cluster_public_vip}}
-openshift_master_cluster_hostname={{hostvar[oo_ose3_install].openshift_master_cluster_hostname}}
-openshift_master_cluster_public_hostname={{hostvar[oo_ose3_install].openshift_master_cluster_public_hostname}}
+openshift_master_cluster_method={{hostvars[groups.oo_ose3_install].openshift_master_cluster_method}}
+openshift_master_cluster_password={{hostvars[groups.oo_ose3_install].openshift_master_cluster_password}}
+openshift_master_cluster_vip={{hostvars[groups.oo_ose3_install].openshift_master_cluster_vip}}
+openshift_master_cluster_public_vip={{hostvars[groups.oo_ose3_install].openshift_master_cluster_public_vip}}
+openshift_master_cluster_hostname={{hostvars[groups.oo_ose3_install].openshift_master_cluster_hostname}}
+openshift_master_cluster_public_hostname={{hostvars[groups.oo_ose3_install].openshift_master_cluster_public_hostname}}
 
 # override the default controller lease ttl
 #osm_controller_lease_ttl=30

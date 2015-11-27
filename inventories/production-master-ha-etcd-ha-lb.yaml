@@ -30,9 +30,9 @@ internal_repo_host_ip="192.168.20.60"
 internal_repo_host_name="internal-repo.example.com"
 internal_repo_iso_src_path=/root/ose
 #internal_repo_iso_dest_path=/root/iso
-internal_repo_rhel_iso_long="rhel-server-7.1-x86_64-151120.iso"
+internal_repo_rhel_iso_long="rhel-server-7.1-x86_64-151125.iso"
 internal_repo_rhel_iso_short="rhel71"
-internal_repo_ose_iso_long="ose-3.1-x86_64-151120.iso"
+internal_repo_ose_iso_long="ose-3.1-x86_64-151125.iso"
 internal_repo_ose_iso_short="ose31"
 internal_repo_apache_repo_path="/var/www/html/repo"
 # This NFS/iscsi server is for testing PV and docker-registory-storage hence I strongly disagee that you use it in Production. Only use it for Test environment.
@@ -63,14 +63,15 @@ subscription_register_pool_id=8a85f9813cf493fe013d028b6cf75b5a
 # or to one or all of the masters defined in the inventory if no load
 # balancer is present.
 openshift_master_cluster_method=native
-openshift_master_cluster_hostname=openshift-cluster.example.com
-openshift_master_cluster_public_hostname=openshift-cluster.example.com
+openshift_master_cluster_hostname=lb.example.com
+openshift_master_cluster_public_hostname=lb.example.com
 
 # override the default controller lease ttl
 #osm_controller_lease_ttl=30
 
 # If you use this script for testing environment, please set this true. Then you can set more infra environment using ansible.
 development=true
+openshift_ansible_tar=false
 
 deployment_type=openshift-enterprise
 
@@ -79,9 +80,9 @@ deployment_type=openshift-enterprise
 # public_network_ip : if you want to fix public ip which can be reached from outside, you set this value. Then, it will change network script.
 # mgmt_network_ip : if you want to fix mgmt ip for communication among systems(masters/nodes/etcds) , you set this value. Then, it will change network script.
 [masters]
-master1.example.com ansible_ssh_host=172.20.20.147 public_network_ip=10.64.168.130 public_network_gw=10.64.168.254 mgmt_network_ip=172.20.20.147
-master2.example.com ansible_ssh_host=172.20.20.148 public_network_ip=10.64.168.131 public_network_gw=10.64.168.254 mgmt_network_ip=172.20.20.148
-master3.example.com ansible_ssh_host=172.20.20.149 public_network_ip=10.64.168.132 public_network_gw=10.64.168.254 mgmt_network_ip=172.20.20.149
+master1.example.com ansible_ssh_host=172.20.20.147 public_network_ip=10.64.168.130 public_network_gw=10.64.168.254 mgmt_network_ip=172.20.20.147 is_node=false
+master2.example.com ansible_ssh_host=172.20.20.148 public_network_ip=10.64.168.131 public_network_gw=10.64.168.254 mgmt_network_ip=172.20.20.148 is_node=false
+master3.example.com ansible_ssh_host=172.20.20.149 public_network_ip=10.64.168.132 public_network_gw=10.64.168.254 mgmt_network_ip=172.20.20.149 is_node=false
 
 [masters:vars]
 # It will help change hostname of each master system.
