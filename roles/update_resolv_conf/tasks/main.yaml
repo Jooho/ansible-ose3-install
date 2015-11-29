@@ -1,0 +1,6 @@
+
+
+   - name: Copy resolv.conf
+     template: src="resolv.conf.j2" dest="/etc/resolv.conf"
+     when: "{{hostvars[groups.oo_ose3_install.0].internal_repo_install}} == true"
+     tags: resolv_confy

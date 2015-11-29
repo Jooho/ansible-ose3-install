@@ -42,6 +42,11 @@ $TTL 1D
 {%- endfor %}
 {% endif %}
   
+{% if (groups[g_lb] | length) == 0 and (groups[g_masters_group] | length) > 1   %}
+{% set host=hostvars[groups.oo_ose3_install.0].openshift_master_cluster_hostname.split(".")|first %}
+{{host}} A {{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_vip}} 
+{% endif %}
+
 {% if (groups[g_lb] | length) >0 %}
 {% for item in groups.oo_lb %}
 {% set host=item.split(".")|first %}

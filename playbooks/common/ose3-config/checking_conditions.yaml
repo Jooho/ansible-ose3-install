@@ -15,8 +15,7 @@
        master_count: "{{ (groups[g_masters_group] | length) }}"
        subscription_register: "{{ (hostvars[groups.oo_ose3_install.0].subscription_register) }}"
      tags: add_host
-   - debug: msg="{{groups.oo_lb}}"
-     tags: add_host
+   
    - name: Check DNS parameters
      shell: "echo Checking DNS parameters"
      notify:
@@ -52,14 +51,16 @@
    - name: Check Master HA parameters with pacemaker
      shell: "echo Checking Master HA parameters with pacemaker"
      notify:
+       - Verify openshift_master_cluster_method
        - Verify openshift_master_cluster_password
        - Verify openshift_master_cluster_vip
        - Verify openshift_master_cluster_public_vip
        - Verify openshift_master_cluster_hostname
        - Verify openshift_master_cluster_public_hostname
-     when: "{{master_count}} > 1 and {{groups[g_lb] is not defined}}"
+     when: "{{master_count}} > 1 and (groups[g_lb]|length)==0"
      tags: add_host
-
+   - debug: var={{groups[g_lb]|length}}
+   - debug: msg="{{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_hostname}} is not defined"
    - name: Check Master HA parameters with lb
      shell: "echo Checking Master HA parameters with lb"
      notify:
@@ -68,7 +69,7 @@
        - Verify openshift_master_cluster_hostname is same as lb hostname
        - Verify openshift_master_cluster_public_hostname
        - Verify openshift_master_cluster_public_hostname is same as lb hostname
-     when: "{{master_count}} > 1 and {{groups[g_lb] is defined}}"
+     when: "{{master_count}} > 1 and (groups[g_lb]|length) >0"
      tags: add_host
 
    - name: Check Subscription_manager parameters (it is depending on what you use Subscription_manager or internal_repo)
@@ -91,86 +92,87 @@
     - name : Verify dns_wildcard_domain
       fail:
         msg="dns_wildcard_domain is not undefinded"
-      when: "hostvars[groups.oo_ose3_install.0].dns_wildcard_domain is not defined"
+      when: "'{{hostvars[groups.oo_ose3_install.0].dns_wildcard_domain}}' is not defined"
       tags: add_host
 
     - name : Verify dns_routers_ip
       fail:
          msg="dns_routers_ip is not undefinded"
-      when: "hostvars[groups.oo_ose3_install.0].dns_routers_ip is not defined"
+      when: "'{{hostvars[groups.oo_ose3_install.0].dns_routers_ip}}' is not defined"
       tags: add_host
 
     - name : Verify dns_host_ip
       fail:
          msg="dns_host_ip is not undefinded"
-      when: "hostvars[groups.oo_ose3_install.0].dns_host_ip is not defined"
+      when: "'{{hostvars[groups.oo_ose3_install.0].dns_host_ip}}' is not defined"
       tags: add_host
 
     - name : Verify proxy_vip
       fail:
          msg="proxy_vip is not undefinded"
-      when: "hostvars[groups.oo_ose3_install.0].proxy_vip is not defined"
+      when: "'{{hostvars[groups.oo_ose3_install.0].proxy_vip}}' is not defined"
       tags: add_host
 
     - name : Verify proxy_host_ip
       fail:
          msg="proxy_host_ip is not undefinded"
-      when: "hostvars[groups.oo_ose3_install.0].proxy_host_ip is not defined"
+      when: "'{{hostvars[groups.oo_ose3_install.0].proxy_host_ip}}' is not defined"
       tags: add_host
 
     - name : Verify internal_repo_host_ip
       fail:
          msg="internal_repo_host_ip is not undefinded"
-      when: "hostvars[groups.oo_ose3_install.0].internal_repo_host_ip is not defined"
+      when: "'{{hostvars[groups.oo_ose3_install.0].internal_repo_host_ip}}' is not defined"
       tags: add_host
 
 
     - name : Verify internal_repo_host_name
       fail:
          msg="internal_repo_host_name is not undefinded"
-      when: "hostvars[groups.oo_ose3_install.0].internal_repo_host_name is not defined"
+      when: "'{{hostvars[groups.oo_ose3_install.0].internal_repo_host_name}}' is not defined"
       tags: add_host
 
     - name : Verify nfs_iscsi_host_ip
       fail:
          msg="nfs_iscsi_host_ip is not undefinded"
-      when: "hostvars[groups.oo_ose3_install.0].nfs_iscsi_host_ip is not defined"
+      when: "'{{hostvars[groups.oo_ose3_install.0].nfs_iscsi_host_ip}}' is not defined"
       tags: add_host
 
     - name : Verify openshift_master_cluster_password
       fail:
          msg="openshift_master_cluster_password is not undefinded"
-      when: "hostvars[groups.oo_ose3_install.0].openshift_master_cluster_password is not defined"
+      when: "'{{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_password}}' is not defined"
       tags: add_host
 
     - name : Verify openshift_master_cluster_vip
       fail:
          msg="openshift_master_cluster_vip is not undefinded"
-      when: "hostvars[groups.oo_ose3_install.0].openshift_master_cluster_vip is not defined"
+      when: "'{{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_vip}}' is not defined"
       tags: add_host
 
     - name : Verify openshift_master_cluster_public_vip
       fail:
          msg="openshift_master_cluster_public_vip is not undefinded"
-      when: "hostvars[groups.oo_ose3_install.0].openshift_master_cluster_public_vip is not defined"
+      when: "'{{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_public_vip}}' is not defined"
       tags: add_host
+
 
     - name : Verify openshift_master_cluster_hostname
       fail:
          msg="openshift_master_cluster_hostname is not undefinded"
-      when: "hostvars[groups.oo_ose3_install.0].openshift_master_cluster_hostname is not defined"
+      when: "'{{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_hostname}}' is not defined"
       tags: add_host
 
     - name : Verify openshift_master_cluster_method
       fail:
          msg="openshift_master_cluster_method is not undefinded"
-      when: "hostvars[groups.oo_ose3_install.0].openshift_master_cluster_method is not defined"
+      when: "'{{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_method}}' is not defined"
       tags: add_host
 
     - name : Verify openshift_master_cluster_public_hostname
       fail:
          msg="openshift_master_cluster_public_hostname is not undefinded"
-      when: "hostvars[groups.oo_ose3_install.0].openshift_master_cluster_public_hostname is not defined"
+      when: "'{{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_public_hostname}}' is not defined"
       tags: add_host
 
     - name : Verify openshift_master_cluster_hostname is same as lb hostname
@@ -188,11 +190,11 @@
     - name : Verify subscription_register_name
       fail:
          msg="subscription_register_name is not undefinded"
-      when: "hostvars[groups.oo_ose3_install.0].subscription_register_name is not defined"
+      when: "'{{hostvars[groups.oo_ose3_install.0].subscription_register_name}}' is not defined"
       tags: add_host
 
     - name : Verify subscription_register_password
       fail:
          msg="subscription_register_password is not undefinded"
-      when: "hostvars[groups.oo_ose3_install.0].subscription_register_password is not defined"
+      when: "'{{hostvars[groups.oo_ose3_install.0].subscription_register_password}}' is not defined"
       tags: add_host

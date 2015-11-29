@@ -1,0 +1,15 @@
+{% if (groups[g_masters_group] | length) == 1 %}
+{% for item in groups.oo_masters %}
+nameserver {{hostvars[item].public_network_ip}} {{item}}
+{%- endfor %}
+{% endif %}
+
+{% if (groups[g_lb] | length) == 0 and (groups[g_masters_group] | length) > 1   %}
+nameserver {{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_vip}}
+{% endif %}
+
+{% if (groups[g_lb] | length) >0 and (groups[g_masters_group] | length) > 1 %}
+nameserver {{hostvars[groups.oo_lb.0].public_network_ip}}
+{% endif %}
+
+nameserver {{hostvars[groups.oo_ose3_install.0].dns_host_ip}}

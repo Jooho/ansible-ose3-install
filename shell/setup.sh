@@ -2,8 +2,8 @@
 function mount_temp_repository(){
      mkdir -p /var/iso_images/rhel
      mkdir -p /var/iso_images/ose
-     mount -o loop,ro $rhel_iso_file /var/iso_images/rhel
-     mount -o loop,ro $ose_iso_file /var/iso_images/ose
+     mount -o loop,ro ../../$rhel_iso_file /var/iso_images/rhel
+     mount -o loop,ro ../../$ose_iso_file /var/iso_images/ose
 
 if [ -f /etc/yum.repos.d/ose.repo ]
 then
@@ -50,8 +50,8 @@ fi
 export internet_connected=$(grep  "internet_connected=" $1 |grep -v ^# |cut -d"=" -f2)
 echo $internet_connected
 
-export rhel_iso_file=$(grep -i rhel_iso_long ./ansible-ose3-install/inventories/production-master-ha-etcd-ha-lb.yaml  |cut -d"=" -f2|awk '{gsub( "\"","" ); print}')
-export ose_iso_file=$(grep -i ose_iso_long ./ansible-ose3-install/inventories/production-master-ha-etcd-ha-lb.yaml  |cut -d"=" -f2|awk '{gsub( "\"","" ); print}')
+export rhel_iso_file=$(grep -i rhel_iso_long ../inventories/production-master-ha-etcd-ha-lb.yaml  |cut -d"=" -f2|awk '{gsub( "\"","" ); print}')
+export ose_iso_file=$(grep -i ose_iso_long ../inventories/production-master-ha-etcd-ha-lb.yaml  |cut -d"=" -f2|awk '{gsub( "\"","" ); print}')
 export mount_temp_repo_statue="unmounted"
 
 
@@ -69,11 +69,12 @@ then
   umount_temp_repository
   mount_temp_repo_statue=umounted
   echo $mount_temp_repo_statue
+  rm /etc/yum.repos.d/ose.repo
 fi
 
 
-export domain=$(grep ^master ./ansible-ose3-install/inventories/production-master-ha-etcd-ha-lb.yaml |sed -n '2p' |cut -d" " -f1 |awk -F . {'print $2 "." $3'};)
-export hosts=$(grep "example.com" ./ansible-ose3-install/inventories/production-master-ha-etcd-ha-lb.yaml | awk -F "mgmt_network_ip=" '{print $2}'|cut -d" " -f1|grep -v "^$" |awk '{print  $1 " \\"  }')
+export domain=$(grep ^master ../inventories/production-master-ha-etcd-ha-lb.yaml |sed -n '2p' |cut -d" " -f1 |awk -F . {'print $2 "." $3'};)
+export hosts=$(grep "example.com" ../inventories/production-master-ha-etcd-ha-lb.yaml | awk -F "mgmt_network_ip=" '{print $2}'|cut -d" " -f1|grep -v "^$" |awk '{print  $1 " \\"  }')
 
 ssh-keygen
 echo -e "Do you want to copy id_rsa.pub file to all machines with 1 password?(y/n) \c"

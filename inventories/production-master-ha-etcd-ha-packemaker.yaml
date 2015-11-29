@@ -1,0 +1,161 @@
+[OSE3_INSTALL:children]
+masters
+nodes
+etcd
+lb
+infra
+
+[OSE3_INSTALL:vars]
+ansible_ssh_user=root
+# Check if it is possible to reach to internet. If it is not, internal repository using apache will be installed by default but you can overwrite it with 'internal_repo_install'.
+internet_connected=false  
+
+overriwrite_hosts_file=true
+# If internet_connected is false, you need archieved openshift-ansible because it is not possible to clone the github.
+openshift_ansible_path=/home/jooho
+
+# This DNS server using bind will be installed and the wildcard card entry configuration will be applied
+dns_install=true
+dns_wildcard_domain="cloudapps.example.com"
+dns_routers_ip="10.64.168.133"
+dns_host_ip="10.64.168.136"
+
+# This proxy server using haproxy play an role in vip for multiple routers  (To-Do : image) In production, it would be changed L4 machine.
+proxy_install=false
+proxy_vip="192.168.259.201"    
+proxy_host_ip="192.168.259.200" #default:infra
+
+# This internal_repository using apache is useful if the site is not available to use internet. If 'internet_connected' set false, internal repository will be installed by default.
+internal_repo_install=true
+internal_repo_host_ip="10.64.168.168.136"
+internal_repo_host_name="internal-repo.example.com"
+internal_repo_iso_src_path=/root/ose
+#internal_repo_iso_dest_path=/root/iso
+internal_repo_rhel_iso_long="rhel-server-7.1-x86_64-151125.iso"
+internal_repo_rhel_iso_short="rhel71"
+internal_repo_ose_iso_long="ose-3.1-x86_64-151125.iso"
+internal_repo_ose_iso_short="ose31"
+internal_repo_apache_repo_path="/var/www/html/repo"
+# This NFS/iscsi server is for testing PV and docker-registory-storage hence I strongly disagee that you use it in Production. Only use it for Test environment.
+nfs_iscsi_install=false
+nfs_iscsi_host_ip="192.168.20.60"     #default:infra
+
+# If you would like to register your server to system, you should provide Red Hat id/password.(internet_connected=true, internal_repo_install=false ==> this must be set)
+subscription_register=false
+subscription_register_name=test
+subscription_register_password=test
+subscription_register_pool_id=8a85f9813cf493fe013d028b6cf75b5a
+
+# If you choose master HA architecture, you should provide master configuration (This will be changed by OSE 3.1 because it does not use pacemaker any more)
+# master cluster ha variables using pacemaker or RHEL HA
+openshift_master_cluster_method=pacemaker
+openshift_master_cluster_password=openshift_cluster
+openshift_master_cluster_vip=10.64.168.150
+openshift_master_cluster_public_vip=10.64.168.150
+openshift_master_cluster_hostname=openshift-ansible.example.com
+openshift_master_cluster_public_hostname=openshift-ansible.example.com
+
+# uncomment the following to enable htpasswd authentication; defaults to DenyAllPasswordIdentityProvider
+#openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/htpasswd'}]
+
+# Native high availbility cluster method with optional load balancer.
+# If no lb group is defined installer assumes that a load balancer has
+# been preconfigured. For installation the value of
+# openshift_master_cluster_hostname must resolve to the load balancer
+# or to one or all of the masters defined in the inventory if no load
+# balancer is present.
+#openshift_master_cluster_method=native
+#openshift_master_cluster_hostname=lb.example.com
+#openshift_master_cluster_public_hostname=lb.example.com
+
+# override the default controller lease ttl
+#osm_controller_lease_ttl=30
+
+# If you use this script for testing environment, please set this true. Then you can set more infra environment using ansible.
+development=true
+openshift_ansible_tar=false
+product_type=openshift
+deployment_type=openshift-enterprise
+
+# host group for master
+# ansible_ssh_host : this is for initial connection of ansible playbook. ex) RHEV gives floating ip to VM automatically, it is the only ip that ansible can connect to execute playbook
+# public_network_ip : if you want to fix public ip which can be reached from outside, you set this value. Then, it will change network script.
+# mgmt_network_ip : if you want to fix mgmt ip for communication among systems(masters/nodes/etcds) , you set this value. Then, it will change network script.
+[masters]
+master1.example.com ansible_ssh_host=172.20.20.161 mgmt_network_ip=172.20.20.161 public_network_ip=10.64.168.130 public_network_gw=10.64.168.254 is_node=false
+master2.example.com ansible_ssh_host=172.20.20.162 mgmt_network_ip=172.20.20.162 public_network_ip=10.64.168.131 public_network_gw=10.64.168.254 is_node=false
+master3.example.com ansible_ssh_host=172.20.20.163 mgmt_network_ip=172.20.20.163 public_network_ip=10.64.168.132 public_network_gw=10.64.168.254 is_node=false
+
+[masters:vars]
+# It will help change hostname of each master system.
+set_hostname=true
+
+# It will help set up network configuration of each master system.
+set_network=true
+# Note!! It is important variable. If you misconfigure it, the master systems' network could be broken. Hence, please double-check the device is for master_mgmt_network
+mgmt_network_dev_name=eth0
+# Note!! It is important variable. If you misconfigure it, the master systems' network could be broken. Hence, please double-check the device is for master_public_network
+public_network_dev_name=eth1
+
+
+[nodes]
+node1.example.com ansible_ssh_host=172.20.20.159 mgmt_network_ip=172.20.20.159 public_network_ip=10.64.168.133 public_network_gw=10.64.168.254 openshift_node_labels="{'region': 'primary', 'zone': 'east'}"
+node2.example.com ansible_ssh_host=172.20.20.160 mgmt_network_ip=172.20.20.160 public_network_ip=10.64.168.134 public_network_gw=10.64.168.254 openshift_node_labels="{'region': 'primary', 'zone': 'west'}"
+
+
+[nodes:vars]
+# It will help change hostname of each node system.
+set_hostname=true
+
+# It will help set up network configuration of each node system.
+set_network=true
+# Note!! It is important variable. If you misconfigure it, the node systems' network could be broken. Hence, please double-check the device is for node_mgmt_network
+mgmt_network_dev_name=eth0
+# Note!! It is important variable. If you misconfigure it, the node systems' network could be broken. Hence, please double-check the device is for node_public_network
+public_network_dev_name=eth1
+
+
+
+[etcd]
+etcd1.example.com ansible_ssh_host=172.20.20.168  mgmt_network_ip=172.20.20.168
+etcd2.example.com ansible_ssh_host=172.20.20.165  mgmt_network_ip=172.20.20.165
+etcd3.example.com ansible_ssh_host=172.20.20.164  mgmt_network_ip=172.20.20.164
+
+
+[etcd:vars]
+# It will help change hostname of each etcd system.
+set_hostname=true
+
+# It will help set up network configuration of each etcd system.
+set_network=false
+# Note!! It is important variable. If you misconfigure it, the etcd systems' network could be broken. Hence, please double-check the device is for etcd_mgmt_network
+mgmt_network_dev_name=eth0
+
+# Specify load balancer host
+[lb]
+#lb.example.com ansible_ssh_host=172.20.20.166  mgmt_network_ip=172.20.20.166 public_network_ip=10.64.168.135 public_network_gw=10.64.168.254
+
+[lb:vars]
+# It will help change hostname of each etcd system.
+set_hostname=true
+
+# It will help set up network configuration of each etcd system.
+set_network=true
+# Note!! It is important variable. If you misconfigure it, the etcd systems' network could be broken. Hence, please double-check the device is for etcd_mgmt_network
+mgmt_network_dev_name=eth0
+# Note!! It is important variable. If you misconfigure it, the node systems' network could be broken. Hence, please double-check the device is for node_public_network
+public_network_dev_name=eth1
+
+[infra]
+infra.example.com ansible_ssh_host=172.20.20.167  mgmt_network_ip=172.20.20.167 public_network_ip=10.64.168.136 public_network_gw=10.64.168.254
+
+[infra:vars]
+# It will help change hostname of each infra system.
+set_hostname=true
+
+# It will help set up network configuration of each infra system.
+set_network=true
+# Note!! It is important variable. If you misconfigure it, the infra systems' network could be broken. Hence, please double-check the device is for infra_mgmt_network
+mgmt_network_dev_name=eth0
+# Note!! It is important variable. If you misconfigure it, the infra systems' network could be broken. Hence, please double-check the device is for infra_public_network
+public_network_dev_name=eth1

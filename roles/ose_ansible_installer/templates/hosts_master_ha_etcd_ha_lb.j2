@@ -41,7 +41,7 @@ openshift_master_cluster_public_hostname={{hostvars[groups.oo_ose3_install.0].op
 [etcd]
 {% for item in groups.oo_etcds %}
 {{item}} 
-{%- endfor %}
+{% endfor %}
  
 # Specify load balancer host
 [lb]

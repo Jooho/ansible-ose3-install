@@ -11,7 +11,7 @@ ansible_ssh_user=root
 
 # If ansible_ssh_user is not root, ansible_sudo must be set to true
 #ansible_sudo=true
-
+product_type=openshift
 deployment_type=openshift-enterprise
 
 # uncomment the following to enable htpasswd authentication; defaults to DenyAllPasswordIdentityProvider
@@ -21,35 +21,38 @@ deployment_type=openshift-enterprise
 # Pacemaker HA environment must be able to self provision the
 # configured VIP. For installation openshift_master_cluster_hostname
 # must resolve to the configured VIP.
-openshift_master_cluster_method={{hostvars[groups.oo_ose3_install].openshift_master_cluster_method}}
-openshift_master_cluster_password={{hostvars[groups.oo_ose3_install].openshift_master_cluster_password}}
-openshift_master_cluster_vip={{hostvars[groups.oo_ose3_install].openshift_master_cluster_vip}}
-openshift_master_cluster_public_vip={{hostvars[groups.oo_ose3_install].openshift_master_cluster_public_vip}}
-openshift_master_cluster_hostname={{hostvars[groups.oo_ose3_install].openshift_master_cluster_hostname}}
-openshift_master_cluster_public_hostname={{hostvars[groups.oo_ose3_install].openshift_master_cluster_public_hostname}}
+openshift_master_cluster_method=pacemaker
+openshift_master_cluster_password={{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_password}}
+openshift_master_cluster_vip={{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_vip}}
+openshift_master_cluster_public_vip={{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_public_vip}}
+openshift_master_cluster_hostname={{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_hostname}}
+openshift_master_cluster_public_hostname={{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_public_hostname}}
 
 # override the default controller lease ttl
 #osm_controller_lease_ttl=30
- 
+
 # host group for masters
 [masters]
-{% for item in groups.oo_masters -%}
+{% for item in groups.oo_masters %}
 {{item}}
-{%- endfor %}
+{% endfor %}
 
 # host group for etcd
 [etcd]
 {% for item in groups.oo_etcds %}
-{{item}} 
-{%- endfor %}
- 
+{{item}}
+{% endfor %}
+
+
 # host group for nodes, includes region info
 [nodes]
-{% for item in groups.oo_masters -%}
-{%- if hostvars[item].is_node == true -%}
-{{item}} openshift_node_lables={{hostnvars[item].openshift_node_labels}}
+{% for item in groups.oo_masters %}
+{% if hostvars[item].is_node == true %}
+{{item}} openshift_node_lables="{{hostnvars[item].openshift_node_labels}}"
 {% endif %}
-{%- endfor %}
+{% endfor %}
 {% for item in groups.oo_nodes %}
-{{item}} openshift_node_lables={{hostvars[item].openshift_node_labels}}
-{%- endfor %}
+{{item}} openshift_node_lables="{{hostvars[item].openshift_node_labels}}"
+{% endfor %}
+
+ 
