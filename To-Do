@@ -35,8 +35,9 @@ Phase 1-1 (Enhancement)
 √  1-lb- notice lb hostname 은 openshift_cluster_hostname과 같아야한다.
   1-all- tag 정리
   1-pre-requite - 기본적으로 설치해야하는 것들 확인하기
-  1-최초 설치시 필요한것 -atomic-openshift-util 설치/ ansible-ose-installer 복사/ SSH-KEYGEN, SSH_COPY_ID/
+√  1-최초 설치시 필요한것 -atomic-openshift-util 설치/ ansible-ose-installer 복사/ SSH-KEYGEN, SSH_COPY_ID/
 
+  2-dns - router가 1개 이상일때 Template처리
   2-infra - hosts/dns 설정파일 무조건 변경하기
   2-master- 전체 언인스톨 하기
 
