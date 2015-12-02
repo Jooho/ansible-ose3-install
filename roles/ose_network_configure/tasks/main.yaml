@@ -20,12 +20,12 @@
     when: "{{set_network}} == true and check_public_network.rc == 1"
   
   - name: Check if hostname is already set
-    shell: "hostname |grep {{inventory_hostname}}"
+    shell: 'hostname |grep {{inventory_hostname | regex_replace(".com(.*)$", ".local") }}'
     register: check_hostname
     ignore_errors: yes
 
   - name: Set hostname for each machine
-    hostname: name={{inventory_hostname}}
+    hostname: name={{inventory_hostname | regex_replace(".com(.*)$", ".local") }}
     when: "{{set_hostname}} == true and check_hostname.rc == 1"
 
   - name: Check if NetworkManager is installed

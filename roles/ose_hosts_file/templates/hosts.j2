@@ -1,30 +1,34 @@
 {% if (groups[g_masters_group] | length) >0 %} 
 {% for item in groups.oo_masters %}
 
-{{hostvars[item].mgmt_network_ip}} {{item}} 
+{% set domain=item.split(".") %}
+{{hostvars[item].mgmt_network_ip}} {{domain.0}}.{{domain.1}}.local
 {{hostvars[item].public_network_ip}} {{item}}
-{%- endfor %}
+{% endfor %}
 {% endif %} 
 
 {% if (groups[g_nodes_group] | length) >0 %} 
 {% for item in groups.oo_nodes %}
 
-{{hostvars[item].mgmt_network_ip}} {{item}}
+{% set domain=item.split(".") %}
+{{hostvars[item].mgmt_network_ip}} {{domain.0}}.{{domain.1}}.local
 {{hostvars[item].public_network_ip}} {{item}}
-{%- endfor %}
+{% endfor %}
 {% endif %} 
 
 {% if (groups[g_etcds_group] | length) >0 %} 
 {% for item in groups.oo_etcds %}
 
-{{hostvars[item].mgmt_network_ip}} {{item}} 
-{%- endfor %}
+{% set domain=item.split(".") %}
+{{hostvars[item].mgmt_network_ip}} {{domain.0}}.{{domain.1}}.local
+{% endfor %}
 {% endif %} 
 
 {% if (groups[g_infra] | length) >0 %} 
 {% for item in groups.oo_infra %}
 
-{{hostvars[item].mgmt_network_ip}} {{item}}
+{% set domain=item.split(".") %}
+{{hostvars[item].mgmt_network_ip}} {{domain.0}}.{{domain.1}}.local
 {{hostvars[item].public_network_ip}} {{item}}
 {% endfor %}
 {% endif %} 
@@ -36,7 +40,8 @@
 {%- if (groups[g_lb] | length) >0 %}
 {% for item in groups.oo_lb -%}
 
-{{hostvars[item].mgmt_network_ip}} {{item}}
+{% set domain=item.split(".") %}
+{{hostvars[item].mgmt_network_ip}} {{domain.0}}.{{domain.1}}.local
 {{hostvars[item].public_network_ip}} {{item}}
 {% endfor %}
 {% endif %}

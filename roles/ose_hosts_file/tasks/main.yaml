@@ -1,6 +1,6 @@
 
   - name: Check if there is already added to hosts
-    shell: "grep -ir '{{groups.oo_masters.0}}' /etc/hosts"
+    shell: 'grep -ir {{inventory_hostname | regex_replace(".com(.*)$", ".local") }} /etc/hosts'
     ignore_errors: yes
     register: check_hosts_file
 

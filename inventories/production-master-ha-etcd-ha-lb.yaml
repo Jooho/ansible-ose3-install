@@ -81,9 +81,9 @@ deployment_type=openshift-enterprise
 # public_network_ip : if you want to fix public ip which can be reached from outside, you set this value. Then, it will change network script.
 # mgmt_network_ip : if you want to fix mgmt ip for communication among systems(masters/nodes/etcds) , you set this value. Then, it will change network script.
 [masters]
-master1.example.com ansible_ssh_host=172.20.20.161 mgmt_network_ip=172.20.20.161 public_network_ip=10.64.168.130 public_network_gw=10.64.168.254 is_node=false
-master2.example.com ansible_ssh_host=172.20.20.162 mgmt_network_ip=172.20.20.162 public_network_ip=10.64.168.131 public_network_gw=10.64.168.254 is_node=false
-master3.example.com ansible_ssh_host=172.20.20.163 mgmt_network_ip=172.20.20.163 public_network_ip=10.64.168.132 public_network_gw=10.64.168.254 is_node=false
+master1.example.com ansible_ssh_host=172.20.20.161 mgmt_network_ip=172.20.20.161 public_network_ip=10.64.168.130 public_network_gw=10.64.168.254 is_node=false openshift_public_hostname=master1.example.com openshift_hostname=master1.example.local openshift_ip=172.20.20.161 openshift_public_ip=10.64.168.130
+master2.example.com ansible_ssh_host=172.20.20.162 mgmt_network_ip=172.20.20.162 public_network_ip=10.64.168.131 public_network_gw=10.64.168.254 is_node=false openshift_public_hostname=master2.example.com openshift_hostname=master2.example.local openshift_ip=172.20.20.162 openshift_public_ip=10.64.168.131
+master3.example.com ansible_ssh_host=172.20.20.163 mgmt_network_ip=172.20.20.163 public_network_ip=10.64.168.132 public_network_gw=10.64.168.254 is_node=false openshift_public_hostname=master2.example.com openshift_hostname=master3.example.local openshift_ip=172.20.20.163 openshift_public_ip=10.64.168.132
 
 [masters:vars]
 # It will help change hostname of each master system.
@@ -98,8 +98,8 @@ public_network_dev_name=eth1
 
 
 [nodes]
-node1.example.com ansible_ssh_host=172.20.20.159 mgmt_network_ip=172.20.20.159 public_network_ip=10.64.168.133 public_network_gw=10.64.168.254 openshift_node_labels="{'region': 'primary', 'zone': 'east'}"
-node2.example.com ansible_ssh_host=172.20.20.160 mgmt_network_ip=172.20.20.160 public_network_ip=10.64.168.134 public_network_gw=10.64.168.254 openshift_node_labels="{'region': 'primary', 'zone': 'west'}"
+node1.example.com ansible_ssh_host=172.20.20.159 mgmt_network_ip=172.20.20.159 public_network_ip=10.64.168.133 public_network_gw=10.64.168.254 openshift_node_labels="{'region': 'primary', 'zone': 'east'}" openshift_public_hostname=node1.example.com openshift_hostname=node2.example.local openshift_ip=172.20.20.159 openshift_public_ip=10.64.168.133
+node2.example.com ansible_ssh_host=172.20.20.160 mgmt_network_ip=172.20.20.160 public_network_ip=10.64.168.134 public_network_gw=10.64.168.254 openshift_node_labels="{'region': 'primary', 'zone': 'west'}" openshift_public_hostname=node2.example.com openshift_hostname=node2.example.local openshift_ip=172.20.20.160 openshift_public_ip=10.64.168.134
 
 
 [nodes:vars]
@@ -132,7 +132,7 @@ mgmt_network_dev_name=eth0
 
 # Specify load balancer host
 [lb]
-lb.example.com ansible_ssh_host=172.20.20.166  mgmt_network_ip=172.20.20.166 public_network_ip=10.64.168.135 public_network_gw=10.64.168.254
+lb.example.com ansible_ssh_host=172.20.20.166  mgmt_network_ip=172.20.20.166 public_network_ip=10.64.168.135 public_network_gw=10.64.168.254 openshift_public_hostname=lb.example.com openshift_hostname=lb.example.local openshift_ip=172.20.20.166 openshift_public_ip=10.64.168.135
 
 [lb:vars]
 # It will help change hostname of each etcd system.
