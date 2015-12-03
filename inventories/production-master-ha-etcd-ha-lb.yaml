@@ -19,6 +19,7 @@ dns_install=true
 dns_wildcard_domain="cloudapps.example.com"
 dns_routers_ip="10.64.168.133"
 dns_host_ip="10.64.168.136"
+external_dns_ip="10.64.255.25"
 
 # This proxy server using haproxy play an role in vip for multiple routers  (To-Do : image) In production, it would be changed L4 machine.
 proxy_install=false
@@ -36,9 +37,15 @@ internal_repo_rhel_iso_short="rhel71"
 internal_repo_ose_iso_long="ose-3.1-x86_64-151125.iso"
 internal_repo_ose_iso_short="ose31"
 internal_repo_apache_repo_path="/var/www/html/repo"
+
 # This NFS/iscsi server is for testing PV and docker-registory-storage hence I strongly disagee that you use it in Production. Only use it for Test environment.
 nfs_iscsi_install=false
 nfs_iscsi_host_ip="192.168.20.60"     #default:infra
+
+# Docker setup
+docker_setup=true
+docker_storage_block_dev_name="vdb"
+docker_options="--insecure-registry 172.30.0.0/16"
 
 # If you would like to register your server to system, you should provide Red Hat id/password.(internet_connected=true, internal_repo_install=false ==> this must be set)
 subscription_register=false
@@ -82,7 +89,7 @@ deployment_type=openshift-enterprise
 # mgmt_network_ip : if you want to fix mgmt ip for communication among systems(masters/nodes/etcds) , you set this value. Then, it will change network script.
 [masters]
 master1.example.com ansible_ssh_host=172.20.20.161 mgmt_network_ip=172.20.20.161 public_network_ip=10.64.168.130 public_network_gw=10.64.168.254 is_node=false openshift_public_hostname=master1.example.com openshift_hostname=master1.example.com openshift_ip=10.64.168.130 openshift_public_ip=10.64.168.130
-master2.example.com ansible_ssh_host=172.20.20.162 mgmt_network_ip=172.20.20.162 public_network_ip=10.64.168.131 public_network_gw=10.64.168.254 is_node=false openshift_public_hostname=master2.example.com openshift_hostname=master2.example.com openshift_ip=10.64.168.131 openshift_public_ip=10.64.168.131
+master2.example.com ansible_ssh_host=172.20.20.172 mgmt_network_ip=172.20.20.172 public_network_ip=10.64.168.131 public_network_gw=10.64.168.254 is_node=false openshift_public_hostname=master2.example.com openshift_hostname=master2.example.com openshift_ip=10.64.168.131 openshift_public_ip=10.64.168.131
 master3.example.com ansible_ssh_host=172.20.20.163 mgmt_network_ip=172.20.20.163 public_network_ip=10.64.168.132 public_network_gw=10.64.168.254 is_node=false openshift_public_hostname=master3.example.com openshift_hostname=master3.example.com openshift_ip=10.64.168.132 openshift_public_ip=10.64.168.132
 
 [masters:vars]
@@ -98,7 +105,7 @@ public_network_dev_name=eth1
 
 
 [nodes]
-node1.example.com ansible_ssh_host=172.20.20.152 mgmt_network_ip=172.20.20.152 public_network_ip=10.64.168.133 public_network_gw=10.64.168.254 openshift_node_labels="{'region': 'primary', 'zone': 'east'}" openshift_public_hostname=node1.example.com openshift_hostname=node2.example.com openshift_ip=10.64.168.133 openshift_public_ip=10.64.168.133
+node1.example.com ansible_ssh_host=172.20.20.152 mgmt_network_ip=172.20.20.152 public_network_ip=10.64.168.133 public_network_gw=10.64.168.254 openshift_node_labels="{'region': 'primary', 'zone': 'east'}" openshift_public_hostname=node1.example.com openshift_hostname=node1.example.com openshift_ip=10.64.168.133 openshift_public_ip=10.64.168.133
 node2.example.com ansible_ssh_host=172.20.20.153 mgmt_network_ip=172.20.20.153 public_network_ip=10.64.168.134 public_network_gw=10.64.168.254 openshift_node_labels="{'region': 'primary', 'zone': 'west'}" openshift_public_hostname=node2.example.com openshift_hostname=node2.example.com openshift_ip=10.64.168.134 openshift_public_ip=10.64.168.134
 
 
@@ -116,9 +123,9 @@ public_network_dev_name=eth1
 
 
 [etcd]
-etcd1.example.com ansible_ssh_host=172.20.20.168  mgmt_network_ip=172.20.20.168 public_network_ip=10.64.168.145 public_network_gw=10.64.168.254 openshift_public_hostname=etcd1.example.com openshift_hostname=etcd1.example.com openshift_ip=172.20.20.168 openshift_public_ip=172.20.20.168
-etcd2.example.com ansible_ssh_host=172.20.20.165  mgmt_network_ip=172.20.20.165 public_network_ip=10.64.168.146 public_network_gw=10.64.168.254 openshift_public_hostname=etcd2.example.com openshift_hostname=etcd2.example.com openshift_ip=172.20.20.165 openshift_public_ip=172.20.20.165
-etcd3.example.com ansible_ssh_host=172.20.20.164  mgmt_network_ip=172.20.20.164 public_network_ip=10.64.168.147 public_network_gw=10.64.168.254 openshift_public_hostname=etcd3.example.com openshift_hostname=etcd3.example.com openshift_ip=172.20.20.165 openshift_public_ip=172.20.20.164
+etcd1.example.com ansible_ssh_host=172.20.20.175  mgmt_network_ip=172.20.20.175 public_network_ip=10.64.168.145 public_network_gw=10.64.168.254 openshift_public_hostname=etcd1.example.com openshift_hostname=etcd1.example.com openshift_ip=10.64.168.145 openshift_public_ip=10.64.168.145
+etcd2.example.com ansible_ssh_host=172.20.20.165  mgmt_network_ip=172.20.20.165 public_network_ip=10.64.168.146 public_network_gw=10.64.168.254 openshift_public_hostname=etcd2.example.com openshift_hostname=etcd2.example.com openshift_ip=10.64.168.146 openshift_public_ip=10.64.168.146
+etcd3.example.com ansible_ssh_host=172.20.20.174  mgmt_network_ip=172.20.20.174 public_network_ip=10.64.168.147 public_network_gw=10.64.168.254 openshift_public_hostname=etcd3.example.com openshift_hostname=etcd3.example.com openshift_ip=10.64.168.147 openshift_public_ip=10.64.168.147
 
 
 [etcd:vars]
@@ -148,7 +155,7 @@ mgmt_network_dev_name=eth0
 public_network_dev_name=eth1
 
 [infra]
-infra.example.com ansible_ssh_host=172.20.20.167  mgmt_network_ip=172.20.20.167 public_network_ip=10.64.168.136 public_network_gw=10.64.168.254
+infra.example.com ansible_ssh_host=172.20.20.173  mgmt_network_ip=172.20.20.173 public_network_ip=10.64.168.136 public_network_gw=10.64.168.254
 
 [infra:vars]
 # It will help change hostname of each infra system.
