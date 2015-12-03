@@ -82,7 +82,7 @@ deployment_type=openshift-enterprise
 # mgmt_network_ip : if you want to fix mgmt ip for communication among systems(masters/nodes/etcds) , you set this value. Then, it will change network script.
 [masters]
 master1.example.com ansible_ssh_host=192.168.122.120 mgmt_network_ip=192.168.122.120 public_network_ip=10.64.168.161 public_network_gw=10.64.168.254 is_node=false openshift_public_hostname=master1.example.com openshift_hostname=master1.example.local openshift_ip=192.168.122.120 openshift_public_ip=10.64.168.161
-master2.example.com ansible_ssh_host=192.168.122.180 mgmt_network_ip=192.168.122.120 public_network_ip=10.64.168.162 public_network_gw=10.64.168.254 is_node=false openshift_public_hostname=master2.example.com openshift_hostname=master2.example.local openshift_ip=192.168.122.180 openshift_public_ip=10.64.168.162
+master2.example.com ansible_ssh_host=192.168.122.180 mgmt_network_ip=192.168.122.180 public_network_ip=10.64.168.162 public_network_gw=10.64.168.254 is_node=false openshift_public_hostname=master2.example.com openshift_hostname=master2.example.local openshift_ip=192.168.122.180 openshift_public_ip=10.64.168.162
 #master3.example.com ansible_ssh_host=192.168.122.163 mgmt_network_ip=192.168.122.163 public_network_ip=10.64.168.132 public_network_gw=10.64.168.254 is_node=false openshift_public_hostname=master2.example.com openshift_hostname=master3.example.local openshift_ip=192.168.122.163 openshift_public_ip=10.64.168.132
 
 [masters:vars]
@@ -157,6 +157,6 @@ set_hostname=true
 # It will help set up network configuration of each infra system.
 set_network=true
 # Note!! It is important variable. If you misconfigure it, the infra systems' network could be broken. Hence, please double-check the device is for infra_mgmt_network
-mgmt_network_dev_name=eth0
+mgmt_network_dev_name=ens4
 # Note!! It is important variable. If you misconfigure it, the infra systems' network could be broken. Hence, please double-check the device is for infra_public_network
-public_network_dev_name=eth1
+public_network_dev_name=ens9
