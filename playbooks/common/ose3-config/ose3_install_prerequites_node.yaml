@@ -2,10 +2,13 @@
 #This file set up prerequites process for installation of ose3
 
   - name: Prerequites process for nodes.
-    hosts: nodes
+    hosts: all
     gather_facts: no
 
     tasks:
     - name: Install nessasary packages
-      shell: "yum install -y  net-tools bind-utils iptables-services bridge-utils bash-completion"
+      shell: "yum install -y  net-tools bind-utils iptables-services bridge-utils bash-completion docker"
       tags: openshift_ansible
+  
+    roles:
+    - { role: ose_docker_configure, tags: openshift_ansible}

@@ -37,9 +37,15 @@ internal_repo_rhel_iso_short="rhel71"
 internal_repo_ose_iso_long="ose-3.1-x86_64-151125.iso"
 internal_repo_ose_iso_short="ose31"
 internal_repo_apache_repo_path="/var/www/html/repo"
+
 # This NFS/iscsi server is for testing PV and docker-registory-storage hence I strongly disagee that you use it in Production. Only use it for Test environment.
 nfs_iscsi_install=false
 nfs_iscsi_host_ip="192.168.20.60"     #default:infra
+
+# Docker setup
+docker_setup=true
+docker_storage_block_dev_name="vdb"
+docker_options="--insecure-registry 172.30.0.0/16"
 
 # If you would like to register your server to system, you should provide Red Hat id/password.(internet_connected=true, internal_repo_install=false ==> this must be set)
 subscription_register=false
