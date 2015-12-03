@@ -30,7 +30,7 @@ $TTL 1D
 {% for item in groups.oo_etcds %}
 {% set host=item.split(".")|first %}
 
-{{host}} A {{hostvars[item].mgmt_network_ip}}
+{{host}} A {{hostvars[item].public_network_ip}}
 {%- endfor %}
 {% endif %}
 
