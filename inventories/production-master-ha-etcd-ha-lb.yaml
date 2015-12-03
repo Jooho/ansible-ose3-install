@@ -99,7 +99,7 @@ public_network_dev_name=eth1
 
 
 [nodes]
-node1.example.com ansible_ssh_host=172.20.20.152 mgmt_network_ip=172.20.20.152 public_network_ip=10.64.168.133 public_network_gw=10.64.168.254 openshift_node_labels="{'region': 'primary', 'zone': 'east'}" openshift_public_hostname=node1.example.com openshift_hostname=node2.example.com openshift_ip=10.64.168.133 openshift_public_ip=10.64.168.133
+node1.example.com ansible_ssh_host=172.20.20.152 mgmt_network_ip=172.20.20.152 public_network_ip=10.64.168.133 public_network_gw=10.64.168.254 openshift_node_labels="{'region': 'primary', 'zone': 'east'}" openshift_public_hostname=node1.example.com openshift_hostname=node1.example.com openshift_ip=10.64.168.133 openshift_public_ip=10.64.168.133
 node2.example.com ansible_ssh_host=172.20.20.153 mgmt_network_ip=172.20.20.153 public_network_ip=10.64.168.134 public_network_gw=10.64.168.254 openshift_node_labels="{'region': 'primary', 'zone': 'west'}" openshift_public_hostname=node2.example.com openshift_hostname=node2.example.com openshift_ip=10.64.168.134 openshift_public_ip=10.64.168.134
 
 
