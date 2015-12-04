@@ -42,12 +42,6 @@ cat <<EOF
 EOF
 }
 
-# Variable set up
-export inventory_file
-export internet_connected=$(grep  "internet_connected=" $1 |grep -v ^# |cut -d"=" -f2)
-export rhel_iso_file=$(grep -i rhel_iso_long ./$inventory_file  |cut -d"=" -f2|awk '{gsub( "\"","" ); print}')
-export ose_iso_file=$(grep -i ose_iso_long ./$inventory_file  |cut -d"=" -f2|awk '{gsub( "\"","" ); print}')
-export mount_temp_repo_statue="unmounted"
 
 # start script
 if [[ $1 == "" ]]
@@ -59,17 +53,42 @@ else
   inventory_file=$1
 fi
 
+# Variable set up
+export inventory_file
+export internet_connected=$(grep  "internet_connected=" $1 |grep -v ^# |cut -d"=" -f2)
+export rhel_iso_file=$(grep -i rhel_iso_long ./$inventory_file  |cut -d"=" -f2|awk '{gsub( "\"","" ); print}')
+export ose_iso_file=$(grep -i ose_iso_long ./$inventory_file  |cut -d"=" -f2|awk '{gsub( "\"","" ); print}')
+export mount_temp_repo_statue="unmounted"
+
+# Domain "example.com"
+export domain=$(grep ^master ./$inventory_file |sed -n '2p' |cut -d" " -f1 |awk -F . {'print $2 "." $3'};)
+
+# IP information about master/node/etcd/lb/infra
+export hosts=$(grep "example.com" ./$inventory_file | awk -F "ansible_ssh_host=" '{print $2}'|cut -d" " -f1|grep -v "^$" |awk '{print  $1 " "  }')
+
 # Generate public key
 ssh-keygen
 echo -e "Do you want to copy id_rsa.pub file to all machines with 1 password?(y/n) \c"
 read copy_pub_file_with_one_password
 
+#ssh-copy-id to each hosts
+if [ $copy_pub_file_with_one_password == "y" ]
+then 
+   echo -e "Type password : \c"
+   read password
+   echo "~/.ssh/id_rsa.pub file will be copyed to : "
+   echo " $hosts"
+   echo `for host in $hosts ;do sshpass -p $password ssh-copy-id -i  ~/.ssh/id_rsa.pub  $host ;  done`
+else
+   echo "~/.ssh/id_rsa.pub file will be copyed to : $hosts"
+   echo `for host in $hosts ;do echo $host ;ssh-copy-id -i ~/.ssh/id_rsa.pub $host;  done`
+fi
+  
 # Mount temp repository
 if [ $internet_connected == false ]; 
 then 
   mount_temp_repository
   mount_temp_repo_statue=mounted
-  echo $mount_temp_repo_statue
 fi
 
 # Install necessary package
@@ -80,27 +99,5 @@ if [ $mount_temp_repo_statue == mounted ];
 then
   umount_temp_repository
   mount_temp_repo_statue=umounted
-  echo $mount_temp_repo_statue
   rm /etc/yum.repos.d/ose.repo
 fi
-
-# Domain "example.com"
-export domain=$(grep ^master ./$inventory_file |sed -n '2p' |cut -d" " -f1 |awk -F . {'print $2 "." $3'};)
-
-# IP information about master/node/etcd/lb/infra
-export hosts=$(grep "example.com" ./$inventory_file | awk -F "ansible_ssh_host=" '{print $2}'|cut -d" " -f1|grep -v "^$" |awk '{print  $1 " \\"  }')
-
-#ssh-copy-id to each hosts
-if [ $copy_pub_file_with_one_password == "y" ]
-then 
-   echo -e "Type password : \c"
-   read password
-   echo "for host in $hosts ;do sshpass -p $password ssh-copy-id -i  ~/.ssh/id_rsa.pub  $host; \ done"
-   echo `for host in $hosts ;do sshpass -p $password ssh-copy-id -i  ~/.ssh/id_rsa.pub  $host;  done`
-else
-   echo "for host in $hosts ;do ssh-copy-id -i ~/.ssh/id_rsa.pub $host;  done"
-   echo `for host in $hosts ;do ssh-copy-id -i ~/.ssh/id_rsa.pub $host;  done`
-fi
-
-
-  
