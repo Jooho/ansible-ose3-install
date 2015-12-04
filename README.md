@@ -199,7 +199,7 @@ vdb                          252:16   0   20G  0 disk     <===== docker block de
 ```
 
 ##Example
-- [example-master-ha-etcd-ha-lb](https://github.com/Jooho/ansible-ose3-install/blob/master/docs/example-master-ha-etcd-ha-lb)
+- [example-master-ha-etcd-ha-lb](https://github.com/Jooho/ansible-ose3-install/blob/master/docs/example-master-ha-etcd-ha-lb.md)
 
 License
 ---
