@@ -85,8 +85,8 @@ if [ $copy_pub_file_with_one_password == "y" ]
 then 
    echo -e "Type password : \c"
    read password
-   echo "for host in $hosts ;do sshpass -p $password ssh-copy-id -i  ~/.ssh/id_rsa.pub  -o StrictHostKeyChecking=no $host; \ done"
-   echo `for host in $hosts ;do sshpass -p $password ssh-copy-id -i  ~/.ssh/id_rsa.pub  -o StrictHostKeyChecking=no $host;  done`
+   echo "for host in $hosts ;do sshpass -p $password ssh-copy-id -i  ~/.ssh/id_rsa.pub  $host; \ done"
+   echo `for host in $hosts ;do sshpass -p $password ssh-copy-id -i  ~/.ssh/id_rsa.pub  $host;  done`
 else
    echo "for host in $hosts ;do ssh-copy-id -i ~/.ssh/id_rsa.pub $host;  done"
    echo `for host in $hosts ;do ssh-copy-id -i ~/.ssh/id_rsa.pub $host;  done`
