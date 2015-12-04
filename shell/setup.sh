@@ -33,30 +33,38 @@ function umount_temp_repository(){
 }
 
 function usage(){
+cat <<EOF 
 # Usage : 
-# Condition: internet_connected=true and rhel-7-ose-3.1 repository must be registered and subscription-manager as  well.
-#export ose_repo=$(yum repolist |grep ose)
-#echo ose_repo=""
-#internet = true  => subscription 등록이 되어 있어야한다.
-#internet = false => temp repository
-test
+#        ./setup.sh   ./inventory_file.yaml
+#
+#   Condition: internet_connected must set true and subscription-manager as well. Or rhel-7-server, rhel-7-ose-3.1 iso files must be in /root/ose.
+
+EOF
 }
+
+# Variable set up
+export inventory_file
+export internet_connected=$(grep  "internet_connected=" $1 |grep -v ^# |cut -d"=" -f2)
+export rhel_iso_file=$(grep -i rhel_iso_long ./$inventory_file  |cut -d"=" -f2|awk '{gsub( "\"","" ); print}')
+export ose_iso_file=$(grep -i ose_iso_long ./$inventory_file  |cut -d"=" -f2|awk '{gsub( "\"","" ); print}')
+export mount_temp_repo_statue="unmounted"
+
+# start script
 if [[ $1 == "" ]]
 then 
   echo "please specify inventory file"
+  usage
   exit 1
 else
   inventory_file=$1
 fi
 
-export inventory_file
-export internet_connected=$(grep  "internet_connected=" $1 |grep -v ^# |cut -d"=" -f2)
-echo $internet_connected
-export rhel_iso_file=$(grep -i rhel_iso_long ./$inventory_file  |cut -d"=" -f2|awk '{gsub( "\"","" ); print}')
-export ose_iso_file=$(grep -i ose_iso_long ./$inventory_file  |cut -d"=" -f2|awk '{gsub( "\"","" ); print}')
-export mount_temp_repo_statue="unmounted"
+# Generate public key
+ssh-keygen
+echo -e "Do you want to copy id_rsa.pub file to all machines with 1 password?(y/n) \c"
+read copy_pub_file_with_one_password
 
-
+# Mount temp repository
 if [ $internet_connected == false ]; 
 then 
   mount_temp_repository
@@ -64,8 +72,10 @@ then
   echo $mount_temp_repo_statue
 fi
 
+# Install necessary package
 yum install -y atomic-openshift-utils sshpass git
 
+#Umount temp repository
 if [ $mount_temp_repo_statue == mounted ]; 
 then
   umount_temp_repository
@@ -74,13 +84,13 @@ then
   rm /etc/yum.repos.d/ose.repo
 fi
 
+# Domain "example.com"
 export domain=$(grep ^master ./$inventory_file |sed -n '2p' |cut -d" " -f1 |awk -F . {'print $2 "." $3'};)
+
+# IP information about master/node/etcd/lb/infra
 export hosts=$(grep "example.com" ./$inventory_file | awk -F "ansible_ssh_host=" '{print $2}'|cut -d" " -f1|grep -v "^$" |awk '{print  $1 " \\"  }')
 
-ssh-keygen
-echo -e "Do you want to copy id_rsa.pub file to all machines with 1 password?(y/n) \c"
-read copy_pub_file_with_one_password
-
+#ssh-copy-id to each hosts
 if [ $copy_pub_file_with_one_password == "y" ]
 then 
    echo -e "Type password : \c"
