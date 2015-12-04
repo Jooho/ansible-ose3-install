@@ -14,4 +14,4 @@
 
   - name: host file will be overwritten if overwrite_config_file is true 
     action: template src=hosts.j2 dest=/etc/hosts force=true
-    when: "{{hostvars[groups.oo_ose3_install.0].overriwrite_hosts_file}} == true"
+    when: "{{hostvars[groups.oo_ose3_install.0].overwrite_hosts_file}} == true"
