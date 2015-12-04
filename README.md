@@ -1,5 +1,5 @@
 # Red Hat Openshift Installer
-##Openshift v3 tools
+
 ![Openshift icon](https://upload.wikimedia.org/wikipedia/en/3/3a/OpenShift-LogoType.svg)
 
 ### Overview
@@ -10,21 +10,6 @@ Therefore, this ansible script will help you to install those nessecery packages
 
 
 ## How to use this script?
-
-**Condition :**
-
-* Case 1
-	* Internet connected - **True** 
-	* Internal repository - **True**
-
-* Case 2 
-	* Internet connected - **True**
- 	* Internal repository - **False**
-
-* Case 3
- 	* Internet connected - **False**
- 	* Internal repository - **True**
-
 
 
 
@@ -41,12 +26,12 @@ Therefore, this ansible script will help you to install those nessecery packages
 * ose-3.1-x86_64.iso
 
 If you want to set up Internal repository for openshift and rhel, those ISO files have to be prepared.
-(You can use this script for backup specific version of *OSE* and *RHEL*.)
+(You can use [this script](https://github.com/Jooho/rhep_tools/blob/master/backup_ose3_repos.sh) for backup specific version of *OSE* and *RHEL*.)
 
 
 **3.Setup script**
 
-* setup.sh ()
+* [setup.sh](https://github.com/Jooho/ansible-ose3-install/blob/master/shell/setup.sh)
 
 **4.ansible-ose3-install github source**
 
@@ -107,6 +92,7 @@ external_dns_ip="10.64.255.25"
 * internal repository
 
 ~~~
+# This internal_repository using apache is useful if the site is not available to use internet. If 'internet_connected' set false, internal repository will be installed by default.
 internal_repo_install=true
 internal_repo_host_ip="10.64.168.168.136"
 internal_repo_host_name="internal-repo.example.com"
