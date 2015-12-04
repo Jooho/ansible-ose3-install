@@ -74,7 +74,7 @@
 ### Step 1
 ** Copy iso files & ansible-ose3-install folder & setup.sh to /root/ose folder on Master **
 
-~~
+~~~
 # ls -al /root/ose
 total 4036880
 drwxr-xr-x. 3 root root       4096 Dec  3 10:59 .
@@ -83,13 +83,14 @@ drwxr-xr-x. 8 root root       4096 Dec  3 10:57 ansible-ose3-install
 -rw-r--r--. 1 root root  227151872 Dec  3 10:28 ose-3.1-x86_64-151125.iso
 -rw-r--r--. 1 root root 3906584576 Dec  3 10:34 rhel-server-7.1-x86_64-151125.iso
 -rwxr-xr-x. 1 root root       2784 Dec  3 10:59 setup.sh 
-~~
+~~~
 
 ### Step 2
 ** Modify inventory file :** 
-~~
+
+~~~
 [root@master1 /root/ose]# vi ansible-ose3-install/inventories/production-master-ha-etcd-ha-lb.yaml
-~~
+~~~
 
 [production-master-ha-etcd-ha-lb.yaml](https://github.com/Jooho/ansible-ose3-install/blob/master/inventories/production-master-ha-etcd-ha-lb.yaml)
 
@@ -97,7 +98,7 @@ drwxr-xr-x. 8 root root       4096 Dec  3 10:57 ansible-ose3-install
 ### Step 3 
 ** Execute setup.sh **
 
-~~
+~~~
 [root@master1 /root/ose]# ./setup.sh  ansible-ose3-installer/inventories/production-master-ha-etcd-ha-lb.yaml
 Generating public/private rsa key pair.
 Enter file in which to save the key (/root/.ssh/id_rsa):
@@ -172,14 +173,14 @@ Package atomic-openshift-utils-3.0.13-1.git.0.5e8c5c7.el7aos.noarch already inst
 Package sshpass-1.05-5.el7aos.x86_64 already installed and latest version
 Package git-1.8.3.1-5.el7.x86_64 already installed and latest version
 Nothing to do
-~~
+~~~
 
 
 ###Step 4
 
 **Execuate ansible playbook**
 
-~~
+~~~
 [root@master1 /root/ose]# cd ./ansible-ose3-install/playbook/rhel
 [root@master1 /root/ose/ansible-ose3-install/playbook/rhel]# ansible-playbook -i ../../inventories/production-master-ha-etcd-ha-lb.yaml config.yaml -vvvv
 ..
@@ -197,7 +198,4 @@ master2.example.com        : ok=94   changed=32   unreachable=0    failed=0
 master3.example.com        : ok=94   changed=32   unreachable=0    failed=0
 node1.example.com          : ok=71   changed=22   unreachable=0    failed=0
 node2.example.com          : ok=71   changed=22   unreachable=0    failed=0
-~~
-
-
-
+~~~
