@@ -11,8 +11,6 @@ Therefore, this ansible script will help you to install those nessecery packages
 
 ## How to use this script?
 
-
-
 ### Prerequites
 
 
@@ -189,9 +187,6 @@ vdb                          252:16   0   20G  0 disk     <===== docker block de
 ```
 
 
-
-
-
 ### Initiate Setup.sh 
 ```
 [root@master1 /root/ose]# ./setup.sh ./production-master-ha-etcd-ha-lb.yaml
@@ -202,6 +197,9 @@ vdb                          252:16   0   20G  0 disk     <===== docker block de
 [root@master1 /root/ose]# cd ./ansible-ose3-install/playbook/rhel
 [root@master1 /root/ose/ansible-ose3-install/playbook/rhel]# ansible-playbook -i ../production-master-ha-etcd-ha-lb.yaml config.yaml -vvvv
 ```
+
+##Example
+- [example-master-ha-etcd-ha-lb](https://github.com/Jooho/ansible-ose3-install/blob/master/docs/example-master-ha-etcd-ha-lb)
 
 License
 ---
