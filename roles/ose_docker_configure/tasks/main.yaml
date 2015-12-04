@@ -3,12 +3,12 @@
 
   - name: Set up docker configuration - storage
     template: src="docker-storage-setup.j2"  dest="/etc/sysconfig/docker-storage-setup"
-    when: "{{docker_setup}} == true and {{docker_storage_block_dev_name}} is defined"
+    when: "{{hostvars[groups.oo_ose3_install.0].docker_setup}} == true and {{hostvars[groups.oo_ose3_install.0].docker_storage_block_dev_name}} is defined"
     tags: docker_config
  
   - name: Execute docker-storage-setup
     command: docker-storage-setup  
-    when: "{{docker_setup}} == true and {{docker_storage_block_dev_name}} is defined"
+    when: "{{hostvars[groups.oo_ose3_install.0].docker_setup}} == true and {{hostvars[groups.oo_ose3_install.0].docker_storage_block_dev_name}} is defined"
     tags: docker_config
 
   - name: Update docker options
