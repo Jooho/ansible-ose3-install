@@ -10,34 +10,46 @@ ansible_ssh_user=root
 # Check if it is possible to reach to internet. If it is not, internal repository using apache will be installed by default but you can overwrite it with 'internal_repo_install'.
 internet_connected=false  
 
+# This variable allow you to overwrite hosts file forcely. Once hosts file is updated, it never try to update the file even though you execute this script again by default.
+overwrite_hosts_file=true
+
 # If internet_connected=false, you need archieved openshift-ansible because it is not possible to clone the github.
 openshift_ansible_path=/home/jooho
 # This DNS server using bind will be installed and the wildcard card entry configuration will be applied
 dns_install=true
 dns_wildcard_domain="cloudapps.example.com"
-dns_routers_ip="192.168.122.2"   
-dns_host_ip="192.168.20.60"    
-#default:infra
+dns_routers_ip="10.64.168.157"   
+dns_host_ip="192.168.20.63"    
+external_dns_ip="10.64.255.25"
 
 # This proxy server using haproxy play an role in vip for multiple routers  (To-Do : image) In production, it would be changed L4 machine.
 proxy_install=false
 proxy_vip="192.168.259.201"    
-proxy_host_ip="192.168.259.200" #default:infra
+proxy_host_ip="192.168.259.200" 
 
 # This internal_repository using apache is useful if the site is not available to use internet. If 'internet_connected' set false, internal repository will be installed by default.
 internal_repo_install=true
-internal_repo_host_ip="192.168.20.60"  
-internal_repo_host_name="internal-repo.example.com"
+internal_repo_host_ip="192.168.20.63"  
+internal_repo_host_name="infra.example.com"
 internal_repo_iso_src_path=/root/ose
 #internal_repo_iso_dest_path=/root/iso
-internal_repo_rhel_iso_long="rhel-server-7.1-x86_64-151120.iso"
+internal_repo_rhel_iso_long="rhel-server-7.1-x86_64-151125.iso"
 internal_repo_rhel_iso_short="rhel71"
-internal_repo_ose_iso_long="ose-3.1-x86_64-151120.iso"
+internal_repo_ose_iso_long="ose-3.1-x86_64-151125.iso"
 internal_repo_ose_iso_short="ose31"
 internal_repo_apache_repo_path="/var/www/html/repo"
+
 # This NFS/iscsi server is for testing PV and docker-registory-storage hence I strongly disagee that you use it in Production. Only use it for Test environment.
-nfs_iscsi_install=true
-nfs_iscsi_host_ip="192.168.20.60"     #default:infra
+nfs_iscsi_install=false
+nfs_iscsi_host_ip="192.168.20.63" 
+
+# Docker setup
+#         docker_storage_block_dev_name - docker use loop back device but it does not recommend in production so this value will allow docker use block device.
+#                                         Note) It needs you to attach block device to each node before executing this script.
+#         docker_options - This is for docker option in /etc/sysconfig/docker file
+docker_setup=true
+docker_storage_block_dev_name="vdb"
+docker_options="--insecure-registry 172.30.0.0/16"
 
 # If you would like to register your server to system, you should provide Red Hat id/password.(internet_connected=true, internal_repo_install=false ==> this must be set)
 subscription_register=false
@@ -72,6 +84,9 @@ subscription_register_pool_id=8a85f9813cf493fe013d028b6cf75b5a
 # If you use this script for testing environment, please set this true. Then you can set more infra environment using ansible.
 development=true
 
+## will be deleted
+openshift_ansible_tar=false
+
 deployment_type=openshift-enterprise
 
 # host group for master
@@ -79,10 +94,8 @@ deployment_type=openshift-enterprise
 # public_network_ip : if you want to fix public ip which can be reached from outside, you set this value. Then, it will change network script.
 # mgmt_network_ip : if you want to fix mgmt ip for communication among systems(masters/nodes/etcds) , you set this value. Then, it will change network script.
 [masters]
-master.example.com ansible_ssh_host=192.168.20.60 public_network_ip=192.168.122.2 public_network_gw=192.168.122.1 mgmt_network_ip=192.168.20.60 is_node=true openshift_node_labels="{'region': 'infra', 'zone': 'default'}" 
+master.example.com ansible_ssh_host=192.168.20.60 mgmt_network_ip=192.168.20.60 public_network_ip=10.64.168.155 public_network_gw=10.64.168.254 is_node=true openshift_node_labels="{'region': 'infra', 'zone': 'default'}" 
 #master.example.com ansible_ssh_host=192.168.20.60 public_network_ip=192.168.122.2 mgmt_network_ip=192.168.20.60 is_node=true 
-#master2.example.com ansible_ssh_host=192.168.20.61 public_network_ip=192.168.122.3 mgmt_network_ip=192.168.20.61
-#master3.example.com ansible_ssh_host=10.64.168.233 public_network_ip=192.168.122.4 mgmt_network_ip=192.168.20.62
 
 [masters:vars]
 # It will help change hostname of each master system.
@@ -97,7 +110,8 @@ public_network_dev_name=ens4
 
 
 [nodes]
-node1.example.com ansible_ssh_host=192.168.20.61 public_network_ip=192.168.122.3 public_network_gw=192.168.122.1 mgmt_network_ip=192.168.20.61 openshift_node_labels="{'region': 'primary', 'zone': 'east'}"
+node1.example.com ansible_ssh_host=192.168.20.61 public_network_ip=10.64.168.156 public_network_gw=10.64.168.254 mgmt_network_ip=192.168.20.61 openshift_node_labels="{'region': 'primary', 'zone': 'east'}"
+node2.example.com ansible_ssh_host=192.168.20.62 public_network_ip=10.64.168.157 public_network_gw=10.64.168.254 mgmt_network_ip=192.168.20.62 openshift_node_labels="{'region': 'primary', 'zone': 'west'}"
 #node2.example.com ansible_ssh_host=192.168.20.62 public_network_ip=192.168.122.4 mgmt_network_ip=192.168.20.62 openshift_node_labels="{'region': 'primary', 'zone': 'west'}
 
 
@@ -133,8 +147,16 @@ mgmt_network_dev_name=ens3
 [lb]
 #lb.example.com ansible_ssh_host=192.168.259.308  mgmt_network_ip=10.64.168.408 public_network_ip=192.168.122.4 public_network_gw=192.168.122.1
 
+[lb:vars]
+# It will help set up network configuration of each etcd system.
+set_network=true
+# Note!! It is important variable. If you misconfigure it, the etcd systems' network could be broken. Hence, please double-check the device is for etcd_mgmt_network
+mgmt_network_dev_name=eth0
+# Note!! It is important variable. If you misconfigure it, the node systems' network could be broken. Hence, please double-check the device is for node_public_network
+public_network_dev_name=eth1
+
 [infra]
-infra.example.com ansible_ssh_host=192.168.20.62  mgmt_network_ip=192.168.20.62 public_network_ip=192.168.122.4 public_network_gw=192.168.122.1
+infra.example.com ansible_ssh_host=192.168.20.63  mgmt_network_ip=192.168.20.63 public_network_ip=10.64.168.158 public_network_gw=10.64.168.254
 
 [infra:vars]
 # It will help change hostname of each infra system.

@@ -60,7 +60,6 @@
      when: "{{master_count}} > 1 and (groups[g_lb]|length)==0"
      tags: add_host
    - debug: var={{groups[g_lb]|length}}
-   - debug: msg="{{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_hostname}} is not defined"
    - name: Check Master HA parameters with lb
      shell: "echo Checking Master HA parameters with lb"
      notify:
