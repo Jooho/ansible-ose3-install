@@ -1,0 +1,51 @@
+{% set domain=groups.oo_masters.0.split(".") %}
+$TTL 1D  
+@       IN SOA  @ rname.invalid. (  
+                                        0       ; serial  
+                                        1D      ; refresh  
+                                        1H      ; retry  
+                                        1W      ; expire  
+                                        3H )    ; minimum  
+      NS          @
+      A          127.0.0.1  
+      AAAA        ::1
+
+{% if (groups[g_masters_group] | length) >0 %}
+{% for item in groups.oo_masters %}
+{% set host=item.split(".")|first %}
+
+{{host}} A {{hostvars[item].mgmt_network_ip}}
+{%- endfor %}
+{% endif %}
+
+{% if (groups[g_nodes_group] | length) >0 %}
+{% for item in groups.oo_nodes %}
+{% set host=item.split(".")|first %}
+
+{{host}} A {{hostvars[item].mgmt_network_ip}}
+{%- endfor %}
+{% endif %}
+
+{% if (groups[g_etcds_group] | length) >0 %}
+{% for item in groups.oo_etcds %}
+{% set host=item.split(".")|first %}
+
+{{host}} A {{hostvars[item].mgmt_network_ip}}
+{%- endfor %}
+{% endif %}
+
+{% if (groups[g_infra] | length) >0 %}
+{% for item in groups.oo_infra %}
+{% set host=item.split(".")|first %}
+
+{{host}} A {{hostvars[item].mgmt_network_ip}}
+{%- endfor %}
+{% endif %}
+
+{% if (groups[g_lb] | length) >0 %}
+{% for item in groups.oo_lb %}
+{% set host=item.split(".")|first %}
+
+{{host}} A {{hostvars[item].mgmt_network_ip}}
+{%- endfor %}
+{% endif %}

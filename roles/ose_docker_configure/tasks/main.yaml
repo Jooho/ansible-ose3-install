@@ -10,6 +10,10 @@
     when: "{{hostvars[groups.oo_ose3_install.0].docker_setup}} == true and hostvars[groups.oo_ose3_install.0].docker_storage_block_dev_name is defined"
     tags: docker_config
 
+  - name: Check docker option is exist 
+    shell: "grep '172.30.0.0' /etc/sysconfig/docker|grep -v ^#|wc -l"
+    register: docker_option_exist
+ 
   - name: Update docker options
     lineinfile:
       dest=/etc/sysconfig/docker
@@ -17,5 +21,6 @@
       regexp="^OPTIONS=\'--selinux-enabled"
       insertafter="^OPTIONS"
       line="OPTIONS=\'--selinux-enabled --insecure-registry 172.30.0.0/16\'"
+    when: docker_option_exist.stdout == "0"
     tags: docker_config
   

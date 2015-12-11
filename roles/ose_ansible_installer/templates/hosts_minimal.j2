@@ -19,17 +19,17 @@ deployment_type=openshift-enterprise
 
 # host group for masters
 [masters]
-{% for item in groups.oo_masters -%}
+{% for item in groups.oo_masters %}
 {{item}}
-{%- endfor %}
+{% endfor %}
 
 # host group for nodes, includes region info
 [nodes]
-{% for item in groups.oo_masters -%}
-{%- if hostvars[item].is_node == true -%}
+{% for item in groups.oo_masters %}
+{% if hostvars[item].is_node == true %}
 {{item}} openshift_node_lables="{{hostnvars[item].openshift_node_labels}}"
 {% endif %}
-{%- endfor %}
+{% endfor %}
 {% for item in groups.oo_nodes %}
 {{item}} openshift_node_lables="{{hostvars[item].openshift_node_labels}}"
-{%- endfor %}
+{% endfor %}

@@ -66,7 +66,7 @@ subscription_register_pool_id=8a85f9813cf493fe013d028b6cf75b5a
 #openshift_master_cluster_public_hostname=openshift-ansible.test.example.com
 
 # uncomment the following to enable htpasswd authentication; defaults to DenyAllPasswordIdentityProvider
-#openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/htpasswd'}]
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/root/password'}]
 
 # Native high availbility cluster method with optional load balancer.
 # If no lb group is defined installer assumes that a load balancer has
@@ -89,12 +89,13 @@ openshift_ansible_tar=false
 
 deployment_type=openshift-enterprise
 
+osm_default_subdomain=cloudapps.example.com
 # host group for master
 # ansible_ssh_host : this is for initial connection of ansible playbook. ex) RHEV gives floating ip to VM automatically, it is the only ip that ansible can connect to execute playbook
 # public_network_ip : if you want to fix public ip which can be reached from outside, you set this value. Then, it will change network script.
 # mgmt_network_ip : if you want to fix mgmt ip for communication among systems(masters/nodes/etcds) , you set this value. Then, it will change network script.
 [masters]
-master.example.com ansible_ssh_host=192.168.20.60 mgmt_network_ip=192.168.20.60 public_network_ip=10.64.168.155 public_network_gw=10.64.168.254 is_node=true openshift_node_labels="{'region': 'infra', 'zone': 'default'}" 
+master.example.com ansible_ssh_host=192.168.20.60 mgmt_network_ip=192.168.20.60 public_network_ip=10.64.168.155 public_network_gw=10.64.168.254 is_node=true openshift_node_labels="{'region': 'infra', 'zone': 'default'}" openshift_hostname=master.example.local openshift_public_hostname=master.example.com  openshift_ip=10.64.168.155 openshift_public_ip=10.64.168.155 
 #master.example.com ansible_ssh_host=192.168.20.60 public_network_ip=192.168.122.2 mgmt_network_ip=192.168.20.60 is_node=true 
 
 [masters:vars]
@@ -110,8 +111,8 @@ public_network_dev_name=ens4
 
 
 [nodes]
-node1.example.com ansible_ssh_host=192.168.20.61 public_network_ip=10.64.168.156 public_network_gw=10.64.168.254 mgmt_network_ip=192.168.20.61 openshift_node_labels="{'region': 'primary', 'zone': 'east'}"
-node2.example.com ansible_ssh_host=192.168.20.62 public_network_ip=10.64.168.157 public_network_gw=10.64.168.254 mgmt_network_ip=192.168.20.62 openshift_node_labels="{'region': 'primary', 'zone': 'west'}"
+node1.example.com ansible_ssh_host=192.168.20.61 public_network_ip=10.64.168.156 public_network_gw=10.64.168.254 mgmt_network_ip=192.168.20.61 openshift_node_labels="{'region': 'primary', 'zone': 'east'}" openshift_hostname=node1.example.local  openshift_ip=10.64.168.156 openshift_public_ip=10.64.168.156
+node2.example.com ansible_ssh_host=192.168.20.62 public_network_ip=10.64.168.157 public_network_gw=10.64.168.254 mgmt_network_ip=192.168.20.62 openshift_node_labels="{'region': 'primary', 'zone': 'west'}" openshift_hostname=node2.example.local  openshift_ip=10.64.168.157 openshift_public_ip=10.64.168.157
 #node2.example.com ansible_ssh_host=192.168.20.62 public_network_ip=192.168.122.4 mgmt_network_ip=192.168.20.62 openshift_node_labels="{'region': 'primary', 'zone': 'west'}
 
 
