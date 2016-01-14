@@ -66,24 +66,7 @@ export domain=$(grep ^master ./$inventory_file |sed -n '2p' |cut -d" " -f1 |awk 
 # IP information about master/node/etcd/lb/infra
 export hosts=$(grep "example.com" ./$inventory_file | awk -F "ansible_ssh_host=" '{print $2}'|cut -d" " -f1|grep -v "^$" |awk '{print  $1 " "  }')
 
-# Generate public key
-ssh-keygen
-echo -e "Do you want to copy id_rsa.pub file to all machines with 1 password?(y/n) \c"
-read copy_pub_file_with_one_password
-
-#ssh-copy-id to each hosts
-if [ $copy_pub_file_with_one_password == "y" ]
-then 
-   echo -e "Type password : \c"
-   read password
-   echo "~/.ssh/id_rsa.pub file will be copyed to : "
-   echo " $hosts"
-   echo `for host in $hosts ;do sshpass -p $password ssh-copy-id -i  ~/.ssh/id_rsa.pub  $host ;  done`
-else
-   echo "~/.ssh/id_rsa.pub file will be copyed to : $hosts"
-   echo `for host in $hosts ;do echo $host ;ssh-copy-id -i ~/.ssh/id_rsa.pub $host;  done`
-fi
-  
+ 
 # Mount temp repository
 if [ $internet_connected == false ]; 
 then 
@@ -101,3 +84,22 @@ then
   mount_temp_repo_statue=umounted
   rm /etc/yum.repos.d/ose.repo
 fi
+
+# Generate public key
+ssh-keygen
+echo -e "Do you want to copy id_rsa.pub file to all machines with 1 password?(y/n) \c"
+read copy_pub_file_with_one_password
+
+#ssh-copy-id to each hosts
+if [ $copy_pub_file_with_one_password == "y" ]
+then 
+   echo -e "Type password : \c"
+   read password
+   echo "~/.ssh/id_rsa.pub file will be copyed to : "
+   echo " $hosts"
+   echo `for host in $hosts ;do sshpass -p $password ssh-copy-id -i  ~/.ssh/id_rsa.pub  $host ;  done`
+else
+   echo "~/.ssh/id_rsa.pub file will be copyed to : $hosts"
+   echo `for host in $hosts ;do echo $host ;ssh-copy-id -i ~/.ssh/id_rsa.pub $host;  done`
+fi
+ 
