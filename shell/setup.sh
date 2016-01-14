@@ -107,3 +107,6 @@ else
     done
 fi
  
+git clone https://github.com/Jooho/ansible-ose3-install
+
+ansible-playbook -i $inventory_file ansible-ose3-install/playbooks/rhel/config.yaml -vvvvv
