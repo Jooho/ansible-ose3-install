@@ -97,9 +97,13 @@ then
    read password
    echo "~/.ssh/id_rsa.pub file will be copyed to : "
    echo " $hosts"
-   echo `for host in $hosts ;do sshpass -p $password ssh-copy-id -i  ~/.ssh/id_rsa.pub  $host ;  done`
+   for host in $hosts; do
+	 sshpass -p $password ssh-copy-id -i  ~/.ssh/id_rsa.pub -o StrictHostKeyChecking=no root@$host
+   done
 else
    echo "~/.ssh/id_rsa.pub file will be copyed to : $hosts"
-   echo `for host in $hosts ;do echo $host ;ssh-copy-id -i ~/.ssh/id_rsa.pub $host;  done`
+    for host in $hosts; do
+      ssh-copy-id -i ~/.ssh/id_rsa.pub root@$host;
+    done
 fi
  
