@@ -67,46 +67,58 @@ export domain=$(grep ^master ./$inventory_file |sed -n '2p' |cut -d" " -f1 |awk 
 export hosts=$(grep "example.com" ./$inventory_file | awk -F "ansible_ssh_host=" '{print $2}'|cut -d" " -f1|grep -v "^$" |awk '{print  $1 " "  }')
 
  
-# Mount temp repository
-if [ $internet_connected == false ]; 
-then 
-  mount_temp_repository
-  mount_temp_repo_statue=mounted
-fi
+# Check if generating public key is needed 
+echo -e "Do you want to go through from the beginning?(y/n) (or just start to install)"
+read need_generating_public_key
 
-# Install necessary package
-yum install -y atomic-openshift-utils sshpass git
-
-#Umount temp repository
-if [ $mount_temp_repo_statue == mounted ]; 
+if [ $need_generating_public_key == "y" ]
 then
-  umount_temp_repository
-  mount_temp_repo_statue=umounted
-  rm /etc/yum.repos.d/ose.repo
-fi
-
-# Generate public key
-ssh-keygen
-echo -e "Do you want to copy id_rsa.pub file to all machines with 1 password?(y/n) \c"
-read copy_pub_file_with_one_password
-
-#ssh-copy-id to each hosts
-if [ $copy_pub_file_with_one_password == "y" ]
-then 
-   echo -e "Type password : \c"
-   read password
-   echo "~/.ssh/id_rsa.pub file will be copyed to : "
-   echo " $hosts"
-   for host in $hosts; do
-	 sshpass -p $password ssh-copy-id -i  ~/.ssh/id_rsa.pub -o StrictHostKeyChecking=no root@$host
-   done
-else
-   echo "~/.ssh/id_rsa.pub file will be copyed to : $hosts"
-    for host in $hosts; do
-      ssh-copy-id -i ~/.ssh/id_rsa.pub root@$host;
-    done
-fi
- 
+   # Mount temp repository
+   if [ $internet_connected == false ]; 
+   then 
+     mount_temp_repository
+     mount_temp_repo_statue=mounted
+   fi
+  
+   # Install necessary package
+   yum install -y atomic-openshift-utils sshpass git wget net-tools bind-utils  bridge-utils bash-completion
+   
+   #Umount temp repository
+   if [ $mount_temp_repo_statue == mounted ]; 
+   then
+     umount_temp_repository
+     mount_temp_repo_statue=umounted
+     rm /etc/yum.repos.d/ose.repo
+   fi
+   
+   # Generate public key
+   ssh-keygen
+   echo -e "Do you want to copy id_rsa.pub file to all machines with 1 password?(y/n) \c"
+   read copy_pub_file_with_one_password
+   
+   #ssh-copy-id to each hosts
+   if [ $copy_pub_file_with_one_password == "y" ]
+   then 
+      echo -e "Type password : \c"
+      read password
+      echo "~/.ssh/id_rsa.pub file will be copyed to : "
+      echo " $hosts"
+      for host in $hosts; do
+   	 sshpass -p $password ssh-copy-id -i  ~/.ssh/id_rsa.pub -o StrictHostKeyChecking=no root@$host
+      done
+   else
+      echo "~/.ssh/id_rsa.pub file will be copyed to : $hosts"
+       for host in $hosts; do
+         ssh-copy-id -i ~/.ssh/id_rsa.pub root@$host;
+       done
+   fi
 git clone https://github.com/Jooho/ansible-ose3-install
+
+else
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+cd ansible-ose3-install;git pull;cd ..
+
+fi  
+
 
 ansible-playbook -i $inventory_file ansible-ose3-install/playbooks/rhel/config.yaml -vvvvv
