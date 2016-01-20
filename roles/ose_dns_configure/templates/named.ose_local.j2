@@ -10,7 +10,7 @@ $TTL 1D
       A          127.0.0.1  
       AAAA        ::1
 
-{% if (groups[g_masters_group] | length) >0 %}
+{% if (groups[g_masters_group]) is defined %}
 {% for item in groups.oo_masters %}
 {% set host=item.split(".")|first %}
 
@@ -18,7 +18,7 @@ $TTL 1D
 {%- endfor %}
 {% endif %}
 
-{% if (groups[g_nodes_group] | length) >0 %}
+{% if (groups[g_nodes_group]) is defined %}
 {% for item in groups.oo_nodes %}
 {% set host=item.split(".")|first %}
 
@@ -26,7 +26,7 @@ $TTL 1D
 {%- endfor %}
 {% endif %}
 
-{% if (groups[g_etcds_group] | length) >0 %}
+{% if (groups[g_etcds_group]) is defined %}
 {% for item in groups.oo_etcds %}
 {% set host=item.split(".")|first %}
 
@@ -34,7 +34,7 @@ $TTL 1D
 {%- endfor %}
 {% endif %}
 
-{% if (groups[g_infra] | length) >0 %}
+{% if (groups[g_infra]) is defined %}
 {% for item in groups.oo_infra %}
 {% set host=item.split(".")|first %}
 
@@ -42,7 +42,7 @@ $TTL 1D
 {%- endfor %}
 {% endif %}
 
-{% if (groups[g_lb] | length) >0 %}
+{% if (groups[g_lb]) is defined %}
 {% for item in groups.oo_lb %}
 {% set host=item.split(".")|first %}
 
