@@ -1,0 +1,17 @@
+
+   - name: Check if nfs-utils has been installed
+     yum: pkg=nfs-utils
+     register: nfs_installed
+
+   - name: Exporting a nfs
+     lineinfile:
+       dest=/etc/exports
+       line="/exports/nfs/registry *(rw,sync,all_squash)"
+       state=present
+       insertafter=EOF
+       create=yes
+
+   - name: Enabling and starting nfs service
+     service: name=nfs state=started enabled=yes
+     when: nfs_installed.rc == 0
+~
