@@ -1,0 +1,45 @@
+
+   - name: Check if nfs-utils has been installed
+     yum: pkg=nfs-utils
+     register: nfs_installed
+
+   - name: Check if nfs-utils has been installed
+     yum: pkg=libsemanage-python 
+
+   - name: Check if selinux is disabled
+     shell: getenforce
+     register: selinux_state
+
+   - name: create nfs_registry folder
+     file: path={{nfs_registry_path}} state=directory force=false
+
+   - name: Exporting a nfs
+     lineinfile:
+       dest=/etc/exports
+       line="{{nfs_registry_path}} *(rw,root_squash)"
+       state=present
+       insertafter=EOF
+       create=yes
+
+   - name: change user/group nobody:nobody
+     file: path={{nfs_registry_path}} owner=nobody group=nobody mode=0777 recurse=yes
+
+   - name: set selinux virt_use_nfs to 1 
+     seboolean: name=virt_use_nfs state=yes persistent=yes
+     when: selinux_state.stdout != "Disabled"
+
+# iptables will be supported since 2.0
+#   - name: add iptable rule for nfs
+#     iptables: chain=INPUT protocol=tcp match=tcp destination_port=2049 jump=ACCEPT 
+#     become: yes
+
+   - name: add iptable rule for nfs
+     shell: "iptables -I INPUT 1 -p tcp --dport 2049 -j ACCEPT"
+
+   - name: enable/start rpcbind
+     service: name=rpcbind state=started enabled=yes
+     when: nfs_installed.rc == 0
+
+   - name: enable/start nfs-server
+     service: name=nfs-server state=started enabled=yes
+     when: nfs_installed.rc == 0
