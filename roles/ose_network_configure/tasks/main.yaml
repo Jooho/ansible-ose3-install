@@ -43,6 +43,15 @@
     yum: name=NetworkManager state=absent
     when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager')|int != 0" 
 
+  
+  - name: Set default GATEWAY to use public network
+    template: src=network.j2 dest=/etc/sysconfig/network
+    when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager')|int != 0" 
+
+  - name: Set dhclient-enter-hooks not to update resolve.conf
+    template: src=dhclient-enter-hooks.j2 dest=/etc/dhclient-enter-hooks
+    when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager')|int != 0" 
+
 # Note!!!!  ==> This should be executed at last
   - name: restart network service
     shell: /etc/sysconfig/network-scripts/ifdown {{public_network_dev_name}} ; /etc/sysconfig/network-scripts/ifup {{public_network_dev_name}}
