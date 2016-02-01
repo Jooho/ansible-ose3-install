@@ -13,7 +13,7 @@
 
   - name: Generate management network script
     template: src=ifcfg-mgmt.j2 dest=/etc/sysconfig/network-scripts/ifcfg-{{mgmt_network_dev_name}}
-    when: "{{set_network}} == true and check_mgmt_network.rc == 1"
+    when: "{{set_network}} == true"
 
   - name: Generate public network script
     template: src=ifcfg-public.j2 dest=/etc/sysconfig/network-scripts/ifcfg-{{public_network_dev_name}}
@@ -37,20 +37,20 @@
     service: name=NetworkManager state=stopped enabled=no
     register: networkmanger_stopped
     ignore_errors: yes
-    when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager')|int != 0"
+    when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager') == 0"
  
   - name: Remove NetworkManager package
     yum: name=NetworkManager state=absent
-    when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager')|int != 0" 
+    when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager') == 0" 
 
   
   - name: Set default GATEWAY to use public network
     template: src=network.j2 dest=/etc/sysconfig/network
-    when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager')|int != 0" 
+    when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager') == 0" 
 
   - name: Set dhclient-enter-hooks not to update resolve.conf
     template: src=dhclient-enter-hooks.j2 dest=/etc/dhclient-enter-hooks
-    when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager')|int != 0" 
+    when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager') == 0" 
 
 # Note!!!!  ==> This should be executed at last
   - name: restart network service
