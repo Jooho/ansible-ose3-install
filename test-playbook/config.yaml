@@ -1,6 +1,6 @@
 
  - name: Test for each role
-   hosts: infra
+   hosts: master1.example.com
    gather_facts: false
    
    pre_tasks:
@@ -15,4 +15,6 @@
      tags: pre_tasks
 
    roles:
-     - { role: ose_nfs, nfs_mount_point: /exports/nfs}
+      # default values : master_ip={master1.example.com, attach_vol_to_registry: "true", nfs_server: "infra.example.com" ,nfs_mount_point_for_registry: "/exports/nfs/registry", selector: "region=primary,zone=infra"
+      - { role: create_ose_registry}
+      #- { role: create_ose_registry, attach_vol_to_registry: "true", nfs_server: "infra.example.com" ,nfs_mount_point_for_registry: "/exports/nfs/registry", selector: "region=primary,zone=infra"}

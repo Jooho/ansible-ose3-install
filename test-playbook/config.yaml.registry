@@ -15,5 +15,5 @@
      tags: pre_tasks
 
    roles:
-      #    - { role: ose_nfs, nfs_mount_point: /exports/nfs}
-      - { role: create_ose_registry, attach_nfs_volume_to_registry: "true", nfs_server: "infra.example.com" ,nfs_registry_mount_point: "/exports/nfs/registry"}
+      # default values : attach_vol_to_registry: "true", nfs_server: "infra.example.com" ,nfs_mount_point_for_registry: "/exports/nfs/registry", selector: "region=primary,zone=infra"
+      - { role: create_ose_registry, attach_vol_to_registry: "true", nfs_server: "infra.example.com" ,nfs_mount_point_for_registry: "/exports/nfs/registry", selector: "region=primary,zone=infra"}
