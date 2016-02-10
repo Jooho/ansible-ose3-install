@@ -15,5 +15,6 @@
      tags: pre_tasks
 
    roles:
-      # default values : attach_vol_to_registry: "true", nfs_server: "infra.example.com" ,nfs_mount_point_for_registry: "/exports/nfs/registry", selector: "region=primary,zone=infra"
-      - { role: create_ose_registry, attach_vol_to_registry: "true", nfs_server: "infra.example.com" ,nfs_mount_point_for_registry: "/exports/nfs/registry", selector: "region=primary,zone=infra"}
+      # default values : master_ip={master1.example.com, attach_vol_to_registry: "true", nfs_server: "infra.example.com" ,nfs_mount_point_for_registry: "/exports/nfs/registry", selector: "region=primary,zone=infra"
+      - { role: create_ose_registry}
+      #- { role: create_ose_registry, attach_vol_to_registry: "true", nfs_server: "infra.example.com" ,nfs_mount_point_for_registry: "/exports/nfs/registry", selector: "region=primary,zone=infra"}
