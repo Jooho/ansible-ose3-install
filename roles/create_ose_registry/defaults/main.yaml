@@ -1,0 +1,5 @@
+nfs_server: infra.example.com
+nfs_mount_point_for_registry: /exports/nfs/registry
+selector: region=primary,zone=infra
+attach_vol_to_registry: true
+master_ip: master1.example.com

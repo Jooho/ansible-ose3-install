@@ -1,0 +1,32 @@
+ - name: Find infra nodes
+   shell: oc get nodes -l {{infra_label}} |awk '{print $1}' |sed 1d
+   register: infra_nodes
+
+ - name: Find app nodes
+   shell: oc get nodes |grep -v {{infra_label}} | awk '{print $1}' | sed 1d
+   register: app_nodes
+
+ - debug: var={{app_nodes.stdout_lines|length}}
+ - name: Download images for infra node
+   shell: 
+     ssh root@{{item}}
+     "docker pull registry.access.redhat.com/openshift3/ose-haproxy-router:{{image_version}}  ; 
+     docker pull registry.access.redhat.com/openshift3/ose-deployer:{{image_version}} ; 
+     docker pull registry.access.redhat.com/openshift3/ose-pod:{{image_version}} ; 
+     docker pull registry.access.redhat.com/openshift3/ose-docker-registry:{{image_version}}" ;
+   with_items: infra_nodes.stdout_lines
+   when: (infra_nodes.stdout_lines|length) != 0
+ 
+ - name: Download images for app node
+   shell: 
+     ssh {{item}}
+     "docker pull registry.access.redhat.com/openshift3/ose-deployer:{{image_version}};
+      docker pull registry.access.redhat.com/openshift3/ose-sti-builder:{{image_version}} ; \
+      docker pull registry.access.redhat.com/openshift3/ose-docker-builder:{{image_version}} ; \
+      docker pull registry.access.redhat.com/openshift3/ose-pod:{{image_version}} ; \
+      docker pull registry.access.redhat.com/openshift3/ose-keepalived-ipfailover:{{image_version}} ; \
+      docker pull registry.access.redhat.com/openshift3/ruby-20-rhel7 ; \
+      docker pull registry.access.redhat.com/openshift3/mysql-55-rhel7 ; \
+      docker pull openshift/hello-openshift:v1.0.6"
+   with_items: app_nodes.stdout_lines
+   when: (app_nodes.stdout_lines|length) != 0

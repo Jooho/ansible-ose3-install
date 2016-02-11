@@ -1,0 +1,1 @@
+oc volume deploymentconfigs/docker-registry  --add --overwrite --name=registry-storage --mount-path=/registry --source='{"nfs": { "server": "{{nfs_server}}", "path": "{{nfs_mount_point_for_registry}}"}}'

@@ -1,0 +1,2 @@
+ CA=/etc/origin/master
+ oadm router --replicas=1 --default-cert=$CA/cloudapps.router.pem --credentials='/etc/origin/master/openshift-router.kubeconfig' --service-account=router --selector='{{selector}}'
