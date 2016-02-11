@@ -1,45 +1,90 @@
 
-   - name: Check if nfs-utils has been installed
-     yum: pkg=nfs-utils
-     register: nfs_installed
+ - name: Check if nfs-utils has been installed
+   yum: pkg=nfs-utils
+   register: nfs_installed
 
-   - name: Check if nfs-utils has been installed
-     yum: pkg=libsemanage-python 
+ - name: Check if nfs-utils has been installed
+   yum: pkg=libsemanage-python 
 
-   - name: Check if selinux is disabled
-     shell: getenforce
-     register: selinux_state
+ - name: Check if selinux is disabled
+   shell: getenforce
+   register: selinux_state
+      
+ - name: create nfs mount point folder
+   file: path={{nfs_mount_point}} state=directory force=false
 
-   - name: create nfs_registry folder
-     file: path={{nfs_registry_path}} state=directory force=false
+ - name: Create PV
+   shell: pvcreate /dev/{{nfs_block_dev_name}}
+   ignore_errors: yes
 
-   - name: Exporting a nfs
-     lineinfile:
-       dest=/etc/exports
-       line="{{nfs_registry_path}} *(rw,root_squash)"
-       state=present
-       insertafter=EOF
-       create=yes
+   # Create a volume group on top of /dev/{{nfs_block_dev_name}} with physical extent size = 16MB.
+ - name: Create VG
+   lvg: vg=nfs_vg pvs=/dev/{{nfs_block_dev_name}} pesize=16
+   ignore_errors: yes
 
-   - name: change user/group nobody:nobody
-     file: path={{nfs_registry_path}} owner=nobody group=nobody mode=0777 recurse=yes
+   # Create a logical volume the size of all remaining space in the volume group
+ - name: Create LV
+   lvol: vg=nfs_vg lv=nfs_lv size=100%FREE
+   ignore_errors: yes
 
-   - name: set selinux virt_use_nfs to 1 
-     seboolean: name=virt_use_nfs state=yes persistent=yes
-     when: selinux_state.stdout != "Disabled"
+ - name: Format nfs_lv
+   filesystem: fstype=xfs dev=/dev/nfs_vg/nfs_lv
+   ignore_errors: yes
 
-# iptables will be supported since 2.0
-#   - name: add iptable rule for nfs
-#     iptables: chain=INPUT protocol=tcp match=tcp destination_port=2049 jump=ACCEPT 
-#     become: yes
+ - name: Mount the Volume
+   mount: name={{nfs_mount_point}} src=/dev/nfs_vg/nfs_lv fstype=xfs opts=rw state=mounted
 
-   - name: add iptable rule for nfs
-     shell: "iptables -I INPUT 1 -p tcp --dport 2049 -j ACCEPT"
+ - name: create nfs_registry folder
+   file: path={{nfs_mount_point}}/registry state=directory force=false
 
-   - name: enable/start rpcbind
-     service: name=rpcbind state=started enabled=yes
-     when: nfs_installed.rc == 0
+ - name: Exporting a nfs
+   lineinfile:
+     dest=/etc/exports
+     line="{{nfs_mount_point}} *(rw,all_squash)"
+     state=present
+     insertafter=EOF
+     create=yes
 
-   - name: enable/start nfs-server
-     service: name=nfs-server state=started enabled=yes
-     when: nfs_installed.rc == 0
+ - name: change user/group nobody:nobody
+   file: path={{nfs_mount_point}} owner=nobody group=nobody mode=0777 recurse=yes
+
+ - name: set selinux virt_use_nfs to 1 
+   seboolean: name=virt_use_nfs state=yes persistent=yes
+   when: selinux_state.stdout != "Disabled"
+ - name: create nfs mount point folder
+   file: path={{nfs_mount_point}} state=directory force=false
+
+ - name: create nfs_registry folder
+   file: path={{nfs_mount_point}}/registry state=directory force=false
+
+ - name: Exporting a nfs
+   lineinfile:
+     dest=/etc/exports
+     line="{{nfs_mount_point}} *(rw,all_squash)"
+     state=present
+     insertafter=EOF
+     create=yes
+
+ - name: change user/group nobody:nobody
+   file: path={{nfs_mount_point}} owner=nobody group=nobody mode=0777 recurse=yes
+
+ - name: set selinux virt_use_nfs to 1 
+   seboolean: name=virt_use_nfs state=yes persistent=yes
+   when: selinux_state.stdout != "Disabled"
+
+
+      #iptables will be supported since 2.0
+      #  - name: add iptable rule for nfs
+      #iptables: chain=INPUT protocol=tcp match=tcp destination_port=2049 jump=ACCEPT 
+      #become: yes
+
+ - name: add iptable rule for nfs
+   shell: "iptables -I INPUT 1 -p tcp --dport 2049 -j ACCEPT"
+
+ - name: enable/start rpcbind
+   service: name=rpcbind state=started enabled=yes
+   when: nfs_installed.rc == 0
+
+ - name: enable/start nfs-server
+   service: name=nfs-server state=started enabled=yes
+   when: nfs_installed.rc == 0

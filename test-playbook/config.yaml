@@ -15,5 +15,4 @@
      tags: pre_tasks
 
    roles:
-      # default values : master_ip={master1.example.com, attach_vol_to_registry: "true", nfs_server: "infra.example.com" ,nfs_mount_point_for_registry: "/exports/nfs/registry", selector: "region=primary,zone=infra"
-      - { role: after_install_download_essential_images }
+      - { role: after_install_create_router }
