@@ -29,21 +29,21 @@
     when: "{{set_hostname}} == true and check_hostname.rc == 1"
 
       # This is not mandatory from 3.1 so it will be deleted
-#  - name: Check if NetworkManager is installed
-#    shell: "rpm -qa NetworkManager"
-#    register: networkmanager_installed
-#    when: "{{set_network}} == true" 
+  - name: Check if NetworkManager is installed
+    shell: "rpm -qa NetworkManager"
+    register: networkmanager_installed
+    when: "{{set_network}} == true" 
 
-#  - name: Disable/stop NetworkManager
-#    service: name=NetworkManager state=stopped enabled=no
-#    register: networkmanger_stopped
-#    ignore_errors: yes
-#    when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager') == 0"
+  - name: Disable/stop NetworkManager
+    service: name=NetworkManager state=stopped enabled=no
+    register: networkmanger_stopped
+    ignore_errors: yes
+    when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager') == 0"
  
-#  - name: Remove NetworkManager package
-#    yum: name=NetworkManager state=absent
-#    when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager') == 0" 
-#
+  - name: Remove NetworkManager package
+    yum: name=NetworkManager state=absent
+    when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager') == 0" 
+
   
   - name: Set default GATEWAY to use public network
     template: src=network.j2 dest=/etc/sysconfig/network
