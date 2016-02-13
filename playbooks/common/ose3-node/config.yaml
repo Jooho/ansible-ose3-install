@@ -19,7 +19,7 @@
 
    roles:
     - { role: ose_hosts_file, tags: node,hosts}
-    - { role: ose_network_configure, when: development_mode == "true", tags: node,network}
+#    - { role: ose_network_configure, when: development_mode == "true", tags: node,network}
     - { role: update_yum_repo, when: "{{hostvars[groups.oo_ose3_install.0].internal_repo_install}} == true", tags: node, yum_repo }
     - { role: update_resolv_conf, tags: node, resolv_conf}
     - { role: subscription_register, when: "{{subscription_register}} == true and {{hostvars[groups.oo_ose3_install.0].internal_repo_install}} == false", tags: subscription_register}

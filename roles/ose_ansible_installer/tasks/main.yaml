@@ -36,11 +36,11 @@
     when: "ansible_folder.stdout|int == 0"
     tags: openshift_ansible 
 
-  - name: Copy ansible inventory hosts file
-    action: template src="hosts_minimal.j2" dest="/etc/ansible/hosts" backup="yes"
-    delegate_to: localhost
-    when: "(groups[g_masters_group] | length) == 1 and (groups[g_etcds_group] | length) == 0" 
-    tags: openshift_ansible
+ # - name: Copy ansible inventory hosts file
+ #   action: template src="hosts_minimal.j2" dest="/etc/ansible/hosts" backup="yes"
+ #   delegate_to: localhost
+ #   when: "(groups[g_masters_group] | length) == 1 and (groups[g_etcds_group] | length) == 0" 
+ #   tags: openshift_ansible
   
   - name: Copy ansible inventory hosts file
     action: template src="hosts_template.j2" dest="/etc/ansible/hosts" backup="yes"

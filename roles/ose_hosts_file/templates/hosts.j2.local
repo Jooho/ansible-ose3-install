@@ -5,6 +5,7 @@
 {% if (groups[g_masters_group] | length) >0 %} 
 {% for item in groups.oo_masters %}
 {% set domain=item.split(".") %}
+{{hostvars[item].mgmt_network_ip}} {{domain.0}}.{{domain.1}}.local
 {{hostvars[item].public_network_ip}} {{item}}
 {% endfor %}
 {% endif %} 
@@ -13,6 +14,7 @@
 {% for item in groups.oo_nodes %}
 
 {% set domain=item.split(".") %}
+{{hostvars[item].mgmt_network_ip}} {{domain.0}}.{{domain.1}}.local
 {{hostvars[item].public_network_ip}} {{item}}
 {% endfor %}
 {% endif %} 
@@ -21,6 +23,7 @@
 {% for item in groups.oo_etcds %}
 
 {% set domain=item.split(".") %}
+{{hostvars[item].mgmt_network_ip}} {{domain.0}}.{{domain.1}}.local
 {{hostvars[item].public_network_ip}} {{item}}
 {% endfor %}
 {% endif %}
@@ -29,6 +32,7 @@
 {% for item in groups.oo_infra %}
 
 {% set domain=item.split(".") %}
+{{hostvars[item].mgmt_network_ip}} {{domain.0}}.{{domain.1}}.local
 {{hostvars[item].public_network_ip}} {{item}}
 {% endfor %}
 {% endif %} 
@@ -41,6 +45,7 @@
 {% for item in groups.oo_lb %}
 
 {% set domain=item.split(".") %}
+{{hostvars[item].mgmt_network_ip}} {{domain.0}}.{{domain.1}}.local
 {{hostvars[item].public_network_ip}} {{item}}
 {% endfor %}
 {% endif %}

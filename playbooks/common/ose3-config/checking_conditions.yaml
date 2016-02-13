@@ -59,7 +59,7 @@
        - Verify openshift_master_cluster_public_hostname
      when: "{{master_count}} > 1 and (groups[g_lb]|length)==0"
      tags: add_host
-   - debug: var={{groups[g_lb]|length}}
+   
    - name: Check Master HA parameters with lb
      shell: "echo Checking Master HA parameters with lb"
      notify:

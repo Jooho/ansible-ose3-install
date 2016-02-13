@@ -52,7 +52,7 @@
    
    roles:
     - { role: ose_hosts_file, tags: infra, hosts}
-    - { role: ose_network_configure, when: development_mode == "true", tags: infra, network} 
+   # - { role: ose_network_configure, when: development_mode == "true", tags: infra, network} 
     - { role: temp_repo_with_iso, when: internet_connected == "false" , tags: infra, temp_repo}
     - { role: ose_dns_configure, tags: infra, dns} 
     - { role: update_resolv_conf, tags: infra, resolv_conf} 
