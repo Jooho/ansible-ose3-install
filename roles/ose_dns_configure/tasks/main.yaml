@@ -6,7 +6,7 @@
     when: "{{dns_install}} == true "
 
   - name: Install bind package 
-    yum: name=bind state=present
+    yum: name=bind state=present enabled=true
     when: "{{dns_install}} == true and (bind_installed|length) >= 1"
  
   - name: Copy /etc/named.conf

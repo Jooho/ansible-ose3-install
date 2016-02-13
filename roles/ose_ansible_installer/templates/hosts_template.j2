@@ -2,10 +2,12 @@
 [OSEv3:children]
 masters
 nodes
-{%- if (groups[g_etcds_group]) is defined %}
+{% if (groups[g_etcds_group]) is defined %}
 etcd
-{% endif -%}
+{% endif %}
+{% if (groups[g_lb]) is defined %}
 lb
+{% endif %}
 
 # Set variables common for all OSEv3 hosts
 [OSEv3:vars]
