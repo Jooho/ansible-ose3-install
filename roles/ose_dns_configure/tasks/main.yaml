@@ -6,7 +6,7 @@
     when: "{{dns_install}} == true "
 
   - name: Install bind package 
-    yum: name=bind state=present enabled=true
+    yum: name=bind state=present 
     when: "{{dns_install}} == true and (bind_installed|length) >= 1"
  
   - name: Copy /etc/named.conf
@@ -38,5 +38,5 @@
     when: "{{dns_install}} == true"
 
   - name: Start DNS server(bind)
-    service: name=named state=restarted
+    service: name=named state=restarted enabled=yes
     when: "{{dns_install}} == true"
