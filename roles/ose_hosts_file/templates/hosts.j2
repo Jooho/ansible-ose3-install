@@ -33,7 +33,7 @@
 {% endfor %}
 {% endif %} 
 
-{% if (groups[g_lb]) is defiend and (groups[g_masters_group] | length) > 1   %}
+{% if (groups[g_lb]) is not defined and (groups[g_masters_group] | length) > 1   %}
 {{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_vip}} {{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_hostname}}
 {% endif %}
 
