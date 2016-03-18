@@ -1,5 +1,5 @@
 
- - name: Change login page logo 
+ - name: Resize Image
    hosts: master1.example.com
    gather_facts: false
    
@@ -12,11 +12,9 @@
    - name: set_facts - pwd_path
      set_fact:
         pwd_path: "{{pwd.stdout}}"
-        output_img: ctc-long-resized.png
      tags: pre_tasks
 
    roles:
       # default values - input_img: input.png, output_img: output.png, size: 193x44
       # example - { role: resize_image, input_img: "/etc/origin/master/stylesheet/images/ctc-long.png", output_img: "ctc-long-resized.png", size: "193x44" }
-      - { role: resize_image, input_img: "/etc/origin/master/stylesheet/images/ctc-long.png", output_img: "{{output_img}}", size: "193x44" }
-      - { role: configure_login_logo, resized_img: "{{output_img}}", master_url: "master1.example.com:8443", login_html_folder: "/etc/origin/master/stylesheet/images" }
+      - { role: resize_image, input_img: "/etc/origin/master/stylesheet/images/ctc-long.png", output_img: "ctc-long-resized.png", size: "193x44" }
