@@ -13,7 +13,7 @@
     delegate_to: localhost
 
   - name: Copy configure_new_login_html.sh to playbook folder locally
-    copy: src=configure_new_login_html.sh  dest={{pwd_path}}/.  mode=0777
+    template: src=configure_new_login_html.sh.j2  dest={{pwd_path}}/configure_new_login_html.sh  mode=0777
     delegate_to: localhost
 
   - name: Copy error_tag.txt to playbook folder locally

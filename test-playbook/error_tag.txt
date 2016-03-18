@@ -1,3 +1,0 @@
-        {{ if .Error }}
-           <div class="error">{{ .Error }}</div>
-         {{ end }}
