@@ -37,7 +37,7 @@
   - name: Configure master-config.xml to load new html
     shell: sed -e "/$(grep -n oauthConfig {{login_html_folder}}/master-config.yaml |cut -d':' -f1)/r {{login_html_folder}}/login_conf.txt" {{login_html_folder}}/master-config.yaml
 
-  - name: Clean temp files
+  - name: Clean temp files in local
     file: path={{item}} state=absent
     with_items:
         - "{{pwd_path}}/new-login.html"
@@ -46,3 +46,9 @@
         - "{{pwd_path}}/error_tag.txt"
         - "{{pwd_path}}/form_tag.txt"
         - "{{pwd_path}}/configure_new_login_html.sh"
+    delegate_to: localhost
+  
+   - name: Clean temp files on remote
+    file: path={{item}} state=absent
+    with_items:
+        - "{{login_html_folder}}/login_conf.txt" 

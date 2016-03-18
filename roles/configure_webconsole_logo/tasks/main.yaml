@@ -1,0 +1,28 @@
+
+    
+  - name: Create CSS/Image folder
+    file: path={{item}} state=directory
+    with_items:
+        - "{{stylesheet_base_folder}}/css"
+        - "{{stylesheet_base_folder}}/images"
+
+  - name: Copy css file under {stylesheet_base_folder}}/css
+    template: src=extension.css.j2 dest="{{stylesheet_base_folder}}/css/extension.css"
+    
+  - name: Copy web console logo under {stylesheet_base_folder}}/images
+    copy: src={{pwd_path}}/{{resized_img}} dest="{{stylesheet_base_folder}}/images"
+
+  - name: webconsole configuration txt file to /etc/origin/master
+    template: src=webconsole_conf.txt.j2 dest={{stylesheet_base_folder}}/webconsole_conf.txt
+
+#To-do 
+#  -name: Check if there is extension configuration in master-config.xml (overwrite variable need)
+
+#To-do  change     /etc/origin/master/stylesheet/images/master-config.yaml   ==> /etc/origin/master/master-config.yaml 
+  - name: Configure master-config.xml to load new html
+    shell: sed -e "$(grep -n assetConfig /etc/origin/master/stylesheet/images/master-config.yaml |cut -d':' -f1)r {{stylesheet_base_folder}}/webconsole_conf.txt"  -i /etc/origin/master/stylesheet/images/master-config.yaml
+
+#  - name: Clean temp files
+#    file: path={{item}} state=absent
+#    with_items:
+#        - "{{stylesheet_base_folder}}/webconsole_conf.txt"

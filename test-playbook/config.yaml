@@ -1,5 +1,5 @@
 
- - name: Change login page logo 
+ - name: Change webconsole page logo 
    hosts: master1.example.com
    gather_facts: false
    
@@ -20,4 +20,4 @@
       # example - { role: resize_image, input_img: "/etc/origin/master/stylesheet/images/ctc-long.png", output_img: "ctc-long-resized.png", size: "193x44" }
       #- { role: resize_image, input_img: "/etc/origin/master/stylesheet/images/ctc-long.png", output_img: "{{output_img}}", size: "193x44" }
       - { role: resize_image, input_img: "/etc/origin/master/stylesheet/images/ctc-long.png", output_img: "ctc-long-resized.png", size: "193x44" }
-      - { role: configure_login_logo, resized_img: "{{output_img}}", master_url: "master1.example.com:8443", login_html_folder: "/etc/origin/master/stylesheet/images" }
+      - { role: configure_webconsole_logo, resized_img: "{{output_img}}", stylesheet_base_folder: "/etc/origin/master/test_stylesheet" }
