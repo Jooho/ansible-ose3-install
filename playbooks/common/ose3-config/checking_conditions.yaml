@@ -9,7 +9,6 @@
      set_fact:
        internet_connected: "{{ hostvars[groups.oo_ose3_install.0].internet_connected }}"
        dns_install: "{{ hostvars[groups.oo_ose3_install.0].dns_install }}"
-       proxy_install: "{{ hostvars[groups.oo_ose3_install.0].proxy_install }}"
        internal_repo_install: "{{ hostvars[groups.oo_ose3_install.0].internal_repo_install }}"
        nfs_iscsi_install: "{{ hostvars[groups.oo_ose3_install.0].nfs_iscsi_install }}"
        master_count: "{{ (groups[g_masters_group] | length) }}"
@@ -23,14 +22,6 @@
        - Verify dns_routers_ip
        - Verify dns_host_ip
      when: "{{dns_install}} == true"
-     tags: add_host
-
-   - name: Check Proxy parameters
-     shell: "echo Checking Proxy parameters"
-     notify:
-       - Verify proxy_vip
-       - Verify proxy_host_ip
-     when: "{{proxy_install}} == true"
      tags: add_host
 
    - name: Check Internal_repo parameters
