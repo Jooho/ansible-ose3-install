@@ -1,5 +1,5 @@
 
 
    - name: subscription register if you have rhn id.
-     redhat_subscription: state=present username={{subscription_register_id}} password={{subscription_register_password}}  pool='{{subscription_register_password}}'
+     redhat_subscription: state=present username={{subscription_register_id}} password={{subscription_register_password}}  pool='{{subscription_register_pool_id}}'
      when: "{{subscription_register}} == true"
