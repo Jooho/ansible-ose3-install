@@ -1,0 +1,12 @@
+
+  - name: Install ImageMagick package 
+    yum: name=ImageMagick state=present
+    delegate_to: localhost
+    register: installed_imagemagick
+    
+
+  - name: Resize image to specific size
+    shell: convert {{input_img}} -resize {{size}} {{output_img}}
+    delegate_to: localhost
+    
+

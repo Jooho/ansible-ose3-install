@@ -1,0 +1,20 @@
+
+ - name: Resize Image
+   hosts: master1.example.com
+   gather_facts: false
+   
+   pre_tasks:
+   - name: set concurrent path
+     local_action: command pwd
+     register: pwd
+     tags: pre_tasks
+
+   - name: set_facts - pwd_path
+     set_fact:
+        pwd_path: "{{pwd.stdout}}"
+     tags: pre_tasks
+
+   roles:
+      # default values - input_img: input.png, output_img: output.png, size: 193x44
+      # example - { role: resize_image, input_img: "/etc/origin/master/stylesheet/images/ctc-long.png", output_img: "ctc-long-resized.png", size: "193x44" }
+      - { role: resize_image, input_img: "/etc/origin/master/stylesheet/images/ctc-long.png", output_img: "ctc-long-resized.png", size: "193x44" }

@@ -1,0 +1,54 @@
+
+    
+  - name: Check if image exist 
+    file: path={{pwd_path}}/{{resized_img}} state=file
+    delegate_to: localhost
+
+  - name: Create new template login page
+    shell: oadm create-login-template > {{pwd_path}}/login-template.html
+    delegate_to: localhost
+    
+  - name: Download default login page
+    shell: "curl -k https://{{master_url}}/login > {{pwd_path}}/new-login.html"
+    delegate_to: localhost
+
+  - name: Copy configure_new_login_html.sh to playbook folder locally
+    template: src=configure_new_login_html.sh.j2  dest={{pwd_path}}/configure_new_login_html.sh  mode=0777
+    delegate_to: localhost
+
+  - name: Copy error_tag.txt to playbook folder locally
+    copy: src=error_tag.txt  dest={{pwd_path}}/.  mode=0777
+    delegate_to: localhost
+
+  - name: Copy form_tag.txt to playbook folder locally
+    copy: src=form_tag.txt  dest={{pwd_path}}/.  mode=0777
+    delegate_to: localhost
+
+  - name: Merge default and new template login page
+    shell: "{{pwd_path}}/configure_new_login_html.sh {{pwd_path}}/new-login.html "
+    delegate_to: localhost
+
+  - name: Copy new login html file to /etc/origin/master
+    copy: src={{pwd_path}}/new-login.html  dest={{login_html_folder}}/.
+
+  - name: login configuration txt file to /etc/origin/master
+    template: src=login_conf.txt.j2 dest={{login_html_folder}}/login_conf.txt
+
+  - name: Configure master-config.xml to load new html
+    shell: sed -e "/$(grep -n oauthConfig {{login_html_folder}}/master-config.yaml |cut -d':' -f1)/r {{login_html_folder}}/login_conf.txt" {{login_html_folder}}/master-config.yaml
+
+  - name: Clean temp files in local
+    file: path={{item}} state=absent
+    with_items:
+        - "{{pwd_path}}/new-login.html"
+        - "{{pwd_path}}/login-template.html"
+        - "{{pwd_path}}/{{resized_img}}"
+        - "{{pwd_path}}/error_tag.txt"
+        - "{{pwd_path}}/form_tag.txt"
+        - "{{pwd_path}}/configure_new_login_html.sh"
+    delegate_to: localhost
+  
+   - name: Clean temp files on remote
+    file: path={{item}} state=absent
+    with_items:
+        - "{{login_html_folder}}/login_conf.txt" 
