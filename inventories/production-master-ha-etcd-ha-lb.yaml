@@ -60,7 +60,7 @@ docker_options="--insecure-registry 172.30.0.0/16"
 subscription_register=false
 subscription_register_name=test
 subscription_register_password=test
-subscription_register_pool_id=8a85f9813cf493fe013d028b6cf75b5a
+subscription_register_pool_id=8a85f9833e1404a9013e3cddf99305e6
 
 # If you use this script for testing environment, please set this true. Then you can set more infra environment using ansible.
 # This varible will effect -> network
