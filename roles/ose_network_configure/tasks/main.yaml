@@ -6,6 +6,8 @@
     when: '{{set_network}} == "true"' 
  
   - debug: msg={{set_network}}
+    when: '{{set_network}} == "true"' 
+
   - name: Check if public ip is already set
     shell: "ip addr show {{public_network_dev_name}} |grep {{public_network_ip}}" 
     register: check_public_network
