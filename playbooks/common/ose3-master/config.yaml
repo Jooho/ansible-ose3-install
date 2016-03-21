@@ -18,7 +18,7 @@
 
    roles:
     - { role: ose_hosts_file, tags: master, hosts}
-#    - { role: ose_network_configure, when: development_mode == "true", tags: master, network} 
+    - { role: ose_network_configure, when: development_mode == "true", tags: master, network} 
     - { role: update_yum_repo, when: "{{hostvars[groups.oo_ose3_install.0].internal_repo_install}} == true", tags: master, yum_repo } 
     - { role: update_resolv_conf, tags: master, resolv_conf}
     - { role: subscription_register, when: "{{subscription_register}} == true and {{hostvars[groups.oo_ose3_install.0].internal_repo_install}} == false", tags: master, scription_register} 
