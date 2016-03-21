@@ -24,6 +24,7 @@
 
    - name: create temp folder for intallation
      file: path="{{iso_dest_path}}" state="directory" force="false"
+     when: 'internet_connected == "false" or internal_repo_install == "true" or subscription_register == "false"'
      tags: infra
    
    - name: check if the iso files exist
@@ -32,6 +33,7 @@
        - "{{internal_repo_rhel_iso_long}}"
        - "{{internal_repo_ose_iso_long}}"
      ignore_errors: yes
+     when: 'internet_connected == "false" or internal_repo_install == "true" or subscription_register == "false"'
      register: iso_exist_int
      tags: infra
 
@@ -41,6 +43,7 @@
        - "{{internal_repo_rhel_iso_short}}"
        - "{{internal_repo_ose_iso_short}}"
      ignore_errors: yes
+     when: 'internet_connected == "false" or internal_repo_install == "true" or subscription_register == "false"'
      register: internal_repo_mounted
      tags: infra
 
@@ -49,7 +52,7 @@
      with_items:
        - "{{internal_repo_rhel_iso_long}}"
        - "{{internal_repo_ose_iso_long}}"
-     when: internal_repo_install == "true" and iso_exist_int.results[0].stdout == "0" and iso_exist_int.results[1].stdout == "0"
+     when: 'internal_repo_install == "true" and iso_exist_int.results[0].stdout == "0" and iso_exist_int.results[1].stdout == "0"'
      tags: infra
    
    roles:
