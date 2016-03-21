@@ -6,3 +6,5 @@ TYPE=Ethernet
 BOOTPROTO=none
 IPADDR={{mgmt_network_ip}}
 NETMASK=255.255.255.0
+{% set domain=mgmt_network_ip.split(".") %}
+DNS1={{{domain.0}}.{domain.1}}.{{domain.2}}.1
