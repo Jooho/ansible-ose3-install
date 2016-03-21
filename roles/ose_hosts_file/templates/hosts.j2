@@ -5,7 +5,8 @@
 {% if (groups[g_masters_group] | length) >0 %} 
 {% for item in groups.oo_masters %}
 {% set domain=item.split(".") %}
-{{hostvars[item].mgmt_network_ip}} {{item}}
+{{hostvars[item].mgmt_network_ip}} {{domain.0}}.{{domain.1}}.local
+{{hostvars[item].public_network_ip}} {{item}}
 {% endfor %}
 {% endif %} 
 
@@ -13,7 +14,8 @@
 {% for item in groups.oo_nodes %}
 
 {% set domain=item.split(".") %}
-{{hostvars[item].mgmt_network_ip}} {{item}}
+{{hostvars[item].mgmt_network_ip}} {{domain.0}}.{{domain.1}}.local
+{{hostvars[item].public_network_ip}} {{item}}
 {% endfor %}
 {% endif %} 
 
@@ -21,7 +23,8 @@
 {% for item in groups.oo_etcds %}
 
 {% set domain=item.split(".") %}
-{{hostvars[item].mgmt_network_ip}} {{item}}
+{{hostvars[item].mgmt_network_ip}} {{domain.0}}.{{domain.1}}.local
+{{hostvars[item].public_network_ip}} {{item}}
 {% endfor %}
 {% endif %}
 
@@ -29,11 +32,12 @@
 {% for item in groups.oo_infra %}
 
 {% set domain=item.split(".") %}
-{{hostvars[item].mgmt_network_ip}} {{item}}
+{{hostvars[item].mgmt_network_ip}} {{domain.0}}.{{domain.1}}.local
+{{hostvars[item].public_network_ip}} {{item}}
 {% endfor %}
 {% endif %} 
 
-{% if (groups[g_lb]) is not defined and (groups[g_masters_group] | length) > 1   %}
+{% if (groups[g_lb]) is defiend and (groups[g_masters_group] | length) > 1   %}
 {{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_vip}} {{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_hostname}}
 {% endif %}
 
@@ -41,7 +45,8 @@
 {% for item in groups.oo_lb %}
 
 {% set domain=item.split(".") %}
-{{hostvars[item].mgmt_network_ip}} {{item}}
+{{hostvars[item].mgmt_network_ip}} {{domain.0}}.{{domain.1}}.local
+{{hostvars[item].public_network_ip}} {{item}}
 {% endfor %}
 {% endif %}
 

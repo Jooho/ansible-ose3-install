@@ -15,18 +15,18 @@
     template: src=ifcfg-mgmt.j2 dest=/etc/sysconfig/network-scripts/ifcfg-{{mgmt_network_dev_name}}
     when: "{{set_network}} == true"
 
- # - name: Generate public network script
- #   template: src=ifcfg-public.j2 dest=/etc/sysconfig/network-scripts/ifcfg-{{public_network_dev_name}}
- #   when: "{{set_network}} == true and check_public_network.rc == 1"
+  - name: Generate public network script
+    template: src=ifcfg-public.j2 dest=/etc/sysconfig/network-scripts/ifcfg-{{public_network_dev_name}}
+    when: "{{set_network}} == true and check_public_network.rc == 1"
   
- # - name: Check if hostname is already set
- #   shell: 'hostname |grep {{inventory_hostname | regex_replace(".com(.*)$", ".local") }}'
- #   register: check_hostname
- #   ignore_errors: yes
+  - name: Check if hostname is already set
+    shell: 'hostname |grep {{inventory_hostname | regex_replace(".com(.*)$", ".local") }}'
+    register: check_hostname
+    ignore_errors: yes
 
- # - name: Set hostname for each machine
- #    hostname: name={{inventory_hostname | regex_replace(".com(.*)$", ".local") }}
- #   when: "{{set_hostname}} == true and check_hostname.rc == 1"
+  - name: Set hostname for each machine
+    hostname: name={{inventory_hostname | regex_replace(".com(.*)$", ".local") }}
+    when: "{{set_hostname}} == true and check_hostname.rc == 1"
 
   - name: Check if hostname is already set
     shell: 'hostname |grep {{ inventory_hostname }}'
@@ -37,7 +37,7 @@
     hostname: name={{inventory_hostname}}
     when: "{{set_hostname}} == true and check_hostname.rc == 1"
  
-      # This is not mandatory from 3.1 so it will be deleted
+ # This is not mandatory from 3.1 so it will be deleted
   - name: Check if NetworkManager is installed
     shell: "rpm -qa NetworkManager"
     register: networkmanager_installed
