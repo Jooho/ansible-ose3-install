@@ -3,3 +3,10 @@
    - name: subscription register if you have rhn id.
      redhat_subscription: state=present username={{subscription_register_id}} password={{subscription_register_password}}  pool='{{subscription_register_pool_id}}'
      when: "{{subscription_register}} == true"
+   
+   - name: copy enablei_ose_repository.sh
+     template: src="enable_ose_repository.sh.j2" dest="/root/ose/enable_ose_repository.sh"
+
+   - name: enable ose repository
+     shell: /root/ose/enable_ose_repository.sh
+
