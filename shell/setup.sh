@@ -115,7 +115,7 @@ then
 git clone https://github.com/Jooho/ansible-ose3-install
 
 else
-echo "nameserver 8.8.8.8" > /etc/resolv.conf
+echo "nameserver 8.8.8.8" >> /etc/resolv.conf
 cd ansible-ose3-install;git pull;cd ..
 
 fi  
