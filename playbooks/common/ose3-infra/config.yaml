@@ -57,5 +57,5 @@
     - { role: temp_repo_with_iso, when: internet_connected == "false" , tags: infra, temp_repo}
     - { role: ose_dns_configure, tags: infra, dns} 
     - { role: update_resolv_conf, tags: infra, resolv_conf} 
-    - { role: internal_repo_with_apache, when: 'internal_repo_mounted.results[0].stdout == "0" or internal_repo_mounted.results[1].stdout == "0"', tags: infra, internal_repo } 
+    - { role: internal_repo_with_apache, when: 'internal_repo_install == "true" and internal_repo_mounted.results[0].stdout == "0" and internal_repo_mounted.results[1].stdout == "0"', tags: infra, internal_repo } 
     - { role: update_yum_repo, when: "{{hostvars[groups.oo_ose3_install.0].internal_repo_install}} == true", tags: infra, yum_repo } 
