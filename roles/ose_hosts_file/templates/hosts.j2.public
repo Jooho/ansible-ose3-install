@@ -1,0 +1,49 @@
+127.0.0.1               localhost.localdomain localhost
+::1             localhost6.localdomain6 localhost6
+
+
+{% if (groups[g_masters_group] | length) >0 %} 
+{% for item in groups.oo_masters %}
+{% set domain=item.split(".") %}
+{{hostvars[item].mgmt_network_ip}} {{item}}
+{% endfor %}
+{% endif %} 
+
+{% if (groups[g_nodes_group] | length) >0 %} 
+{% for item in groups.oo_nodes %}
+
+{% set domain=item.split(".") %}
+{{hostvars[item].mgmt_network_ip}} {{item}}
+{% endfor %}
+{% endif %} 
+
+{% if (groups[g_etcds_group]) is defined %}
+{% for item in groups.oo_etcds %}
+
+{% set domain=item.split(".") %}
+{{hostvars[item].mgmt_network_ip}} {{item}}
+{% endfor %}
+{% endif %}
+
+{% if (groups[g_infra]) is defined %} 
+{% for item in groups.oo_infra %}
+
+{% set domain=item.split(".") %}
+{{hostvars[item].mgmt_network_ip}} {{item}}
+{% endfor %}
+{% endif %} 
+
+{% if (groups[g_lb]) is not defined and (groups[g_masters_group] | length) > 1   %}
+{{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_vip}} {{hostvars[groups.oo_ose3_install.0].openshift_master_cluster_hostname}}
+{% endif %}
+
+{% if (groups[g_lb]) is defined %}
+{% for item in groups.oo_lb %}
+
+{% set domain=item.split(".") %}
+{{hostvars[item].mgmt_network_ip}} {{item}}
+{% endfor %}
+{% endif %}
+
+
+
