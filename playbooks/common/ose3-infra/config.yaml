@@ -14,6 +14,7 @@
         pwd_path: "{{pwd.stdout}}"
         development_mode: "{{hostvars[groups.oo_ose3_install.0].development}}"
         internet_connected: "{{hostvars[groups.oo_ose3_install.0].internet_connected}}"
+        internal_repo_install: "{{hostvars[groups.oo_ose3_install.0].internal_repo_install}}"
         iso_dest_path: "{{hostvars[groups.oo_ose3_install.0].internal_repo_iso_src_path}}"
         temp_path: "/root/tmp"
         internal_repo_apache_repo_path: "{{hostvars[groups.oo_ose3_install.0].internal_repo_apache_repo_path}}"
@@ -47,7 +48,7 @@
      with_items:
        - "{{internal_repo_rhel_iso_long}}"
        - "{{internal_repo_ose_iso_long}}"
-     when: iso_exist_int.results[0].stdout == "0" or iso_exist_int.results[1].stdout == "0"
+     when: internal_repo_install == "true" and iso_exist_int.results[0].stdout == "0" and iso_exist_int.results[1].stdout == "0"
      tags: infra
    
    roles:
