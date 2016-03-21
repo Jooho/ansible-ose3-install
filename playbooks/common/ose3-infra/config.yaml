@@ -15,6 +15,7 @@
         development_mode: "{{hostvars[groups.oo_ose3_install.0].development}}"
         internet_connected: "{{hostvars[groups.oo_ose3_install.0].internet_connected}}"
         internal_repo_install: "{{hostvars[groups.oo_ose3_install.0].internal_repo_install}}"
+        subscription_register: "{{hostvars[groups.oo_ose3_install.0].subscription_register}}"
         iso_dest_path: "{{hostvars[groups.oo_ose3_install.0].internal_repo_iso_src_path}}"
         temp_path: "/root/tmp"
         internal_repo_apache_repo_path: "{{hostvars[groups.oo_ose3_install.0].internal_repo_apache_repo_path}}"
@@ -54,7 +55,8 @@
    roles:
     - { role: ose_hosts_file, tags: infra, hosts}
    # - { role: ose_network_configure, when: development_mode == "true", tags: infra, network} 
-    - { role: temp_repo_with_iso, when: internet_connected == "false" , tags: infra, temp_repo}
+    - { role: subscription_register, when: subscription_register == "true", tags: infra, temp_repo}
+    - { role: temp_repo_with_iso, when: 'internet_connected == "false" or internal_repo_install == "true" or subscription_register == "false"', tags: infra, temp_repo}
     - { role: ose_dns_configure, tags: infra, dns} 
     - { role: update_resolv_conf, tags: infra, resolv_conf} 
     - { role: internal_repo_with_apache, when: 'internal_repo_install == "true" and internal_repo_mounted.results[0].stdout == "0" and internal_repo_mounted.results[1].stdout == "0"', tags: infra, internal_repo } 
