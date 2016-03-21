@@ -84,9 +84,6 @@ openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 
 # If you use this script for testing environment, please set this true. Then you can set more infra environment using ansible.
 development=true
 
-## will be deleted
-openshift_ansible_tar=false
-
 deployment_type=openshift-enterprise
 
 osm_default_subdomain=cloudapps.example.com

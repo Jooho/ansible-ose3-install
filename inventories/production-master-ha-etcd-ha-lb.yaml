@@ -66,9 +66,6 @@ subscription_register_pool_id=8a85f9813cf493fe013d028b6cf75b5a
 # This varible will effect -> network
 development=true
 
-## will be deleted
-openshift_ansible_tar=false
-
 deployment_type=openshift-enterprise
 
 # Uncomment the following to enable htpasswd authentication; defaults to DenyAllPasswordIdentityProvider

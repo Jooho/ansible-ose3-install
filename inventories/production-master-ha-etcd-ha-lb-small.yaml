@@ -72,7 +72,6 @@ openshift_master_cluster_public_hostname=lb.example.com
 
 # If you use this script for testing environment, please set this true. Then you can set more infra environment using ansible.
 development=true
-openshift_ansible_tar=false
 
 deployment_type=openshift-enterprise
 

@@ -14,7 +14,6 @@
         pwd_path: "{{pwd.stdout}}"
         development_mode: "{{hostvars[groups.oo_ose3_install.0].development}}"
         internet_connected: "{{hostvars[groups.oo_ose3_install.0].internet_connected}}"
-        openshift_ansible_tar: "{{hostvars[groups.oo_ose3_install.0].openshift_ansible_tar}}"
      tags: pre_tasks
 
    roles:

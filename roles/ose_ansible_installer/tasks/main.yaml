@@ -1,27 +1,8 @@
 
 # This part is no more needed because openshift conains openshift-ansible source
-  - name: Check if there is already "openshift-ansible" folder 
-    shell: "ls /root | grep openshift-ansible | wc -l"
-    when: "{{internet_connected}} == false and {{openshift_ansible_tar}} == true"
-    register: openshift_ansible_exist
-    tags: openshift_ansible
-
-# This part is no more needed because openshift conains openshift-ansible source
-  - name: Copy github "openshift-ansible" when internet is not connected
-    copy: src="{{openshift_ansible_path}}/openshift_ansible.tar" dest="/root/openshift_ansible.tar"
-    when: "{{internet_connected}} == false and {{openshift_ansible_tar}} == true and openshift_ansible_exist.stdout|int == 0 "
-    tags: openshift_ansible
-
-# This part is no more needed because openshift conains openshift-ansible source
-  - name: Extract zip file "openshift-ansible.zip"
-    shell: "tar -xvf /root/openshift_ansible.tar"
-    when: "{{internet_connected}} == false and {{openshift_ansible_tar}} == true and openshift_ansible_exist.stdout|int == 0"
-    tags: openshift_ansible
-
-# This part is no more needed because openshift conains openshift-ansible source
   - name: Clone github "openshift-ansible" when internet is connected
     git: repo=https://github.com/openshift/openshift-ansible.git dest=/root/openshift-ansible
-    when: "{{internet_connected}} == true and {{openshift_ansible_tar}} == false"
+    when: "{{internet_connected}} == true" 
     tags: openshift_ansible
 
   - name: Check if the /etc/ansible folder exist
