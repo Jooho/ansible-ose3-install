@@ -3,24 +3,26 @@
     shell: "ip addr show {{mgmt_network_dev_name}} |grep {{mgmt_network_ip}}" 
     register: check_mgmt_network
     ignore_errors: yes
-    when: "{{set_network}} == 'true'" 
- 
-  - debug: msg={{set_network}}
     when: "{{set_network}} == true" 
+ 
 
   - name: Check if public ip is already set
     shell: "ip addr show {{public_network_dev_name}} |grep {{public_network_ip}}" 
     register: check_public_network
     ignore_errors: yes
-    when: '{{set_network}} == "true"' 
+    when: "{{set_network}} == true" 
+
+
+  - debug: msg={{set_network}}
+    when: "{{set_network}} == true and check_public_network.rc == 1" 
 
   - name: Generate management network script
     template: src=ifcfg-mgmt.j2 dest=/etc/sysconfig/network-scripts/ifcfg-{{mgmt_network_dev_name}}
-    when: '{{set_network}} == "true"'
+    when: "{{set_network}} == true"
 
   - name: Generate public network script
     template: src=ifcfg-public.j2 dest=/etc/sysconfig/network-scripts/ifcfg-{{public_network_dev_name}}
-    when: '{{set_network}} == "true" and check_public_network.rc == 1'
+    when: "{{set_network}} == true and check_public_network.rc == 1"
   
   - name: Check if hostname is already set
     shell: 'hostname |grep {{inventory_hostname | regex_replace(".com(.*)$", ".local") }}'
