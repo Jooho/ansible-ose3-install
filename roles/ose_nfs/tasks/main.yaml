@@ -45,8 +45,8 @@
      insertafter=EOF
      create=yes
 
- - name: change user/group nobody:nobody
-   file: path={{nfs_mount_point}} owner=nobody group=nobody mode=0777 recurse=yes
+ - name: change user/group nfsnobody:nfsnobody
+   file: path={{nfs_mount_point}} owner=nfsnobody group=nfsnobody mode=0777 recurse=yes
 
  - name: set selinux virt_use_nfs to 1 
    seboolean: name=virt_use_nfs state=yes persistent=yes
@@ -65,8 +65,8 @@
      insertafter=EOF
      create=yes
 
- - name: change user/group nobody:nobody
-   file: path={{nfs_mount_point}} owner=nobody group=nobody mode=0777 recurse=yes
+ - name: change user/group nfsnobody:nfsnobody
+   file: path={{nfs_mount_point}} owner=nfsnobody group=nfsnobody mode=0777 recurse=yes
 
  - name: set selinux virt_use_nfs to 1 
    seboolean: name=virt_use_nfs state=yes persistent=yes
