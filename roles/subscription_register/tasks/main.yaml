@@ -4,7 +4,7 @@
      redhat_subscription: state=present username={{subscription_register_id}} password={{subscription_register_password}}  pool='{{subscription_register_pool_id}}'
      when: "{{subscription_register}} == true"
    
-   - name: copy enablei_ose_repos.sh
+   - name: copy enable_ose_repos.sh
      template: src="enable_ose_repos.sh.j2" dest="/root/enable_ose_repos.sh" mode=0775
      when: "{{subscription_register}} == true"
 

@@ -1,6 +1,6 @@
 
- - name: internal_repo_with_apache
-   hosts: all
+ - name: Test for each role
+   hosts: infra
    gather_facts: false
    
    pre_tasks:
@@ -18,4 +18,4 @@
       # default values - input_img: input.png, output_img: output.png, size: 193x44
       # example - { role: resize_image, input_img: "/etc/origin/master/stylesheet/images/ctc-long.png", output_img: "ctc-long-resized.png", size: "193x44" }
       #- { role: resize_image, input_img: "/etc/origin/master/stylesheet/images/ctc-long.png", output_img: "{{output_img}}", size: "193x44" }
-      - { role: internal_repo_with_apache}
+     - { role: ose_nfs, nfs_mount_point: /exports/nfs}

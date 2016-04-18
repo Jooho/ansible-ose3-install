@@ -1,5 +1,9 @@
 BACKUP_REPOS="rhel-7-server-rpms rhel-7-server-extras-rpms rhel-ha-for-rhel-7-server-rpms rhel-7-server-ose-3.1-rpms"
 
+#Attach Openshift Employee Subscription
+echo "Attach Openshift Employee Subscription"
+subscription-manager attach --pool={{subscription_register_pool_id}}
+
 # Disable all repos
 echo "Disable all repos"
 subscription-manager repos --disable="*"
