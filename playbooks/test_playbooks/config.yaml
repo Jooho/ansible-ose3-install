@@ -1,5 +1,5 @@
 
- - name: Subcription register
+ - name: internal_repo_with_apache
    hosts: all
    gather_facts: false
    
@@ -18,4 +18,4 @@
       # default values - input_img: input.png, output_img: output.png, size: 193x44
       # example - { role: resize_image, input_img: "/etc/origin/master/stylesheet/images/ctc-long.png", output_img: "ctc-long-resized.png", size: "193x44" }
       #- { role: resize_image, input_img: "/etc/origin/master/stylesheet/images/ctc-long.png", output_img: "{{output_img}}", size: "193x44" }
-      - { role: subscription_registrer}
+      - { role: internal_repo_with_apache}

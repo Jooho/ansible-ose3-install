@@ -104,7 +104,7 @@ then
       echo "~/.ssh/id_rsa.pub file will be copyed to : "
       echo " $hosts"
       for host in $hosts; do
-   	 sshpass -p $password ssh-copy-id -i  ~/.ssh/id_rsa.pub -o StrictHostKeyChecking=no root@$host
+       	 sshpass -p $password ssh-copy-id -i  ~/.ssh/id_rsa.pub -o StrictHostKeyChecking=no root@$host
       done
    else
       echo "~/.ssh/id_rsa.pub file will be copyed to : $hosts"
