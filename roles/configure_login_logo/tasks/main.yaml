@@ -34,8 +34,13 @@
   - name: login configuration txt file to /etc/origin/master
     template: src=login_conf.txt.j2 dest={{login_html_folder}}/login_conf.txt
 
+  - name: check the configuration exist in master-config.yaml
+    shell:  grep new-login.html /etc/origin/master/master-config.yaml|wc -l
+    register: login_conf_exist
+
   - name: Configure master-config.xml to load new html
-    shell: sed -e "/$(grep -n oauthConfig {{login_html_folder}}/master-config.yaml |cut -d':' -f1)/r {{login_html_folder}}/login_conf.txt" {{login_html_folder}}/master-config.yaml
+    shell: sed -e "$(grep -n oauthConfig {{login_html_folder}}/master-config.yaml |cut -d':' -f1)r {{login_html_folder}}/login_conf.txt" -i {{login_html_folder}}/master-config.yaml
+    when: "{{login_conf_exist.stdout}} == 0 " 
 
   - name: Clean temp files in local
     file: path={{item}} state=absent
@@ -48,7 +53,7 @@
         - "{{pwd_path}}/configure_new_login_html.sh"
     delegate_to: localhost
   
-   - name: Clean temp files on remote
-    file: path={{item}} state=absent
-    with_items:
-        - "{{login_html_folder}}/login_conf.txt" 
+#  - name: Clean temp files on remote
+#    file: path={{item}} state=absent
+#    with_items:
+#        - "{{login_html_folder}}/login_conf.txt" 

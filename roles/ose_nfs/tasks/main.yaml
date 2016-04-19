@@ -40,7 +40,7 @@
  - name: Exporting a nfs
    lineinfile:
      dest=/etc/exports
-     line="{{nfs_mount_point}} *(rw,all_squash)"
+     line="{{nfs_mount_point}} *(rw,root_squash)"
      state=present
      insertafter=EOF
      create=yes

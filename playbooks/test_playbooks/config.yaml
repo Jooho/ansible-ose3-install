@@ -1,6 +1,6 @@
 
- - name: Test for each role
-   hosts: infra
+ - name: Change login page logo 
+   hosts: masters
    gather_facts: false
    
    pre_tasks:
@@ -12,7 +12,11 @@
    - name: set_facts - pwd_path
      set_fact:
         pwd_path: "{{pwd.stdout}}"
+        output_img_name: fb-resized.png
      tags: pre_tasks
 
    roles:
-     - { role: ose_nfs, nfs_mount_point: /exports/nfs}
+      # default values - input_img: input.png, output_img: output.png, size: 193x44
+      # example - { role: resize_image, input_img: "/etc/origin/master/stylesheet/images/ctc-long.png", output_img: "ctc-long-resized.png", size: "193x44" }
+      - { role: resize_image, input_img: "/etc/origin/master/stylesheet/images/BCBS_Florida.png", output_img: "{{output_img_name}}", size: "193x44" }
+      - { role: configure_login_logo, resized_img: "{{output_img_name}}", master_url: "lb.example.com:8443", login_html_folder: "/etc/origin/master" }
