@@ -5,7 +5,7 @@
      tags: resolv_config
   
    - name: add infra dns 
-     shell: cat /root/resolve.conf.txt >> /etc/resolve.conf
+     shell: cat /root/resolv.conf.txt >> /etc/resolv.conf
 
    - name: clean temp file
      file: path=/root/resolv.conf.txt  state=absent

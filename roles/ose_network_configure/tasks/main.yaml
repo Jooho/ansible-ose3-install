@@ -13,9 +13,6 @@
     when: "{{set_network}} == true" 
 
 
-  - debug: msg={{set_network}}
-    when: "{{set_network}} == true and check_public_network.rc == 1" 
-
   - name: Generate management network script
     template: src=ifcfg-mgmt.j2 dest=/etc/sysconfig/network-scripts/ifcfg-{{mgmt_network_dev_name}}
     when: "{{set_network}} == true"
@@ -25,22 +22,14 @@
     when: "{{set_network}} == true and check_public_network.rc == 1"
   
   - name: Check if hostname is already set
-    shell: 'hostname |grep {{inventory_hostname | regex_replace(".com(.*)$", ".local") }}'
-    register: check_hostname
-    ignore_errors: yes
-
-  - name: Set hostname for each machine
-    hostname: name={{inventory_hostname | regex_replace(".com(.*)$", ".local") }}
-    when: "{{set_hostname}} == true and check_hostname.rc == 1"
-
-  - name: Check if hostname is already set
     shell: 'hostname |grep {{ inventory_hostname }}'
     register: check_hostname
     ignore_errors: yes
 
+  - debug: msg="{{set_network}} == true and {{check_hostname.rc}} == 1" 
   - name: Set hostname for each machine
     hostname: name={{inventory_hostname}}
-    when: "{{set_hostname}} == true and check_hostname.rc == 1"
+    when: ("{{set_hostname}} == true and check_hostname.rc == 1")
  
  # This is not mandatory from 3.1 so it will be deleted
   - name: Check if NetworkManager is installed
@@ -54,9 +43,9 @@
     ignore_errors: yes
     when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager') == 0"
  
-  - name: Remove NetworkManager package
-    yum: name=NetworkManager state=absent
-    when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager') == 0"
+ # - name: Remove NetworkManager package
+ #   yum: name=NetworkManager state=absent
+ #   when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager') == 0"
 
   
   - name: Set default GATEWAY to use public network
