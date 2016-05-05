@@ -42,7 +42,6 @@ cat <<EOF
 EOF
 }
 
-
 # start script
 if [[ $1 == "" ]]
 then 
@@ -59,12 +58,14 @@ export internet_connected=$(grep  "internet_connected=" $1 |grep -v ^# |cut -d"=
 export rhel_iso_file=$(grep -i rhel_iso_long ./$inventory_file  |cut -d"=" -f2|awk '{gsub( "\"","" ); print}')
 export ose_iso_file=$(grep -i ose_iso_long ./$inventory_file  |cut -d"=" -f2|awk '{gsub( "\"","" ); print}')
 export mount_temp_repo_statue="unmounted"
+export password
 
 # Domain "example.com"
 export domain=$(grep ^master ./$inventory_file |sed -n '2p' |cut -d" " -f1 |awk -F . {'print $2 "." $3'};)
 
 # IP information about master/node/etcd/lb/infra
-export hosts=$(grep "example.com" ./$inventory_file | awk -F "ansible_ssh_host=" '{print $2}'|cut -d" " -f1|grep -v "^$" |awk '{print  $1 " "  }')
+export internal_ip_hosts=$(grep "example.com" ./$inventory_file | awk -F "ansible_ssh_host=" '{print $2}'|cut -d" " -f1|grep -v "^$" |awk '{print  $1 " "  }')
+export public_ip_hosts=$(grep "example.com" ./$inventory_file | awk -F "public_network_ip=" '{print $2}'|cut -d" " -f1|grep -v "^$" |awk '{print  $1 " "  }')
 
  
 # Check if generating public key is needed 
@@ -96,19 +97,19 @@ then
    echo -e "Do you want to copy id_rsa.pub file to all machines with 1 password?(y/n) \c"
    read copy_pub_file_with_one_password
    
-   #ssh-copy-id to each hosts
+   #ssh-copy-id to each hosts with internal ip
    if [ $copy_pub_file_with_one_password == "y" ]
    then 
       echo -e "Type password : \c"
       read password
       echo "~/.ssh/id_rsa.pub file will be copyed to : "
-      echo " $hosts"
-      for host in $hosts; do
+      echo " $internal_ip_hosts"
+      for host in $internal_ip_hosts; do
        	 sshpass -p $password ssh-copy-id -i  ~/.ssh/id_rsa.pub -o StrictHostKeyChecking=no root@$host
       done
    else
-      echo "~/.ssh/id_rsa.pub file will be copyed to : $hosts"
-       for host in $hosts; do
+      echo "~/.ssh/id_rsa.pub file will be copyed to : $internal_ip_hosts"
+       for host in $internal_ip_hosts; do
          ssh-copy-id -i ~/.ssh/id_rsa.pub root@$host;
        done
    fi
@@ -122,3 +123,22 @@ fi
 
 
 ansible-playbook -i $inventory_file ansible-ose3-install/playbooks/rhel/config.yaml -vvvvv
+
+
+#ssh-copy-id to each hosts with public ip
+   if [ $copy_pub_file_with_one_password == "y" ]
+   then 
+      echo -e "Type password : \c"
+      read password
+      echo "~/.ssh/id_rsa.pub file will be copyed to : "
+      echo " $public_ip_hosts"
+      for host in $public_ip_hosts; do
+       	 sshpass -p $password ssh-copy-id -i  ~/.ssh/id_rsa.pub -o StrictHostKeyChecking=no root@$host
+      done
+   else
+      echo "~/.ssh/id_rsa.pub file will be copyed to : $public_ip_hosts"
+       for host in $public_ip_hosts; do
+         ssh-copy-id -i ~/.ssh/id_rsa.pub root@$host;
+       done
+   fi
+g
