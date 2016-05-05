@@ -63,7 +63,7 @@ openshift_master_cluster_public_hostname={{hostvars[groups.oo_ose3_install.0].op
 # host group for nodes, includes region info
 [nodes]
 {% for item in groups.oo_masters %}
-{% if hostvars[item].is_node == true %}
+{% if hostvars[item].is_node == "true" %}
 {{item}}  openshift_node_lables="{'region':'infra','zone':'default'}" openshift_schedulable=false
 {% endif %}
 {% endfor %}
