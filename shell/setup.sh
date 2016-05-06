@@ -98,6 +98,7 @@ then
    read copy_pub_file_with_one_password
    
    #ssh-copy-id to each hosts with internal ip
+   export password
    if [ $copy_pub_file_with_one_password == "y" ]
    then 
       echo -e "Type password : \c"
@@ -123,22 +124,14 @@ fi
 
 
 ansible-playbook -i $inventory_file ansible-ose3-install/playbooks/rhel/config.yaml -vvvvv
+ansible-playbook  /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml -vvvv  
 
-
+echo ""
+echo "FINISHED Openshift installation"
+echo ""
 #ssh-copy-id to each hosts with public ip
-   if [ $copy_pub_file_with_one_password == "y" ]
-   then 
-      echo -e "Type password : \c"
-      read password
       echo "~/.ssh/id_rsa.pub file will be copyed to : "
       echo " $public_ip_hosts"
       for host in $public_ip_hosts; do
        	 sshpass -p $password ssh-copy-id -i  ~/.ssh/id_rsa.pub -o StrictHostKeyChecking=no root@$host
       done
-   else
-      echo "~/.ssh/id_rsa.pub file will be copyed to : $public_ip_hosts"
-       for host in $public_ip_hosts; do
-         ssh-copy-id -i ~/.ssh/id_rsa.pub root@$host;
-       done
-   fi
-g
