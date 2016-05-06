@@ -18,6 +18,23 @@ ansible_ssh_user=root
 #ansible_sudo=true
 
 deployment_type=openshift-enterprise
+debug_level=2
+
+cli_docker_additional_registries=registry.access.redhat.com
+cli_docker_insecure_registries=172.30.0.0/16
+
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
+
+osm_default_subdomain=cloudapps.example.com
+
+osm_default_node_selector='region=app'
+
+openshift_router_selector='region=infra'
+openshift_registry_selector='region=infra'
+
+os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
+
+logrotate_scripts=[{"name": "syslog", "path": "/var/log/cron\n/var/log/maillog\n/var/log/messages\n/var/log/secure\n/var/log/spooler\n", "options": ["daily", "rotate 7", "compress", "sharedscripts", "missingok"], "scripts": {"postrotate": "/bin/kill -HUP `cat /var/run/syslogd.pid 2> /dev/null` 2> /dev/null || true"}}]
 
 # uncomment the following to enable htpasswd authentication; defaults to DenyAllPasswordIdentityProvider
 #openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/htpasswd'}]
@@ -64,9 +81,9 @@ openshift_master_cluster_public_hostname={{hostvars[groups.oo_ose3_install.0].op
 [nodes]
 {% for item in groups.oo_masters %}
 {% if hostvars[item].is_node == "true" %}
-{{item}}  openshift_node_lables="{'region': 'infra', 'zone': 'default'}" openshift_schedulable=false
+{{item}}  openshift_node_labels="{'region': 'infra', 'zone': 'default'}" openshift_schedulable=false
 {% endif %}
 {% endfor %}
 {% for item in groups.oo_nodes %}
-{{item}} openshift_node_lables="{{hostvars[item].openshift_node_labels}}"
+{{item}} openshift_node_labels="{{hostvars[item].openshift_node_labels}}"
 {% endfor %}

@@ -124,7 +124,6 @@ fi
 
 
 ansible-playbook -i $inventory_file ansible-ose3-install/playbooks/rhel/config.yaml -vvvvv
-ansible-playbook  /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml -vvvv  
 
 echo ""
 echo "FINISHED Openshift installation"
@@ -135,3 +134,5 @@ echo ""
       for host in $public_ip_hosts; do
        	 sshpass -p $password ssh-copy-id -i  ~/.ssh/id_rsa.pub -o StrictHostKeyChecking=no root@$host
       done
+
+ansible-playbook  /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml -vvvv  
