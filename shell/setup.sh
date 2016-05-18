@@ -65,7 +65,7 @@ export domain=$(grep ^master ./$inventory_file |sed -n '2p' |cut -d" " -f1 |awk 
 
 # IP information about master/node/etcd/lb/infra
 export internal_ip_hosts=$(grep "example.com" ./$inventory_file | awk -F "ansible_ssh_host=" '{print $2}'|cut -d" " -f1|grep -v "^$" |awk '{print  $1 " "  }')
-export public_ip_hosts=$(grep "example.com" ./$inventory_file | awk -F "public_network_ip=" '{print $2}'|cut -d" " -f1|grep -v "^$" |awk '{print  $1 " "  }')
+export public_ip_hosts=$(grep  example.com ./$inventory_file |grep -v ^# |grep ansible |cut -d" " -f1)
 
  
 # Check if generating public key is needed 

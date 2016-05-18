@@ -37,11 +37,11 @@
     register: networkmanager_installed
     when: "{{set_network}} == true" 
 
-  - name: Disable/stop NetworkManager
-    service: name=NetworkManager state=stopped enabled=no
-    register: networkmanger_stopped
-    ignore_errors: yes
-    when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager') == 0"
+#  - name: Disable/stop NetworkManager
+#    service: name=NetworkManager state=stopped enabled=no
+#    register: networkmanger_stopped
+#    ignore_errors: yes
+#    when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager') == 0"
  
  # - name: Remove NetworkManager package
  #   yum: name=NetworkManager state=absent

@@ -5,4 +5,4 @@ nameserver {{hostvars[groups.oo_ose3_install.0].dns_host_ip}}
 
 {% if hostvars[groups.oo_ose3_install.0].external_dns_ip is defined  %}
 nameserver {{hostvars[groups.oo_ose3_install.0].external_dns_ip}}
-{% endif %}
+{% endif -%}
