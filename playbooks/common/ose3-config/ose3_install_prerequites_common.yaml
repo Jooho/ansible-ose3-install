@@ -10,3 +10,15 @@
       shell: "yum install -y  net-tools bind-utils iptables-services bridge-utils bash-completion"
       tags: openshift_ansible
     
+    - name: Install docker 1.8.2
+      shell: "yum install -y docker-1.8.2"
+      when: "'{{hostvars[groups.oo_ose3_install.0].openshift_minor_version}}' == '1'"
+      tags: openshift_ansible
+    
+    - name: Install docker 1.9
+      shell: "yum install -y docker-1.9"
+      when: "'{{hostvars[groups.oo_ose3_install.0].openshift_minor_version}}' == '2'"
+      tags: openshift_ansible
+
+    roles:
+    - { role: ose_docker_configure,  tags: openshift_ansible}

@@ -74,5 +74,5 @@
  - include: ../ose3-node/config.yaml
  - include: ./ose3_install_prerequites_common.yaml
  - include: ./ose3_install_prerequites_master.yaml
- - include: ./ose3_install_prerequites_node.yaml
+ #- include: ./ose3_install_prerequites_node.yaml
  #- include: /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml

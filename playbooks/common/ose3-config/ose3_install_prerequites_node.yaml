@@ -1,6 +1,6 @@
 
 #This file set up prerequites process for installation of ose3
-
+#this playbook is not used yet
   - name: Prerequites process for masters:nodes:etcd:lb.
     hosts: masters:nodes:etcd:lb
     gather_facts: no
