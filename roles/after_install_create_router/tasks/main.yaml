@@ -7,16 +7,16 @@
   - debug: var={{exist_router.stdout}}  
   - name: Copy generate_pem.sh to /root/ose/generate_pem.sh
     template: src="generate_pem.sh.j2" dest="/root/ose/generate_pem.sh" mode=0777
-    when: exist_router.stdout == ""
+    when: {{exist_router.stdout}} == ""'
  
   - name: Execute generate_pem.sh
     shell: /root/ose/generate_pem.sh
-    when: exist_router.stdout == ""
+    when: '{{exist_router.stdout}} == ""'
  
   - name: Copy create_router.sh to /root/ose/create_router.sh
     template: src="create_router.sh.j2" dest="/root/ose/create_router.sh" mode=0777
-    when: exist_router.stdout == ""
+    when: '{{exist_router.stdout}} == ""'
  
   - name: Execute create_router.sh
     shell: /root/ose/create_router.sh
-    when: exist_router.stdout == ""
+    when: '{{ exist_router.stdout}} == ""'

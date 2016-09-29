@@ -50,7 +50,7 @@
 
  - name: set selinux virt_use_nfs to 1 
    seboolean: name=virt_use_nfs state=yes persistent=yes
-   when: selinux_state.stdout != "Disabled"
+   when: '{{selinux_state.stdout}} != Disabled'
  - name: create nfs mount point folder
    file: path={{nfs_mount_point}} state=directory force=false
 
@@ -70,7 +70,7 @@
 
  - name: set selinux virt_use_nfs to 1 
    seboolean: name=virt_use_nfs state=yes persistent=yes
-   when: selinux_state.stdout != "Disabled"
+   when: '{{selinux_state.stdout}} != Disabled'
 
 
       #iptables will be supported since 2.0
@@ -83,8 +83,8 @@
 
  - name: enable/start rpcbind
    service: name=rpcbind state=started enabled=yes
-   when: nfs_installed.rc == 0
+   when: '{{nfs_installed.rc}} == 0'
 
  - name: enable/start nfs-server
    service: name=nfs-server state=started enabled=yes
-   when: nfs_installed.rc == 0
+   when: '{{nfs_installed.rc}} == 0'

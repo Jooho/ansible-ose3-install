@@ -16,8 +16,8 @@ baseurl=http://infra.example.com/repo/{{internal_repo_ose_iso_short}}/rhel-ha-fo
 enabled=1
 gpgcheck=0
 
-[rhel-7-server-ose-3.1-rpms]
-name=rhel-7-server-ose-3.1-rpms
-baseurl=http://infra.example.com/repo/{{internal_repo_ose_iso_short}}/rhel-7-server-ose-3.1-rpms
+[rhel-7-server-ose-{{openshift_major_version}}.{{openshift_minor_version}}-rpms]
+name=rhel-7-server-ose-{{internal_repo_ose_iso_short}}-rpms
+baseurl=http://infra.example.com/repo/{{internal_repo_ose_iso_short}}/rhel-7-server-ose-{{openshift_major_version}}.{{openshift_minor_version}}-rpms
 enabled=1
 gpgcheck=0

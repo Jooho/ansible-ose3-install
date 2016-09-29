@@ -7,12 +7,12 @@
    - debug: msg="{{hostvars[groups.oo_ose3_install.0].dns_host_ip}}"
    - name: Copy resolv.conf
      template: src="resolv.conf.j2" dest="/root/resolv.conf.txt"
-     when: is_infra_added_resolv.stdout != "1"
+     when: '{{is_infra_added_resolv.stdout}} != 1'
   
    - name: add infra dns 
      shell: cat /root/resolv.conf.txt >> /etc/resolv.conf
-     when: is_infra_added_resolv.stdout != "1"
+     when: '{{is_infra_added_resolv.stdout}} != 1'
 
    - name: clean temp file
      file: path=/root/resolv.conf.txt  state=absent
-     when: is_infra_added_resolv.stdout != "1"
+     when: '{{is_infra_added_resolv.stdout}} != 1'

@@ -5,6 +5,7 @@
     register: bind_installed
     when: "{{dns_install}} == true "
 
+  - debug: var="{{(bind_installed|length)}}"
   - name: Install bind package 
     yum: name=bind state=present 
     when: "{{dns_install}} == true and (bind_installed|length) >= 1"

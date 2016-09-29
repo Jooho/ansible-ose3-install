@@ -22,9 +22,11 @@
      tags: pre_tasks
 
 
+   - debug : msg='{{hostvars[groups.oo_ose3_install.0].dns_wildcard_domain}}'
+   - debug : msg='{{(groups[g_masters_group] | length)}} '
    - name: create temp folder for intallation
      file: path="{{iso_dest_path}}" state="directory" force="false"
-     when: 'internal_repo_install == "true" or subscription_register == "false"'
+     when : '{{internal_repo_install}} == true or {{subscription_register}} == false'
      tags: infra
    
    - name: check if the iso files exist
@@ -33,7 +35,7 @@
        - "{{internal_repo_rhel_iso_long}}"
        - "{{internal_repo_ose_iso_long}}"
      ignore_errors: yes
-     when: 'internal_repo_install == "true" or subscription_register == "false"'
+     when: '{{internal_repo_install}} == true or {{subscription_register}} == false'
      register: iso_exist_int
      tags: infra
 
@@ -43,7 +45,7 @@
        - "{{internal_repo_rhel_iso_short}}"
        - "{{internal_repo_ose_iso_short}}"
      ignore_errors: yes
-     when: 'internal_repo_install == "true" or subscription_register == "false"'
+     when: '{{internal_repo_install}} == true or {{subscription_register}} == false'
      register: internal_repo_mounted
      tags: infra
 
@@ -52,15 +54,22 @@
      with_items:
        - "{{internal_repo_rhel_iso_long}}"
        - "{{internal_repo_ose_iso_long}}"
-     when: 'internal_repo_install == "true" and iso_exist_int.results[0].stdout == "0" and iso_exist_int.results[1].stdout == "0"'
+     when: '{{internal_repo_install}} == true and {{iso_exist_int.results[0].stdout}} == 0 and {{iso_exist_int.results[1].stdout}} == 0'
      tags: infra
-   
+  
+   - debug: msg="{{internal_repo_install}} == true and {{internal_repo_mounted.results[0].stdout}} == 0 and {{internal_repo_mounted.results[1].stdout}} == 0" 
    roles:
     - { role: ose_hosts_file, tags: infra, hosts}
-    - { role: ose_network_configure, when: development_mode == "true", tags: infra, network} 
-    - { role: subscription_register, when: subscription_register == "true", tags: infra, temp_repo}
-    - { role: temp_repo_with_iso, when: 'internal_repo_install == "true" or subscription_register == "false"', tags: infra, temp_repo}
-    - { role: ose_dns_configure, tags: infra, dns} 
-    - { role: update_resolv_conf, tags: infra, resolv_conf} 
-    - { role: internal_repo_with_apache, when: 'internal_repo_install == "true" and internal_repo_mounted.results[0].stdout == "0" and internal_repo_mounted.results[1].stdout == "0"', tags: infra, internal_repo } 
-    - { role: update_yum_repo, when: 'internal_repo_install == "true" or subscription_register == "false"', tags: infra, yum_repo } 
+    - { role: ose_network_configure, when: "{{development_mode}} == true", tags: infra, network}
+    - { role: subscription_register, when: "{{subscription_register}} == true", tags: infra, temp_repo}
+    - { role: temp_repo_with_iso, when: "{{internal_repo_install}} == true or {{subscription_register}} == false", tags: infra, temp_repo}
+    - { role: ose_dns_configure, tags: infra, dns}
+    - { role: update_resolv_conf, tags: infra, resolv_conf}
+    - { role: internal_repo_with_apache, when: '{{internal_repo_install}} == true and {{internal_repo_mounted.results[0].stdout}} == 2 and {{internal_repo_mounted.results[1].stdout}} == 3', tags: infra, internal_repo }
+    - { role: update_yum_repo, when: '{{internal_repo_install}} == true or {{subscription_register}} == false', tags: infra, yum_repo }
+
+
+
+
+
+

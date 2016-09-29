@@ -15,7 +15,7 @@
      docker pull registry.access.redhat.com/openshift3/ose-pod:{{image_version}} ; 
      docker pull registry.access.redhat.com/openshift3/ose-docker-registry:{{image_version}}" ;
    with_items: infra_nodes.stdout_lines
-   when: (infra_nodes.stdout_lines|length) != 0
+   when: {{(infra_nodes.stdout_lines|length) != 0}}
  
  - name: Download images for app node
    shell: 
@@ -29,4 +29,4 @@
       docker pull registry.access.redhat.com/openshift3/mysql-55-rhel7 ; \
       docker pull openshift/hello-openshift:v1.0.6"
    with_items: app_nodes.stdout_lines
-   when: (app_nodes.stdout_lines|length) != 0
+   when: {{(app_nodes.stdout_lines|length) != 0}}

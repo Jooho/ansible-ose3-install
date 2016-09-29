@@ -8,12 +8,12 @@
     - name: Create script for docker registry 
       template: src="create_registry.sh.j2" dest="/root/ose/create_registry.sh" mode=0777
       delegate_to: "{{master_ip}}"
-      when: docker_registry_svc_ip.stdout == "" 
+      when: '{{docker_registry_svc_ip.stdout}} == ""'
 
     - name: Execute the script to create docker registry 
       shell: /root/ose/create_registry.sh 
       delegate_to: "{{master_ip}}"
-      when: docker_registry_svc_ip.stdout == "" 
+      when: '{{docker_registry_svc_ip.stdout}} == ""'
       register: created_registry
     
 

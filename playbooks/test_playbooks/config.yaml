@@ -12,7 +12,14 @@
    - name: set_facts - pwd_path
      set_fact:
         pwd_path: "{{pwd.stdout}}"
+        development_mode: "{{hostvars[groups.oo_ose3_install.0].development}}"
+        internet_connected: "{{hostvars[groups.oo_ose3_install.0].internet_connected}}"
+        internal_repo_install: "{{hostvars[groups.oo_ose3_install.0].internal_repo_install}}"
+        subscription_register: "{{hostvars[groups.oo_ose3_install.0].subscription_register}}"
+        iso_dest_path: "{{hostvars[groups.oo_ose3_install.0].internal_repo_iso_src_path}}"
+        temp_path: "/root/tmp"
+        internal_repo_apache_repo_path: "{{hostvars[groups.oo_ose3_install.0].internal_repo_apache_repo_path}}"
      tags: pre_tasks
 
-   roles:
-     - { role: ose_nfs, nfs_mount_point: /exports/ose}
+   - debug: msg="{{internal_repo_install}} == true and {{internal_repo_mounted.results[0].stdout}} == 0 and {{internal_repo_mounted.results[1].stdout}} == 0"
+

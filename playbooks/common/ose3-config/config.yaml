@@ -15,8 +15,8 @@
    - name: Evaluate oo_ose3_install_to_config
      add_host:
        name: "{{ item }}"
-       groups: oo_ose3_install
-     with_items: groups[g_ose3_install_group] | default([])
+       groups: "oo_ose3_install"
+     with_items: "{{ groups[g_ose3_install_group] | default([]) }}"
      tags: add_host
 
    - name: Evaluate oo_masters_to_config
@@ -25,7 +25,7 @@
        groups: oo_masters
        ansible_ssh_user: "{{ g_ssh_user | default(omit) }}"
        ansible_sudo: "{{ g_sudo | default(omit) }}"
-     with_items: groups[g_masters_group] | default([])
+     with_items: "{{ groups[g_masters_group] | default([]) }}"
      tags: add_host
    
    - name: Evaluate oo_nodes_to_config
@@ -34,7 +34,7 @@
       groups: oo_nodes
       ansible_ssh_user: "{{ g_ssh_user | default(omit) }}"
       ansible_sudo: "{{ g_sudo | default(omit) }}"
-     with_items: groups[g_nodes_group]
+     with_items: "{{ groups[g_nodes_group] }}"
      tags: add_host
  
    - name: Evaluate oo_etcds_to_config
@@ -43,7 +43,7 @@
       groups: oo_etcds
       ansible_ssh_user: "{{ g_ssh_user | default(omit) }}"
       ansible_sudo: "{{ g_sudo | default(omit) }}"
-     with_items: groups[g_etcds_group]|default([])
+     with_items: "{{ groups[g_etcds_group]|default([]) }}"
      tags: add_host
  
    - name: Evaluate oo_lb_to_config
@@ -52,7 +52,7 @@
       groups: oo_lb
       ansible_ssh_user: "{{ g_ssh_user | default(omit) }}"
       ansible_sudo: "{{ g_sudo | default(omit) }}"
-     with_items: groups[g_lb]|default([])
+     with_items: "{{ groups[g_lb]|default([]) }}"
      when: "{{groups[g_lb] is defined}}"
      tags: add_host
 
@@ -62,7 +62,7 @@
       groups: oo_infra
       ansible_ssh_user: "{{ g_ssh_user | default(omit) }}"
       ansible_sudo: "{{ g_sudo | default(omit) }}"
-     with_items: groups[g_infra]
+     with_items: "{{ groups[g_infra] }}"
      tags: add_host
 
 #Check conditions(To-Do vm network setting verification)

@@ -1,4 +1,4 @@
 ose_repos:
   - rhel-7-server-extras-rpms
-  - rhel-ha=for-rhel-7-server-rpms
-  - rhel-7-server-ose3.1-rpms
+  - rhel-ha-for-rhel-7-server-rpms
+  - rhel-7-server-ose3.3-rpms
