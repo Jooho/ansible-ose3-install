@@ -29,7 +29,7 @@
   - debug: msg="{{set_network}} == true and {{check_hostname.rc}} == 1" 
   - name: Set hostname for each machine
     hostname: name={{inventory_hostname}}
-    when: ("{{set_hostname}} == true and check_hostname.rc == 1")
+    when: "{{set_hostname}} == true and {{check_hostname.rc}} == 1"
  
  # This is not mandatory from 3.1 so it will be deleted
   - name: Check if NetworkManager is installed

@@ -8,7 +8,7 @@
   - debug: var="{{(bind_installed|length)}}"
   - name: Install bind package 
     yum: name=bind state=present 
-    when: "{{dns_install}} == true and (bind_installed|length) >= 1"
+    when: "{{dns_install}} == true and {{(bind_installed|length)}} >= 1"
  
   - name: Copy /etc/named.conf
     template: src=named.conf.j2 dest=/etc/named.conf
