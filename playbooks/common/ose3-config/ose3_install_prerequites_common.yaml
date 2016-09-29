@@ -10,9 +10,9 @@
       shell: "yum install -y  net-tools bind-utils iptables-services bridge-utils bash-completion"
       tags: openshift_ansible
     
-#    - name: Install docker latest
-#      shell: "yum install -y docker"
-#      tags: openshift_ansible
+    - name: Install docker latest
+      shell: "yum install -y docker"
+      tags: openshift_ansible
 
 #    - name: Install docker 1.8.2
 #      shell: "yum install -y docker-1.8.2"
