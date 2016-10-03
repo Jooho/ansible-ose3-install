@@ -7,3 +7,9 @@ BOOTPROTO=none
 IPADDR={{public_network_ip}}
 NETMASK=255.255.255.0
 GATEWAY={{public_network_gw}}
+{% for item in groups.oo_infra %}
+{% set domain=item.split(".") %}
+DNS1={{hostvars[item].public_network_ip}}
+{% endfor %}
+
+

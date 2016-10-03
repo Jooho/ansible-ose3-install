@@ -57,6 +57,9 @@
     when: "{{set_network}} == true and networkmanager_installed.stdout.find('NetworkManager') == 0"
 
 # Note!!!!  ==> This should be executed at last
+# - name: restart network service
+#    shell: /etc/sysconfig/network-scripts/ifdown {{public_network_dev_name}} ; /etc/sysconfig/network-scripts/ifup {{public_network_dev_name}}
+#    when: "{{set_network}} == true and check_public_network.rc == 1" 
   - name: restart network service
-    shell: /etc/sysconfig/network-scripts/ifdown {{public_network_dev_name}} ; /etc/sysconfig/network-scripts/ifup {{public_network_dev_name}}
+    service: name=network state=restarted 
     when: "{{set_network}} == true and check_public_network.rc == 1" 
