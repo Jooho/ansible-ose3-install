@@ -116,7 +116,7 @@ then
 git clone https://github.com/Jooho/ansible-ose3-install
 
 else
-  if [[ $(cat /etc/resolve.conf|grep '8.8.8.8'|wc -l) ==0 ]]
+  if [[ $(cat /etc/resolv.conf|grep '8.8.8.8'|wc -l) == 0 ]]
   then
     echo "nameserver 8.8.8.8" >> /etc/resolv.conf
   fi
