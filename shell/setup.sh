@@ -17,6 +17,13 @@ name=Openshift v3
 baseurl=file:///var/iso_images/ose/${ose_rpms_name}
 enabled=1
 gpgcheck=0
+
+[ansible]
+name=Openshift v3
+baseurl=file:///var/iso_images/ose/rhel-7-server-ansible-2.4-rpms
+enabled=1
+gpgcheck=0
+
 [rhel]
 name=RHEL 7
 baseurl=file:///var/iso_images/rhel
